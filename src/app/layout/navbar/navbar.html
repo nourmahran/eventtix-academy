@@ -1,0 +1,43 @@
+
+<header class="navbar">
+  <nav class="nav-container" aria-label="Main navigation">
+    <a routerLink="/" class="logo">
+      <span class="logo-icon">✦</span>
+      <span>Event<span class="logo-accent">Tix</span></span>
+    </a>
+
+    <button
+      class="menu-toggle"
+      type="button"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="menuOpen"
+      aria-controls="nav-links"
+      aria-label="Toggle navigation menu"
+    >
+      ☰
+    </button>
+
+    <div
+      class="nav-links"
+      id="nav-links"
+      [class.open]="menuOpen"
+    >
+      <a routerLink="/" routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: true }"
+         (click)="closeMenu()">Home</a>
+
+      <a routerLink="/events" routerLinkActive="active"
+         (click)="closeMenu()">Events</a>
+
+      @if (auth.user()) {
+        @if (auth.hasRole(['admin'])) { <a routerLink="/admin" routerLinkActive="active" (click)="closeMenu()">Admin</a> }
+        @if (auth.hasRole(['admin', 'accounting'])) { <a routerLink="/accounting" routerLinkActive="active" (click)="closeMenu()">Accounting</a> }
+        <a routerLink="/profile" routerLinkActive="active" (click)="closeMenu()">Profile</a>
+        <button type="button" class="signup-btn" (click)="logout()">Sign out</button>
+      } @else {
+        <a routerLink="/login" routerLinkActive="active" (click)="closeMenu()">Login</a>
+        <a routerLink="/signup" class="signup-btn" (click)="closeMenu()">Sign Up</a>
+      }
+    </div>
+  </nav>
+</header>

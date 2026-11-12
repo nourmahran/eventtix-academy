@@ -14,6 +14,8 @@ export interface User {
   email: string;
   role: UserRole;
   profilePictureUrl?: string;
+  /** Classroom-only card label; never a full card number or security code. */
+  paymentMethodLabel?: string;
   preferences: UserPreferences;
   createdAt: string;
 }
