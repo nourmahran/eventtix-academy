@@ -1,59 +1,187 @@
-# GiuFinancialManagement
+# EventTix Academy
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.42.
+EasyWeb | GIU Web Programming — ICS 511 | Topic 15
 
-## Development server
+EventTix Academy is a web application designed to help an academy manage events, ticket sales, student course fees, staff payroll, and event finances.
 
-To start a local development server, run:
+The platform brings together event discovery, student discounts, digital tickets, and administrative management in one application.
 
-```bash
+Project Overview
+
+EventTix Academy supports three main event categories:
+
+* Conferences
+* Concerts
+* Workshops
+
+The application is designed for different user roles, including students, administrators, and accounting staff.
+
+Main Features
+
+1. User Management
+
+* User registration and login
+* User profiles
+* Role-based access control
+* Protected routes
+
+2. Event Management
+
+* Browse available events
+* View event information
+* Manage event details
+* Manage ticket prices and available seats
+
+3. Ticket Management
+
+* Purchase event tickets
+* Apply student discounts
+* View ticket purchase history
+* Generate digital tickets with QR codes
+* View ticket invoices
+
+4. Student Course Fees
+
+* View course fees
+* Track payments
+* Monitor outstanding balances
+
+5. Staff Payroll
+
+* Manage event staff information
+* Assign event-based allowances
+* Track payroll payments
+
+6. Financial Management
+
+* Track ticket revenue
+* Manage sponsorship income
+* Record event expenses
+* Calculate event profit
+* Display financial charts
+
+7. Additional Features
+
+* Responsive user interface
+* Animations and visual effects
+* AI chatbot
+* Browser storage integration
+
+Note: These are the planned project features. Implementation and testing status should be verified before final submission.
+
+Technologies
+
+* Angular 20
+* TypeScript
+* HTML
+* SCSS
+* Angular Router
+* Angular Reactive Forms
+* Git and GitHub
+
+Project Structure
+
+src/
+  app/
+    core/
+      auth/
+      guards/
+      models/
+      services/
+      storage/
+    features/
+      auth/
+      home/
+      profile/
+      events/
+      tickets/
+      payroll/
+      student-fees/
+      budgets/
+      chatbot/
+    layout/
+    shared/
+      ui/
+  styles.scss
+
+Some directories may be populated as development progresses.
+
+Installation
+
+Prerequisites
+
+* Node.js
+* npm
+* Angular CLI
+
+Clone the repository
+
+git clone https://github.com/nourmahran/eventtix-academy.git
+cd eventtix-academy
+
+The repository is private, so collaborators must have access.
+
+Install dependencies
+
+npm install
+
+Start the development server
+
 ng serve
-```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open:
 
-## Code scaffolding
+http://localhost:4200/
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Build
 
-```bash
-ng generate component component-name
-```
+To create a production build:
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
 ng build
-```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Testing
 
-## Running unit tests
+To run the configured Angular unit tests:
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
 ng test
-```
 
-## Running end-to-end tests
+Team — EasyWeb
 
-For end-to-end (e2e) testing, run:
+Member	Responsibilities
+Member 1	Project foundation, home page, authentication, profiles, routing, and access control
+Member 2	Ticket purchases, QR tickets, invoices, student fees, and staff payroll
+Member 3	Event management, budgets, financial charts, responsive styling, and animations
+Member 4	AI chatbot, browser storage, quality assurance, and documentation
 
-```bash
-ng e2e
-```
+GitHub Workflow
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+The project uses Git branches for collaborative development.
 
-## Additional Resources
+* main — Stable project version
+* develop — Shared development and integration branch
+* feature/member1-foundation-auth
+* feature/member2-payroll-fees
+* feature/member3-budget-ui
+* feature/member4-chatbot-storage-qa
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Feature branches are merged into develop through pull requests after review.
+
+Academic Information
+
+University: German International University (GIU)
+
+Course: ICS 511 — Web Programming
+
+Team: EasyWeb
+
+Project Topic: 15 — EventTix: Academy Events and Ticket Store
+
+Milestone: 1
+
+Project Status
+
+Under development. Features, bonuses, and tests will be verified before the final submission.
+
+⸻
+
+Developed by Team EasyWeb for GIU Web Programming.
