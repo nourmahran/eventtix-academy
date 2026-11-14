@@ -1,0 +1,164 @@
+
+:host {
+  display: block;
+  background: var(--page-bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.home-page {
+  min-height: 100vh;
+}
+
+.hero {
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+  padding: 80px 8%;
+  background:
+    radial-gradient(circle at 80% 30%, var(--glow) 0%, transparent 45%),
+    linear-gradient(135deg, var(--page-bg), var(--hero-end));
+}
+
+.hero-content {
+  max-width: 760px;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.hero h1 {
+  margin: 22px 0;
+  font-size: clamp(42px, 6vw, 82px);
+  line-height: 1.1;
+  letter-spacing: -2px;
+}
+
+.hero h1 span {
+  display: block;
+  color: var(--accent);
+}
+
+.hero p,
+.section-heading p,
+.category-card p,
+.about p {
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.hero p {
+  max-width: 550px;
+  font-size: 18px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 14px 26px;
+  border-radius: 10px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.btn:hover {
+  transform: translateY(-3px);
+}
+
+.btn-primary {
+  color: white;
+  background: #8651dc;
+}
+
+.btn-primary:hover {
+  background: #9d6af2;
+}
+
+.btn-secondary {
+  color: var(--text);
+  border: 1px solid #76569c;
+}
+
+.categories {
+  padding: 85px 8%;
+}
+
+.section-heading {
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.section-heading h2,
+.about h2 {
+  font-size: clamp(28px, 4vw, 42px);
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.category-card {
+  padding: 36px 28px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.category-card:hover {
+  transform: translateY(-6px);
+  border-color: #a779ef;
+}
+
+.category-icon {
+  font-size: 36px;
+}
+
+.category-card h3 {
+  margin-top: 24px;
+  font-size: 22px;
+}
+
+.about {
+  padding: 85px 8%;
+  text-align: center;
+  background: var(--surface);
+}
+
+.about p {
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    min-height: 65vh;
+    padding: 70px 6%;
+  }
+
+  .categories,
+  .about {
+    padding: 60px 6%;
+  }
+
+  .category-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    letter-spacing: -1px;
+  }
+}
