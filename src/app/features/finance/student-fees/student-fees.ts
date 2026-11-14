@@ -1,0 +1,227 @@
+
+import { Component } from '@angular/core';
+import { DecimalPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+interface StudentFee {
+  id: string;
+  name: string;
+  totalFees: number;
+  paidAmount: number;
+  status: 'Paid' | 'Partial' | 'Unpaid';
+}
+
+interface Invoice {
+  id: string;
+  studentId: string;
+  studentName: string;
+  description: string;
+  amount: number;
+  dueDate: string;
+  status: 'Unpaid' | 'Paid';
+}
+
+interface Payment {
+  id: string;
+  studentId: string;
+  studentName: string;
+  invoiceId: string;
+  amount: number;
+  paymentDate: string;
+  paymentMethod: string;
+}
+
+@Component({
+  selector: 'app-student-fees',
+  imports: [DecimalPipe, FormsModule],
+  templateUrl: './student-fees.html',
+  styleUrl: './student-fees.scss',
+})
+export class StudentFees {
+
+  // Student records
+  students: StudentFee[] = [
+    {
+      id: '2024001',
+      name: 'Ahmed Ali',
+      totalFees: 15000,
+      paidAmount: 10000,
+      status: 'Partial'
+    },
+    {
+      id: '2024002',
+      name: 'Sara Mohamed',
+      totalFees: 12000,
+      paidAmount: 12000,
+      status: 'Paid'
+    },
+    {
+      id: '2024003',
+      name: 'Omar Hassan',
+      totalFees: 15000,
+      paidAmount: 5000,
+      status: 'Partial'
+    },
+    {
+      id: '2024004',
+      name: 'Mariam Adel',
+      totalFees: 14000,
+      paidAmount: 14000,
+      status: 'Paid'
+    }
+  ];
+
+  // Search and filter
+  searchTerm: string = '';
+  selectedStatus: string = '';
+
+  // Invoice records
+  invoices: Invoice[] = [];
+
+  // Payment history records
+  payments: Payment[] = [];
+
+  // Invoice form
+  showInvoiceForm: boolean = false;
+  invoiceStudentId: string = '';
+  invoiceDescription: string = '';
+  invoiceAmount: number = 0;
+  invoiceDueDate: string = '';
+
+  // Filter students
+  get filteredStudents(): StudentFee[] {
+    return this.students.filter(student => {
+
+      const matchesSearch =
+        student.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        student.id.includes(this.searchTerm);
+
+      const matchesStatus =
+        this.selectedStatus === '' ||
+        student.status === this.selectedStatus;
+
+      return matchesSearch && matchesStatus;
+    });
+  }
+
+  // Financial summary calculations
+  get totalFees(): number {
+    return this.students.reduce(
+      (total, student) => total + student.totalFees, 0
+    );
+  }
+
+  get collectedFees(): number {
+    return this.students.reduce(
+      (total, student) => total + student.paidAmount, 0
+    );
+  }
+
+  get outstandingFees(): number {
+    return this.totalFees - this.collectedFees;
+  }
+
+  get totalStudents(): number {
+    return this.students.length;
+  }
+
+  // Create a new invoice
+  createInvoice(): void {
+
+    const student = this.students.find(
+      s => s.id === this.invoiceStudentId
+    );
+
+    if (
+      !student ||
+      !this.invoiceDescription.trim() ||
+      this.invoiceAmount <= 0 ||
+      !Number.isFinite(this.invoiceAmount) ||
+      !this.invoiceDueDate
+    ) {
+      alert('Please complete all invoice fields correctly.');
+      return;
+    }
+
+    const newInvoice: Invoice = {
+      id: 'INV-' + Date.now(),
+      studentId: student.id,
+      studentName: student.name,
+      description: this.invoiceDescription,
+      amount: this.invoiceAmount,
+      dueDate: this.invoiceDueDate,
+      status: 'Unpaid'
+    };
+
+    this.invoices.push(newInvoice);
+
+    alert('Invoice created successfully!');
+
+    // Reset form
+    this.invoiceStudentId = '';
+    this.invoiceDescription = '';
+    this.invoiceAmount = 0;
+    this.invoiceDueDate = '';
+    this.showInvoiceForm = false;
+  }
+
+  // Record payment for an invoice
+  recordPayment(invoiceId: string): void {
+
+    const invoice = this.invoices.find(
+      inv => inv.id === invoiceId
+    );
+
+    if (!invoice || invoice.status === 'Paid') {
+      return;
+    }
+
+    const student = this.students.find(
+      s => s.id === invoice.studentId
+    );
+
+    if (!student) {
+      alert('Student not found.');
+      return;
+    }
+
+    const remainingBalance =
+      student.totalFees - student.paidAmount;
+
+    if (invoice.amount > remainingBalance) {
+      alert('Payment exceeds the remaining student balance.');
+      return;
+    }
+
+    // Update student payment
+    student.paidAmount += invoice.amount;
+
+    // Update student payment status
+    if (student.paidAmount >= student.totalFees) {
+      student.status = 'Paid';
+    } else if (student.paidAmount > 0) {
+      student.status = 'Partial';
+    } else {
+      student.status = 'Unpaid';
+    }
+
+    // Update invoice status
+    invoice.status = 'Paid';
+
+    // Create payment history record
+    const newPayment: Payment = {
+      id: 'PAY-' + Date.now(),
+      studentId: student.id,
+      studentName: student.name,
+      invoiceId: invoice.id,
+      amount: invoice.amount,
+      paymentDate: new Date().toLocaleDateString(),
+      paymentMethod: 'Cash'
+    };
+
+    this.payments.push(newPayment);
+
+    alert('Payment recorded successfully!');
+  }
+
+}
