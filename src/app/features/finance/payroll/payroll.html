@@ -1,0 +1,322 @@
+
+<div class="payroll-page">
+
+  <!-- Header -->
+  <header class="page-header">
+    <div>
+      <h1>Staff Payroll</h1>
+      <p>Manage staff salaries, allowances and deductions.</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="secondary-btn" (click)="exportReport()">
+        Download JSON Report
+      </button>
+
+      <button class="primary-btn" (click)="openAddStaff()">
+        + Add Staff
+      </button>
+    </div>
+  </header>
+
+  <!-- Month Selection -->
+  <section class="month-section">
+    <label for="payroll-month">Payroll Month</label>
+
+    <input
+      id="payroll-month"
+      type="month"
+      name="payrollMonth"
+      [(ngModel)]="selectedMonth"
+    />
+  </section>
+
+  <!-- Summary Cards -->
+  <section class="summary-cards">
+
+    <div class="summary-card">
+      <p>Total Monthly Payroll</p>
+      <h2>EGP {{ totalPayroll | number }}</h2>
+      <span>Total net salaries</span>
+    </div>
+
+    <div class="summary-card">
+      <p>Staff Members</p>
+      <h2>{{ totalStaff }}</h2>
+      <span>Registered employees</span>
+    </div>
+
+    <div class="summary-card">
+      <p>Total Allowances</p>
+      <h2>EGP {{ totalAllowances | number }}</h2>
+      <span>Regular + event allowances</span>
+    </div>
+
+    <div class="summary-card">
+      <p>Total Deductions</p>
+      <h2>EGP {{ totalDeductions | number }}</h2>
+      <span>Monthly deductions</span>
+    </div>
+
+  </section>
+
+  <!-- Add/Edit Staff Form -->
+  @if (showStaffForm) {
+    <section class="form-section">
+
+      <div class="section-header">
+        <h2>
+          {{ editingStaffId ? 'Edit Staff' : 'Add Staff' }}
+        </h2>
+
+        <button
+          type="button"
+          class="secondary-btn"
+          (click)="showStaffForm = false">
+          Cancel
+        </button>
+      </div>
+
+      <form (ngSubmit)="saveStaff()">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Staff Name</label>
+            <input
+              type="text"
+              name="staffName"
+              [(ngModel)]="formName"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Position</label>
+            <input
+              type="text"
+              name="position"
+              [(ngModel)]="formPosition"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Basic Salary (EGP)</label>
+            <input
+              type="number"
+              name="salary"
+              min="0"
+              [(ngModel)]="formSalary"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Allowances (EGP)</label>
+            <input
+              type="number"
+              name="allowances"
+              min="0"
+              [(ngModel)]="formAllowances"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Deductions (EGP)</label>
+            <input
+              type="number"
+              name="deductions"
+              min="0"
+              [(ngModel)]="formDeductions"
+              required
+            />
+          </div>
+
+        </div>
+
+        <button type="submit" class="primary-btn">
+          Save Staff
+        </button>
+
+      </form>
+    </section>
+  }
+
+  <!-- Staff Payroll Table -->
+  <section class="records-section">
+
+    <div class="section-header">
+      <div>
+        <h2>Staff Salary Records</h2>
+        <p>Monthly salaries and net payment calculations.</p>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table>
+
+        <thead>
+          <tr>
+            <th>Staff Name</th>
+            <th>Position</th>
+            <th>Basic Salary</th>
+            <th>Allowances</th>
+            <th>Event Allowances</th>
+            <th>Deductions</th>
+            <th>Net Salary</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (member of staff; track member.id) {
+            <tr>
+              <td>{{ member.name }}</td>
+              <td>{{ member.position }}</td>
+              <td>{{ member.basicSalary | number }}</td>
+              <td>{{ member.allowances | number }}</td>
+
+              <td>
+                {{ getEventAllowance(member) | number }}
+              </td>
+
+              <td>{{ member.deductions | number }}</td>
+
+              <td class="net-salary">
+                EGP {{ getNetSalary(member) | number }}
+              </td>
+
+              <td>
+                <button
+                  class="action-btn"
+                  (click)="editStaff(member)">
+                  Edit
+                </button>
+              </td>
+            </tr>
+          }
+
+          @if (staff.length === 0) {
+            <tr>
+              <td colspan="8" class="empty-state">
+                No staff records available.
+              </td>
+            </tr>
+          }
+
+        </tbody>
+
+      </table>
+    </div>
+
+  </section>
+
+  <!-- Event Allowances -->
+  <section class="records-section">
+
+    <div class="section-header">
+      <div>
+        <h2>Event Allowances</h2>
+        <p>Additional payments for staff working at events.</p>
+      </div>
+
+      <button
+        class="primary-btn"
+        (click)="showEventForm = !showEventForm">
+        + Add Event Allowance
+      </button>
+    </div>
+
+    @if (showEventForm) {
+      <form
+        class="event-form"
+        (ngSubmit)="addEventAllowance()">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Select Staff</label>
+
+            <select
+              name="eventStaff"
+              [(ngModel)]="selectedStaffId"
+              required>
+
+              <option value="" disabled>Select employee</option>
+
+              @for (member of staff; track member.id) {
+                <option [value]="member.id">
+                  {{ member.name }}
+                </option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Event Name</label>
+            <input
+              type="text"
+              name="eventName"
+              placeholder="e.g. Music Concert"
+              [(ngModel)]="eventName"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Allowance Amount (EGP)</label>
+            <input
+              type="number"
+              name="eventAmount"
+              min="1"
+              [(ngModel)]="eventAmount"
+              required
+            />
+          </div>
+
+        </div>
+
+        <button type="submit" class="primary-btn">
+          Save Allowance
+        </button>
+
+      </form>
+    }
+
+    <!-- Recorded Event Allowances -->
+    <div class="table-container">
+      <table>
+
+        <thead>
+          <tr>
+            <th>Staff Member</th>
+            <th>Event</th>
+            <th>Month</th>
+            <th>Allowance</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (member of staff; track member.id) {
+            @for (allowance of member.eventAllowances; track $index) {
+              <tr>
+                <td>{{ member.name }}</td>
+                <td>{{ allowance.eventName }}</td>
+                <td>{{ allowance.month }}</td>
+                <td>EGP {{ allowance.amount | number }}</td>
+              </tr>
+            }
+          }
+
+        </tbody>
+
+      </table>
+    </div>
+
+  </section>
+
+</div>

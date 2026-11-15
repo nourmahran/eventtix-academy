@@ -2,11 +2,11 @@
 
 ## Integrated development status
 
-The `develop` branch combines completed Member 1 foundation/authentication with Member 4's shared StorageService and headless Karma test setup.
+The `develop` branch combines Member 1 foundation/authentication, Member 3 finance pages, and Member 4 storage, responsive/animation utilities and testing setup.
 
 - Ready: responsive home/navigation, signup/login, roles and guards, profiles/pictures, mock card labels, preferences and basic storage.
-- Integrated: shared local/session/cookie storage helper, its tests, and `npm run test:ci`.
-- Still planned: events, ticketing/QR/invoices, fees, payroll, budgets/charts and chatbot. Their route entries remain placeholders.
+- Integrated: student fees/invoice payments, staff payroll/monthly JSON reports, event finance/charts, shared storage, responsive/animation utilities, and `npm run test:ci`. Finance pages are available to admin/accounting users through the Accounting navigation entry.
+- Still planned: event catalogue/management, ticket purchasing/QR/ticket invoices, and chatbot. Finance persistence and the student-fee View action remain incomplete. See the integration notes for verified limitations.
 - Authentication is a frontend classroom mock. Refresh signs out; persistent demo accounts remain in browser storage. Do not enter real payment details.
 
 Run `npm ci`, then `npm start`; build with `npm run build`; test with `npm run test:ci` (Chrome required).
