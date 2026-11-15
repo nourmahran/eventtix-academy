@@ -1,0 +1,127 @@
+
+<div class="seat-page">
+
+  <a [routerLink]="['/events', eventId]" class="back-link">
+    ← Back to Event Details
+  </a>
+
+  @if (event) {
+    <header class="page-header">
+      <span class="eyebrow">EVENTTIX BOOKING</span>
+      <h1>Select Your Seats</h1>
+      <p>{{ event.title }} · {{ event.date }}</p>
+    </header>
+
+    <div class="seat-layout">
+
+      <section class="seating-section">
+
+        <div class="stage">STAGE</div>
+
+        <div class="seat-legend">
+          <span><i class="available"></i> Available</span>
+          <span><i class="selected"></i> Selected</span>
+          <span><i class="booked"></i> Booked</span>
+        </div>
+
+        <div class="seat-map">
+          @for (row of rows; track row) {
+            <div class="seat-row">
+              <span class="row-label">{{ row }}</span>
+
+              @for (number of seatsPerRow; track number) {
+                <button
+                  type="button"
+                  class="seat"
+                  [class.booked]="isBooked(row + number)"
+                  [class.selected]="isSelected(row + number)"
+                  [disabled]="isBooked(row + number)"
+                  (click)="toggleSeat(row + number)">
+                  {{ number }}
+                </button>
+              }
+
+              <span class="row-label">{{ row }}</span>
+            </div>
+          }
+        </div>
+
+        <p class="map-note">Select your preferred available seats.</p>
+
+      </section>
+
+      <aside class="booking-summary">
+        <h2>Booking Summary</h2>
+
+        <div class="summary-event">
+          <strong>{{ event.title }}</strong>
+          <span>{{ event.location }}</span>
+        </div>
+
+        <div class="summary-line">
+          <span>Selected seats</span>
+          <strong>{{ selectedSeats().length }}</strong>
+        </div>
+
+        <div class="selected-list">
+          @if (selectedSeats().length > 0) {
+            @for (seat of selectedSeats(); track seat) {
+              <span>{{ seat }}</span>
+            }
+          } @else {
+            <small>No seats selected yet</small>
+          }
+        </div>
+
+       <div class="summary-line">
+  <span>Price per seat</span>
+  <strong>EGP {{ event.price }}</strong>
+</div>
+
+<label class="student-option">
+  <input
+    type="checkbox"
+    [checked]="isStudent()"
+    (change)="isStudent.set($any($event.target).checked)"
+  />
+  I am a student — get 10% off
+</label>
+
+<div class="summary-line">
+  <span>Original total</span>
+  <strong>EGP {{ totalPrice() }}</strong>
+</div>
+
+@if (isStudent()) {
+  <div class="summary-line discount">
+    <span>Student discount (10%)</span>
+    <strong>- EGP {{ discountAmount() }}</strong>
+  </div>
+}
+
+<div class="total-line">
+  <span>Final Total</span>
+  <strong>EGP {{ finalTotal() }}</strong>
+</div>
+
+        <button
+  class="continue-button"
+  [disabled]="selectedSeats().length === 0"
+  (click)="proceedToCheckout()">
+  Continue to Checkout →
+</button>
+
+        <small class="notice">
+          You can continue once checkout is connected.
+        </small>
+      </aside>
+
+    </div>
+  } @else {
+    <div class="not-found">
+      <h2>Event not found</h2>
+      <a routerLink="/events">Return to Events</a>
+    </div>
+  }
+
+</div>

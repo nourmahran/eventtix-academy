@@ -1,0 +1,101 @@
+
+<div class="checkout-page">
+
+  <a [routerLink]="['/events', eventId, 'seats']" class="back-link">
+    ← Back to Seat Selection
+  </a>
+
+  @if (event) {
+    <header class="page-header">
+      <span class="eyebrow">EVENTTIX CHECKOUT</span>
+      <h1>Review Your Booking</h1>
+      <p>Check your booking details before confirming.</p>
+    </header>
+
+    <div class="checkout-card">
+      <section class="event-info">
+        <h2>{{ event.title }}</h2>
+        <p>{{ event.date }} · {{ event.location }}</p>
+      </section>
+
+      <section class="booking-info">
+        <h3>Selected Seats</h3>
+
+        <div class="selected-seats">
+          @for (seat of selectedSeats; track seat) {
+            <span>{{ seat }}</span>
+          }
+        </div>
+
+        <div class="price-row">
+          <span>Number of seats</span>
+          <strong>{{ selectedSeats.length }}</strong>
+        </div>
+
+        <div class="price-row">
+          <span>Price per seat</span>
+          <strong>EGP {{ event.price }}</strong>
+        </div>
+
+        <div class="price-row">
+          <span>Original total</span>
+          <strong>EGP {{ totalPrice }}</strong>
+        </div>
+
+        @if (isStudent) {
+          <div class="price-row discount">
+            <span>Student discount (10%)</span>
+            <strong>- EGP {{ discountAmount }}</strong>
+          </div>
+        }
+
+        <div class="final-total">
+          <span>Final Total</span>
+          <strong>EGP {{ finalTotal }}</strong>
+        </div>
+      </section>
+
+      @if (!confirmed) {
+  <button
+    class="confirm-button"
+    type="button"
+    [disabled]="!booking || selectedSeats.length === 0"
+    (click)="confirmBooking()">
+    Confirm Booking
+  </button>
+} @else {
+  <div class="confirmation-message">
+  <h2>Booking Confirmed!</h2>
+  <p>Your mock booking was successful.</p>
+
+  <p>Ticket Reference: <strong>{{ ticketCode }}</strong></p>
+
+  <div class="ticket-qr">
+  @for (row of qrPattern; track $index) {
+    @for (cell of row; track $index) {
+      <span [class.dark]="cell === 1"></span>
+    }
+  }
+</div>
+
+  <p class="qr-label">Your EventTix E-Ticket</p>
+
+  <p><strong>{{ event?.title }}</strong></p>
+  <p>{{ event?.date }} · {{ event?.location }}</p>
+
+  <p>Seats: {{ selectedSeats.join(', ') }}</p>
+  <p>Paid: EGP {{ finalTotal }}</p>
+</div>
+}
+      <p class="mock-notice">
+        This is a mock checkout. No real payment will be processed.
+      </p>
+    </div>
+  } @else {
+    <div class="not-found">
+      <h2>Event not found</h2>
+      <a routerLink="/events">Return to Events</a>
+    </div>
+  }
+
+</div>
