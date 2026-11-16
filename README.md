@@ -2,11 +2,11 @@
 
 ## Integrated development status
 
-The `develop` branch combines Member 1 foundation/authentication, Member 3 finance pages, and Member 4 storage, responsive/animation utilities and testing setup.
+The `develop` branch combines Member 1 foundation/authentication, Member 2 events/ticket booking, Member 3 finance pages, and Member 4 storage, responsive/animation utilities and testing setup.
 
 - Ready: responsive home/navigation, signup/login, roles and guards, profiles/pictures, mock card labels, preferences and basic storage.
-- Integrated: student fees/invoice payments, staff payroll/monthly JSON reports, event finance/charts, shared storage, responsive/animation utilities, and `npm run test:ci`. Finance pages are available to admin/accounting users through the Accounting navigation entry.
-- Still planned: event catalogue/management, ticket purchasing/QR/ticket invoices, and chatbot. Finance persistence and the student-fee View action remain incomplete. See the integration notes for verified limitations.
+- Integrated: event catalogue/details, seat selection, account-scoped mock checkout/ticket history, admin event editing, student fees/invoice payments, staff payroll/monthly JSON reports, event finance/charts, shared storage, responsive/animation utilities, and `npm run test:ci`. Finance pages are available to admin/accounting users through the Accounting navigation entry.
+- Still incomplete: scannable ticket QR codes, ticket invoices, live seat availability, event/finance persistence, chatbot, and the student-fee View action. See the integration notes for verified limitations.
 - Authentication is a frontend classroom mock. Refresh signs out; persistent demo accounts remain in browser storage. Do not enter real payment details.
 
 Run `npm ci`, then `npm start`; build with `npm run build`; test with `npm run test:ci` (Chrome required).
@@ -173,7 +173,7 @@ The project uses Git branches for collaborative development.
 * main — Stable project version
 * develop — Shared development and integration branch
 * feature/member1-foundation-auth
-* feature/member2-payroll-fees (planned; not yet pushed at integration)
+* feature/member2-events-tickets
 * feature/member3-finance-payroll
 * feature/member4-bonuses-ux
 

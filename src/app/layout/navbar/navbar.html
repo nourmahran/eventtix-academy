@@ -30,6 +30,7 @@
          (click)="closeMenu()">Events</a>
 
       @if (auth.user()) {
+        <a routerLink="/ticket-history" routerLinkActive="active" (click)="closeMenu()">My Tickets</a>
         @if (auth.hasRole(['admin'])) { <a routerLink="/admin" routerLinkActive="active" (click)="closeMenu()">Admin</a> }
         @if (auth.hasRole(['admin', 'accounting'])) { <a routerLink="/accounting" routerLinkActive="active" (click)="closeMenu()">Accounting</a> }
         <a routerLink="/profile" routerLinkActive="active" (click)="closeMenu()">Profile</a>

@@ -1,0 +1,163 @@
+
+.admin-page {
+  min-height: 100vh;
+  padding: 40px 8%;
+  background: #f7f5fc;
+  color: #25213a;
+}
+
+.back-link {
+  color: #7046c8;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.page-header {
+  margin: 40px 0 30px;
+}
+
+.eyebrow {
+  color: #8056d6;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.page-header h1 {
+  font-size: 36px;
+  margin: 10px 0;
+}
+
+.page-header p {
+  color: #777;
+}
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) minmax(300px, 1.2fr);
+  gap: 25px;
+  align-items: start;
+}
+
+.event-form,
+.events-list {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(40, 20, 80, 0.07);
+}
+
+.event-form h2,
+.events-list h2 {
+  margin-top: 0;
+  margin-bottom: 22px;
+}
+
+.event-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.event-form label {
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+.event-form input,
+.event-form select,
+.event-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid #ddd6ed;
+  border-radius: 8px;
+  font: inherit;
+  background: white;
+}
+
+.event-form input:focus,
+.event-form select:focus,
+.event-form textarea:focus {
+  outline: 2px solid #b69be8;
+  border-color: #7046c8;
+}
+
+.save-button,
+.cancel-button,
+.edit-button {
+  border: none;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.save-button {
+  margin-top: 15px;
+  background: #7046c8;
+  color: white;
+}
+
+.cancel-button {
+  background: #eeeaf5;
+  color: #51466a;
+}
+
+.admin-event-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 18px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.admin-event-card:last-child {
+  border-bottom: none;
+}
+
+.admin-event-card h3 {
+  margin: 8px 0;
+}
+
+.admin-event-card p {
+  color: #777;
+  font-size: 13px;
+}
+
+.category {
+  color: #7046c8;
+  background: #eee7ff;
+  padding: 5px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.edit-button {
+  background: #eee7ff;
+  color: #7046c8;
+}
+
+@media (max-width: 800px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-page {
+    padding: 25px 5%;
+  }
+}
+
+@media (max-width: 450px) {
+  .admin-event-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .page-header h1 {
+    font-size: 28px;
+  }
+}
