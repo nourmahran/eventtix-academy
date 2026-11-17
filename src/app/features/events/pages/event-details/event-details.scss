@@ -1,0 +1,160 @@
+
+:host {
+  display: block;
+  min-height: 100vh;
+  background: #f7f8fc;
+  color: #17172b;
+  font-family: Arial, sans-serif;
+}
+
+.details-page {
+  max-width: 1100px;
+  margin: auto;
+  padding: 40px 24px 70px;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 25px;
+  color: #6554d9;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.details-banner {
+  height: 380px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+}
+
+.details-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.category-tag {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: white;
+  color: #6554d9;
+  padding: 10px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.details-content {
+  display: grid;
+  grid-template-columns: 1fr 330px;
+  gap: 45px;
+  margin-top: 40px;
+}
+
+.eyebrow {
+  color: #6554d9;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.event-information h1 {
+  font-size: 38px;
+  margin: 12px 0;
+}
+
+.description {
+  color: #77788c;
+  line-height: 1.8;
+  margin-bottom: 30px;
+}
+
+.information-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 25px 0;
+}
+
+.information-row > span {
+  font-size: 24px;
+}
+
+.information-row strong {
+  font-size: 14px;
+}
+
+.information-row p {
+  margin: 5px 0 0;
+  color: #77788c;
+  font-size: 13px;
+}
+
+.booking-card {
+  align-self: start;
+  background: white;
+  border: 1px solid #ededf3;
+  border-radius: 16px;
+  padding: 25px;
+}
+
+.booking-card > span {
+  color: #77788c;
+  font-size: 13px;
+}
+
+.booking-card h2 {
+  font-size: 30px;
+  margin: 12px 0;
+}
+
+.booking-card p {
+  color: #77788c;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.booking-card button {
+  width: 100%;
+  padding: 14px;
+  margin: 15px 0;
+  background: #6554d9;
+  color: white;
+  border: none;
+  border-radius: 9px;
+  font-weight: 600;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.booking-card small {
+  display: block;
+  text-align: center;
+  color: #999;
+}
+
+.not-found {
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.not-found a {
+  color: #6554d9;
+}
+
+@media (max-width: 750px) {
+  .details-banner {
+    height: 250px;
+  }
+
+  .details-content {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .event-information h1 {
+    font-size: 29px;
+  }
+}

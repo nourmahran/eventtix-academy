@@ -1,0 +1,28 @@
+<button class="chat-toggle" (click)="toggle()" aria-label="Open chat assistant">
+  {{ open ? '✕' : '💬' }}
+</button>
+
+@if (open) {
+  <section class="chat-panel" aria-label="Chat assistant">
+    <header>Assistant</header>
+
+    <div class="messages" #messagesEl>
+      @for (m of messages; track $index) {
+        <div class="bubble" [class.user]="m.from === 'user'">{{ m.text }}</div>
+      }
+      @if (typing) {
+        <div class="bubble typing">...</div>
+      }
+    </div>
+
+    <div class="input-row">
+      <input
+        [(ngModel)]="input"
+        (keyup.enter)="send()"
+        placeholder="Type a question..."
+        aria-label="Type your message"
+      />
+      <button (click)="send()" [disabled]="typing">Send</button>
+    </div>
+  </section>
+}

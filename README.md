@@ -1,5 +1,18 @@
 # EventTix Academy
 
+## Integrated development status
+
+The `develop` branch combines Member 1 foundation/authentication, Member 2 events/ticket booking, Member 3 finance pages, and Member 4 storage, responsive/animation utilities and testing setup.
+
+- Ready: responsive home/navigation, signup/login, roles and guards, profiles/pictures, mock card labels, preferences and basic storage.
+- Integrated: event catalogue/details, seat selection, account-scoped mock checkout/ticket history, admin event editing, student fees/invoice payments, staff payroll/monthly JSON reports, event finance/charts, shared storage, responsive/animation utilities, and `npm run test:ci`. Finance pages are available to admin/accounting users through the Accounting navigation entry.
+- Still incomplete: scannable ticket QR codes, ticket invoices, live seat availability, event/finance persistence, chatbot, and the student-fee View action. See the integration notes for verified limitations.
+- Authentication is a frontend classroom mock. Refresh signs out; persistent demo accounts remain in browser storage. Do not enter real payment details.
+
+Run `npm ci`, then `npm start`; build with `npm run build`; test with `npm run test:ci` (Chrome required).
+
+See [Member 1 handoff](docs/MEMBER1-INTEGRATION.md) and [team integration notes](docs/TEAM-INTEGRATION.md).
+
 EasyWeb | GIU Web Programming — ICS 511 | Topic 15
 
 EventTix Academy is a web application designed to help an academy manage events, ticket sales, student course fees, staff payroll, and event finances.
@@ -153,6 +166,24 @@ Member 2	Ticket purchases, QR tickets, invoices, student fees, and staff payroll
 Member 3	Event management, budgets, financial charts, responsive styling, and animations
 Member 4	AI chatbot, browser storage, quality assurance, and documentation
 
+## Chatbot (AI assistant)
+
+The app includes a chat assistant (the round chat button at the bottom right) that answers questions about events, tickets, fees and accounts. It uses the free [Groq](https://console.groq.com) AI API, an AI chat tool as allowed by the assignment. If the AI is unavailable, the assistant falls back to built-in keyword answers, so the app never shows a dead chat.
+
+### Setup
+
+1. Install dependencies: `npm install`
+2. Create a free API key at https://console.groq.com (API Keys page).
+3. Create a file named `.env` in the project root (next to `package.json`) with one line:
+   ```
+   GROQ_API_KEY=your-key-here
+   ```
+4. Start the app with the chat proxy: `npm run start:chat`
+5. Open http://localhost:4200 and click the chat button.
+
+Use `npm run start:chat` instead of `ng serve`. Plain `ng serve` has no proxy, so the chatbot would only use the built-in answers.
+
+
 GitHub Workflow
 
 The project uses Git branches for collaborative development.
@@ -160,9 +191,9 @@ The project uses Git branches for collaborative development.
 * main — Stable project version
 * develop — Shared development and integration branch
 * feature/member1-foundation-auth
-* feature/member2-payroll-fees
-* feature/member3-budget-ui
-* feature/member4-chatbot-storage-qa
+* feature/member2-events-tickets
+* feature/member3-finance-payroll
+* feature/member4-bonuses-ux
 
 Feature branches are merged into develop through pull requests after review.
 

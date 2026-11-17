@@ -1,0 +1,371 @@
+
+<div class="fees-page">
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div>
+      <h1>Student Fees</h1>
+      <p>Manage student payments, invoices and outstanding balances.</p>
+    </div>
+
+    <button
+      class="primary-btn"
+      (click)="showInvoiceForm = true">
+      + Create Invoice
+    </button>
+  </header>
+
+  <!-- Create Invoice Form -->
+  @if (showInvoiceForm) {
+    <section class="invoice-form-section">
+
+      <div class="section-header">
+        <div>
+          <h2>Create New Invoice</h2>
+          <p>Enter the student and invoice details.</p>
+        </div>
+
+        <button
+          class="action-btn"
+          type="button"
+          (click)="showInvoiceForm = false">
+          Cancel
+        </button>
+      </div>
+
+      <form (ngSubmit)="createInvoice()">
+
+        <div class="invoice-fields">
+
+          <div class="form-group">
+            <label>Student</label>
+
+            <select
+              name="student"
+              [(ngModel)]="invoiceStudentId"
+              required>
+
+              <option value="" disabled>Select a student</option>
+
+              @for (student of students; track student.id) {
+                <option [value]="student.id">
+                  {{ student.name }} - {{ student.id }}
+                </option>
+              }
+
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Invoice Description</label>
+
+            <input
+              type="text"
+              name="description"
+              placeholder="e.g. Semester tuition fees"
+              [(ngModel)]="invoiceDescription"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Amount (EGP)</label>
+
+            <input
+              type="number"
+              name="amount"
+              min="1"
+              placeholder="Enter amount"
+              [(ngModel)]="invoiceAmount"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Due Date</label>
+
+            <input
+              type="date"
+              name="dueDate"
+              [(ngModel)]="invoiceDueDate"
+              required
+            />
+          </div>
+
+        </div>
+
+        <button type="submit" class="primary-btn">
+          Generate Invoice
+        </button>
+
+      </form>
+
+    </section>
+  }
+
+  <!-- Financial Summary -->
+  <section class="summary-cards">
+
+    <div class="summary-card">
+      <p>Total Fees</p>
+      <h2>EGP {{ totalFees | number }}</h2>
+      <span>Expected student fees</span>
+    </div>
+
+    <div class="summary-card">
+      <p>Collected</p>
+      <h2>EGP {{ collectedFees | number }}</h2>
+      <span>Payments received</span>
+    </div>
+
+    <div class="summary-card">
+      <p>Outstanding</p>
+      <h2>EGP {{ outstandingFees | number }}</h2>
+      <span>Remaining balances</span>
+    </div>
+
+    <div class="summary-card">
+      <p>Total Students</p>
+      <h2>{{ totalStudents }}</h2>
+      <span>Registered students</span>
+    </div>
+
+  </section>
+
+  <!-- Student Fee Records -->
+  <section class="records-section">
+
+    <div class="section-header">
+      <div>
+        <h2>Student Fee Records</h2>
+        <p>View and manage student payment records.</p>
+      </div>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="filters">
+
+      <input
+        type="text"
+        placeholder="Search by student name or ID..."
+        [value]="searchTerm"
+        (input)="searchTerm = $any($event.target).value"
+      />
+
+      <select
+        [value]="selectedStatus"
+        (change)="selectedStatus = $any($event.target).value">
+
+        <option value="">All Payment Statuses</option>
+        <option value="Paid">Paid</option>
+        <option value="Partial">Partially Paid</option>
+        <option value="Unpaid">Unpaid</option>
+
+      </select>
+
+    </div>
+
+    <!-- Students Table -->
+    <div class="table-container">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Student ID</th>
+            <th>Total Fees</th>
+            <th>Paid Amount</th>
+            <th>Remaining</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (student of filteredStudents; track student.id) {
+            <tr>
+              <td>{{ student.name }}</td>
+              <td>{{ student.id }}</td>
+              <td>{{ student.totalFees | number }}</td>
+              <td>{{ student.paidAmount | number }}</td>
+
+              <td>
+                {{ (student.totalFees - student.paidAmount) | number }}
+              </td>
+
+              <td>
+                <span
+                  class="status"
+                  [class.paid]="student.status === 'Paid'"
+                  [class.partial]="student.status === 'Partial'"
+                  [class.unpaid]="student.status === 'Unpaid'">
+                  {{ student.status }}
+                </span>
+              </td>
+
+              <td>
+                <button class="action-btn">View</button>
+              </td>
+            </tr>
+          }
+
+          @if (filteredStudents.length === 0) {
+            <tr>
+              <td colspan="7" class="empty-state">
+                No students found.
+              </td>
+            </tr>
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+  <!-- Invoice Records -->
+  <section class="records-section invoice-records">
+
+    <div class="section-header">
+      <div>
+        <h2>Invoice Records</h2>
+        <p>View all invoices generated for students.</p>
+      </div>
+    </div>
+
+    <div class="table-container">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Invoice ID</th>
+            <th>Student</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (invoice of invoices; track invoice.id) {
+            <tr>
+
+              <td>{{ invoice.id }}</td>
+              <td>{{ invoice.studentName }}</td>
+              <td>{{ invoice.description }}</td>
+              <td>EGP {{ invoice.amount | number }}</td>
+              <td>{{ invoice.dueDate }}</td>
+
+              <td>
+                <span
+                  class="status"
+                  [class.paid]="invoice.status === 'Paid'"
+                  [class.unpaid]="invoice.status === 'Unpaid'">
+                  {{ invoice.status }}
+                </span>
+              </td>
+
+              <td>
+                @if (invoice.status === 'Unpaid') {
+                  <button
+                    class="action-btn"
+                    (click)="recordPayment(invoice.id)">
+                    Mark as Paid
+                  </button>
+                } @else {
+                  <span>Completed</span>
+                }
+              </td>
+
+            </tr>
+          }
+
+          @if (invoices.length === 0) {
+            <tr>
+              <td colspan="7" class="empty-state">
+                No invoices have been generated yet.
+              </td>
+            </tr>
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+  <!-- Payment History -->
+  <section class="records-section payment-history">
+
+    <div class="section-header">
+      <div>
+        <h2>Payment History</h2>
+        <p>Track all payments received from students.</p>
+      </div>
+    </div>
+
+    <div class="table-container">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>Payment ID</th>
+            <th>Student</th>
+            <th>Student ID</th>
+            <th>Invoice ID</th>
+            <th>Amount</th>
+            <th>Payment Date</th>
+            <th>Method</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          @for (payment of payments; track payment.id) {
+            <tr>
+
+              <td>{{ payment.id }}</td>
+
+              <td>{{ payment.studentName }}</td>
+
+              <td>{{ payment.studentId }}</td>
+
+              <td>{{ payment.invoiceId }}</td>
+
+              <td>EGP {{ payment.amount | number }}</td>
+
+              <td>{{ payment.paymentDate }}</td>
+
+              <td>{{ payment.paymentMethod }}</td>
+
+            </tr>
+          }
+
+          @if (payments.length === 0) {
+            <tr>
+              <td colspan="7" class="empty-state">
+                No payments recorded yet.
+              </td>
+            </tr>
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</div>

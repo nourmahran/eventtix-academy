@@ -1,0 +1,177 @@
+
+.checkout-page {
+  min-height: 100vh;
+  padding: 40px 8%;
+  background: #f7f5fc;
+  color: #25213a;
+}
+
+.back-link {
+  color: #7046c8;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.page-header {
+  margin: 40px 0 30px;
+}
+
+.eyebrow {
+  color: #8056d6;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.page-header h1 {
+  margin: 10px 0;
+  font-size: 36px;
+}
+
+.page-header p {
+  color: #777;
+}
+
+.checkout-card {
+  max-width: 650px;
+  margin: auto;
+  padding: 30px;
+  background: white;
+  border-radius: 18px;
+  box-shadow: 0 8px 30px rgba(40, 20, 80, 0.08);
+}
+
+.event-info {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.event-info h2 {
+  margin-top: 0;
+}
+
+.event-info p,
+.mock-notice {
+  color: #777;
+}
+
+.booking-info {
+  padding: 20px 0;
+}
+
+.selected-seats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.selected-seats span {
+  padding: 8px 14px;
+  background: #eee7ff;
+  color: #7046c8;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.price-row,
+.final-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin: 16px 0;
+}
+
+.discount {
+  color: #16834a;
+}
+
+.final-total {
+  padding-top: 18px;
+  border-top: 1px solid #eee;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.confirm-button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background: #7046c8;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.mock-notice {
+  text-align: center;
+  font-size: 12px;
+}
+
+.not-found {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+@media (max-width: 600px) {
+  .checkout-page {
+    padding: 25px 5%;
+  }
+
+  .page-header h1 {
+    font-size: 28px;
+  }
+
+  .checkout-card {
+    padding: 20px;
+  }
+  .confirmation-message {
+  margin-top: 20px;
+  padding: 20px;
+  background: #e9f8ef;
+  border: 1px solid #b8e5c8;
+  border-radius: 12px;
+  text-align: center;
+  color: #176b3a;
+}
+
+.confirmation-message h2 {
+  margin-top: 0;
+}
+.ticket-qr {
+  display: grid;
+  grid-template-columns: repeat(11, 12px);
+  grid-template-rows: repeat(11, 12px);
+  width: fit-content;
+  margin: 20px auto;
+  padding: 10px;
+  background: white;
+  border: 1px solid #ddd;
+}
+
+.ticket-qr {
+  display: grid;
+  grid-template-columns: repeat(11, 16px);
+  grid-template-rows: repeat(11, 16px);
+  width: fit-content;
+  margin: 25px auto;
+  padding: 12px;
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+}
+
+.ticket-qr span {
+  display: block;
+  width: 16px;
+  height: 16px;
+  background: white;
+}
+
+.ticket-qr span.dark {
+  background: #171717;
+}
+}

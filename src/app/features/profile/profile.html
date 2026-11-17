@@ -1,0 +1,14 @@
+<main class="auth-page"><section class="auth-card"><div class="auth-heading"><div class="auth-icon">✦</div><h1>Your profile</h1><p>{{ auth.user()?.username }} · {{ auth.user()?.role }}</p></div>
+<form [formGroup]="form" (ngSubmit)="save()">
+<app-photo-picker [value]="form.controls.profilePictureUrl.value" (valueChange)="form.controls.profilePictureUrl.setValue($event); form.markAsDirty()" (busyChange)="photoBusy = $event" />
+<p class="notice">Password: hidden for your privacy.</p>
+<div class="form-group"><label for="fullName">Full name</label><input id="fullName" formControlName="fullName" autocomplete="name" />
+@if (form.controls.fullName.touched && form.controls.fullName.invalid) { <p class="error">Enter at least 3 characters.</p> }</div>
+<div class="form-group"><label for="email">Email</label><input id="email" type="email" formControlName="email" autocomplete="email" />
+@if (form.controls.email.touched && form.controls.email.invalid) { <p class="error">Enter a valid email.</p> }</div>
+<div class="form-group"><label for="paymentMethod">Credit card (mock)</label><select id="paymentMethod" formControlName="paymentMethodLabel"><option value="">No card selected</option>@for (method of paymentMethods; track method) { <option [value]="method">{{ method }}</option> }</select><small>Sample cards only. No real payments or card details.</small></div>
+<fieldset><legend>Preferences</legend><div class="form-group"><label for="theme">Appearance</label><select id="theme" formControlName="theme"><option value="dark">Dark purple</option><option value="light">Light purple</option></select></div><p><label><input type="checkbox" formControlName="notificationsEnabled" /> Notifications</label></p><p><label><input type="checkbox" formControlName="soundEnabled" /> Sound</label></p></fieldset>
+<p class="notice">Appearance applies when saved. Notification and sound preferences are saved for your team’s upcoming features. Demo-role profiles last until sign out or refresh.</p>
+<button type="submit" class="submit-btn" [disabled]="photoBusy">Save profile</button>
+@if (message) { <p role="status">{{ message }}</p> } @if (error) { <p class="error" role="alert">{{ error }}</p> }
+</form></section></main>

@@ -1,0 +1,25 @@
+<main class="auth-page"><section class="auth-card">
+<div class="auth-heading"><div class="auth-icon">✦</div><h1>Create your account</h1><p>Join EventTix Academy as a student</p></div>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<app-photo-picker [value]="form.controls.profilePictureUrl.value" [disabled]="busy || photoBusy" (valueChange)="form.controls.profilePictureUrl.setValue($event)" (busyChange)="photoBusy = $event" />
+@for (field of ['fullName', 'username', 'email', 'password', 'confirmPassword']; track field) {
+<div class="form-group">
+<label [for]="field">{{ field === 'fullName' ? 'Full name' : field === 'confirmPassword' ? 'Confirm password' : field === 'username' ? 'Username' : field === 'email' ? 'Email' : 'Password' }}</label>
+<input [id]="field" [formControlName]="field" [type]="field.toLowerCase().includes('password') ? (showPassword ? 'text' : 'password') : field === 'email' ? 'email' : 'text'" [autocomplete]="field.toLowerCase().includes('password') ? 'new-password' : field === 'fullName' ? 'name' : field" [attr.aria-invalid]="form.get(field)?.touched && form.get(field)?.invalid" />
+@if (form.get(field)?.touched && form.get(field)?.invalid) { <small class="error">{{ field === 'username' ? 'Use 3–30 letters, numbers or underscores.' : field === 'password' ? 'Use 8–128 characters.' : 'Please enter a valid value.' }}</small> }
+</div> }
+<button class="visibility-btn" type="button" [attr.aria-pressed]="showPassword" (click)="showPassword = !showPassword">{{ showPassword ? 'Hide passwords' : 'Show passwords' }}</button>
+@if (form.controls.confirmPassword.touched && form.hasError('mismatch')) { <p class="error">Passwords must match.</p> }
+<div class="form-group"><label for="paymentMethod">Credit card (mock)</label><select id="paymentMethod" formControlName="paymentMethodLabel"><option value="">No card selected</option>@for (method of paymentMethods; track method) { <option [value]="method">{{ method }}</option> }</select><small>Choose a sample card. No real card numbers, security codes, or payments.</small></div>
+<fieldset><legend>Your preferences</legend>
+<div class="form-group"><label for="theme">Appearance</label><select id="theme" formControlName="theme"><option value="dark">Dark purple</option><option value="light">Light purple</option></select></div>
+<p><label><input type="checkbox" formControlName="notificationsEnabled" /> Enable notifications</label></p>
+<p><label><input type="checkbox" formControlName="soundEnabled" /> Enable sound</label></p>
+</fieldset>
+<p class="notice">Classroom demo: account details stay in this browser. Use a unique demo password and no real payment information. Refreshing signs you out.</p>
+<label><input type="checkbox" formControlName="acceptTerms" /> I understand this is a local demo.</label>
+@if (form.controls.acceptTerms.touched && form.controls.acceptTerms.invalid) { <p class="error">Please acknowledge the demo notice.</p> }
+<p><button class="submit-btn" type="submit" [disabled]="busy || photoBusy">{{ busy ? 'Creating account…' : 'Create account' }}</button></p>
+@if (error) { <p class="error" role="alert">{{ error }}</p> }
+</form><p class="signup-link">Already registered? <a routerLink="/login">Sign in</a></p>
+</section></main>

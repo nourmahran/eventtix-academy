@@ -1,0 +1,122 @@
+
+<div class="admin-page">
+
+  <a routerLink="/events" class="back-link">
+    ← Back to Events
+  </a>
+
+  <header class="page-header">
+    <span class="eyebrow">EVENTTIX ADMIN</span>
+    <h1>Manage Events</h1>
+    <p>Create new events or update existing ones.</p>
+  </header>
+
+  <div class="admin-layout">
+
+    <section class="event-form">
+      <h2>{{ editing() ? 'Edit Event' : 'Create New Event' }}</h2>
+
+      <form (ngSubmit)="saveEvent()">
+
+        <label>Event Title</label>
+        <input
+          type="text"
+          name="title"
+          [(ngModel)]="form.title"
+          placeholder="Enter event title"
+          required
+        />
+
+        <label>Category</label>
+        <select name="category" [(ngModel)]="form.category">
+          <option value="Concert">Concert</option>
+          <option value="Conference">Conference</option>
+          <option value="Workshop">Workshop</option>
+        </select>
+
+        <label>Date</label>
+        <input
+          type="date"
+          name="date"
+          [(ngModel)]="form.date"
+          required
+        />
+
+        <label>Location</label>
+        <input
+          type="text"
+          name="location"
+          [(ngModel)]="form.location"
+          placeholder="Enter location"
+          required
+        />
+
+        <label>Ticket Price (EGP)</label>
+        <input
+          type="number"
+          name="price"
+          [(ngModel)]="form.price"
+          min="1"
+          required
+        />
+
+        <label>Image URL</label>
+        <input
+          type="url"
+          name="image"
+          [(ngModel)]="form.image"
+          placeholder="https://example.com/image.jpg"
+        />
+
+        <label>Description</label>
+        <textarea
+          name="description"
+          [(ngModel)]="form.description"
+          placeholder="Describe the event"
+          rows="4">
+        </textarea>
+
+        <button type="submit" class="save-button">
+          {{ editing() ? 'Save Changes' : 'Create Event' }}
+        </button>
+
+        @if (editing()) {
+          <button
+            type="button"
+            class="cancel-button"
+            (click)="cancelEdit()">
+            Cancel Editing
+          </button>
+        }
+
+      </form>
+    </section>
+
+    <section class="events-list">
+      <h2>Existing Events ({{ events().length }})</h2>
+
+      @for (event of events(); track event.id) {
+        <article class="admin-event-card">
+
+          <div>
+            <span class="category">{{ event.category }}</span>
+            <h3>{{ event.title }}</h3>
+            <p>{{ event.date }} · {{ event.location }}</p>
+            <strong>EGP {{ event.price }}</strong>
+          </div>
+
+          <button
+            type="button"
+            class="edit-button"
+            (click)="editEvent(event)">
+            Edit
+          </button>
+
+        </article>
+      }
+
+    </section>
+
+  </div>
+
+</div>
