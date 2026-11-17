@@ -4,11 +4,12 @@ import { AuthService } from './core/auth/auth.service';
 import { Component, effect, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Navbar } from './layout/navbar/navbar';
+import { Chatbot } from './shared/chatbot/chatbot';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, Navbar],
+  imports: [RouterOutlet, Navbar, Chatbot],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
