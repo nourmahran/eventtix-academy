@@ -1,0 +1,61 @@
+@if (error) { <p class="notice" role="alert">{{ error }}</p> }
+
+<div class="history-page">
+
+  <a routerLink="/events" class="back-link">
+    ← Back to Events
+  </a>
+
+  <header class="page-header">
+    <span class="eyebrow">EVENTTIX</span>
+    <h1>My Ticket History</h1>
+    <p>View all your confirmed event bookings.</p>
+  </header>
+
+  @if (tickets.length > 0) {
+    <div class="tickets-grid">
+
+      @for (ticket of tickets; track ticket.ticketCode) {
+        <article class="ticket-card">
+
+          <div class="ticket-header">
+            <span class="ticket-status">Confirmed</span>
+            <strong>{{ ticket.ticketCode }}</strong>
+          </div>
+
+          <div class="ticket-body">
+            <h2>{{ ticket.eventTitle }}</h2>
+
+            <p>{{ ticket.eventDate }}</p>
+            <p>{{ ticket.eventLocation }}</p>
+
+            <div class="ticket-divider"></div>
+
+            <div class="ticket-detail">
+              <span>Selected Seats</span>
+              <strong>{{ ticket.selectedSeats.join(', ') }}</strong>
+            </div>
+
+            <div class="ticket-detail">
+              <span>Amount Paid</span>
+              <strong>EGP {{ ticket.finalTotal }}</strong>
+            </div>
+
+            @if (ticket.isStudent) {
+              <span class="discount-label">Student discount applied</span>
+            }
+          </div>
+
+        </article>
+      }
+
+    </div>
+  } @else {
+    <div class="empty-state">
+      <h2>No tickets yet</h2>
+      <p>Your confirmed bookings will appear here.</p>
+      <a routerLink="/events">Explore Events</a>
+    </div>
+  }
+
+</div>
