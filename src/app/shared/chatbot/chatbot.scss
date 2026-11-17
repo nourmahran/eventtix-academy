@@ -1,0 +1,102 @@
+:host {
+  --chat-accent: var(--color-primary, #6a3fb5); // swap for Member 1's purple variable if it has another name
+}
+
+.chat-toggle {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  border: none;
+  border-radius: 50%;
+  background: var(--chat-accent);
+  color: #fff;
+  font-size: 1.4rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+.chat-panel {
+  position: fixed;
+  right: 1rem;
+  bottom: 5.5rem;
+  width: 340px;
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  color: #1f2430;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  z-index: 1000;
+  animation: chat-pop 0.2s ease both;
+
+  header {
+    padding: 0.75rem 1rem;
+    background: var(--chat-accent);
+    color: #fff;
+    font-weight: 600;
+  }
+
+  @media (max-width: 480px) {
+    left: 0.5rem;
+    right: 0.5rem;
+    width: auto;
+  }
+}
+
+@keyframes chat-pop {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 200px;
+}
+
+.bubble {
+  max-width: 80%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 12px;
+  background: #ece8f7;
+  align-self: flex-start;
+  white-space: pre-wrap;
+
+  &.user {
+    background: var(--chat-accent);
+    color: #fff;
+    align-self: flex-end;
+  }
+}
+
+.input-row {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-top: 1px solid #ddd;
+
+  input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+
+  button {
+    border: none;
+    padding: 0 1rem;
+    border-radius: 6px;
+    background: var(--chat-accent);
+    color: #fff;
+    cursor: pointer;
+  }
+}
