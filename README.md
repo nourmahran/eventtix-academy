@@ -166,6 +166,24 @@ Member 2	Ticket purchases, QR tickets, invoices, student fees, and staff payroll
 Member 3	Event management, budgets, financial charts, responsive styling, and animations
 Member 4	AI chatbot, browser storage, quality assurance, and documentation
 
+## Chatbot (AI assistant)
+
+The app includes a chat assistant (the round chat button at the bottom right) that answers questions about events, tickets, fees and accounts. It uses the free [Groq](https://console.groq.com) AI API, an AI chat tool as allowed by the assignment. If the AI is unavailable, the assistant falls back to built-in keyword answers, so the app never shows a dead chat.
+
+### Setup
+
+1. Install dependencies: `npm install`
+2. Create a free API key at https://console.groq.com (API Keys page).
+3. Create a file named `.env` in the project root (next to `package.json`) with one line:
+   ```
+   GROQ_API_KEY=your-key-here
+   ```
+4. Start the app with the chat proxy: `npm run start:chat`
+5. Open http://localhost:4200 and click the chat button.
+
+Use `npm run start:chat` instead of `ng serve`. Plain `ng serve` has no proxy, so the chatbot would only use the built-in answers.
+
+
 GitHub Workflow
 
 The project uses Git branches for collaborative development.
