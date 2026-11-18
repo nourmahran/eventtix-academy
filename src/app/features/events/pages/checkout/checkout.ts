@@ -1,3 +1,4 @@
+import { SoundService } from '../../../../core/preferences/sound.service';
 import { TicketCode } from '../ticket-code';
 import { BookingStorage, Booking, SavedTicket } from '../../services/booking-storage';
 import { AuthService } from '../../../../core/auth/auth.service';
@@ -14,6 +15,7 @@ import { EventService } from '../../services/event';
   styleUrl: './checkout.scss'
 })
 export class Checkout {
+  private readonly sound = inject(SoundService);
   private readonly storage = inject(BookingStorage);
   private readonly auth = inject(AuthService);
   error = '';
@@ -51,6 +53,7 @@ async confirmBooking(): Promise<void> {
     this.savedTicket = await this.storage.confirm({ ...this.booking, totalPrice: this.totalPrice, discountAmount: this.discountAmount, finalTotal: this.finalTotal, isStudent: this.isStudent, ticketCode, eventTitle: this.event.title, eventDate: this.event.date, eventLocation: this.event.location });
     this.ticketCode = ticketCode;
     this.confirmed = true;
+    void this.sound.success();
   } catch (error) { this.error = error instanceof Error ? error.message : 'Unable to confirm booking.'; }
   finally { this.busy = false; }
 }

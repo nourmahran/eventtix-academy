@@ -11,7 +11,7 @@ describe('Finance route integration', () => {
     const harness = await RouterTestingHarness.create();
     const auth = TestBed.inject(AuthService);
     const router = TestBed.inject(Router);
-    for (const path of ['/student-fees', '/payroll', '/event-finance']) {
+    for (const path of ['/student-fees', '/payroll', '/event-finance', '/department-budget']) {
       auth.logout();
       await harness.navigateByUrl(path);
       expect(router.url).toContain('/login?returnUrl=');
@@ -28,8 +28,8 @@ describe('Finance route integration', () => {
     for (const role of ['accounting', 'admin'] as const) {
       auth.startDemo(role);
       await harness.navigateByUrl('/accounting');
-      expect(harness.routeNativeElement?.querySelectorAll('a').length).toBe(5);
-      for (const path of ['/student-fees', '/payroll', '/event-finance']) {
+      expect(harness.routeNativeElement?.querySelectorAll('a').length).toBe(6);
+      for (const path of ['/student-fees', '/payroll', '/event-finance', '/department-budget']) {
         await harness.navigateByUrl(path);
         expect(router.url).toBe(path);
         expect(harness.routeNativeElement?.querySelector('h1')).toBeTruthy();
