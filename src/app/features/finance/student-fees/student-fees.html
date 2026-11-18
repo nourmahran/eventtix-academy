@@ -1,3 +1,4 @@
+@if (error) { <p class="error-banner" role="alert">{{ error }}</p> }
 
 <div class="fees-page">
 
@@ -206,7 +207,7 @@
               </td>
 
               <td>
-                <button class="action-btn">View</button>
+                <button class="action-btn" (click)="viewStudent(student.id); studentDialog.showModal()">View</button>
               </td>
             </tr>
           }
@@ -369,3 +370,23 @@
   </section>
 
 </div>
+
+<dialog #studentDialog class="student-dialog" aria-labelledby="student-detail-title">
+  @if (selectedStudent; as student) {
+    <button class="action-btn close-detail" type="button" (click)="studentDialog.close()">Close details</button>
+    <h2 id="student-detail-title">{{ student.name }}</h2><p>Student ID: {{ student.id }}</p>
+    <p>Fees: EGP {{ student.totalFees | number }} · Paid: EGP {{ student.paidAmount | number }}</p>
+    <p><strong>Remaining: EGP {{ student.totalFees - student.paidAmount | number }}</strong> · {{ student.status }}</p>
+    <h3>Invoices</h3>
+    @for (invoice of studentInvoices; track invoice.id) {
+      <article><strong>{{ invoice.description }}</strong><p>{{ invoice.id }} · Due {{ invoice.dueDate }}</p>
+      <p>EGP {{ invoice.amount | number }} · {{ invoice.status }}</p>
+      @if (invoice.status === 'Unpaid') { <button class="action-btn" (click)="recordPayment(invoice.id)">Mark as Paid</button> }</article>
+    } @empty { <p>No invoices recorded for this student.</p> }
+    <h3>Payment history</h3>
+    @for (payment of studentPayments; track payment.id) {
+      <article><strong>EGP {{ payment.amount | number }}</strong><p>{{ payment.paymentDate }} · {{ payment.paymentMethod }}</p><p>Invoice: {{ payment.invoiceId }}</p></article>
+    } @empty { <p>No itemized payments recorded. Opening balances are included in the paid total above.</p> }
+    @if (error) { <p class="error" role="alert">{{ error }}</p> }
+  }
+</dialog>

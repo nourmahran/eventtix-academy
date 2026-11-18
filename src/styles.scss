@@ -140,3 +140,60 @@ button,
   }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* Shared EventTix design tokens: both themes use the same visual hierarchy. */
+:root {
+  --page-bg: #10101b; --surface: #1a1929; --input-bg: #131320;
+  --text: #f5f3ff; --muted: #b6b3ca; --placeholder: #9793ae;
+  --border: #38354d; --soft: #26223b; --accent: #c4adff;
+  --primary: #7040ce; --primary-hover: #5e2db8; --glow: #30204c;
+  --hero-end: #191329; --shadow: 0 16px 48px #00000020;
+  --color-primary: var(--primary); --color-bg: var(--page-bg);
+  --color-surface: var(--surface); --color-text: var(--text); --radius: 16px;
+}
+:root[data-theme='light'] {
+  --page-bg: #f6f5fa; --surface: #ffffff; --input-bg: #fcfbff;
+  --text: #242037; --muted: #625c76; --placeholder: #746c88;
+  --border: #dfdbe9; --soft: #efebf8; --accent: #6534b5;
+  --glow: #e9dffc; --hero-end: #efebf7; --shadow: 0 16px 48px #32204b0a;
+}
+body { font-family: 'Segoe UI', system-ui, sans-serif; line-height: 1.55; }
+h1,h2,h3 { line-height: 1.2; letter-spacing: -.035em; text-wrap: balance; }
+a { color: var(--accent); }
+button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+button:not(:disabled), summary, select { cursor: pointer; }
+input, select, textarea { color: var(--text); accent-color: var(--primary); }
+input::placeholder, textarea::placeholder { color: var(--placeholder); }
+button:disabled { cursor: not-allowed; opacity: .45; box-shadow: none; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.primary-btn,.submit-btn,.confirm-button,.continue-button,.details-button,.save-button,.btn-primary {
+  box-shadow: 0 4px 12px #5925b02b;
+}
+.fees-page,.finance-page,.payroll-page,.admin-page,.history-page {
+  max-width: 1440px; margin-inline: auto;
+}
+.summary-card,.records-section,.booking-card,.booking-summary,.checkout-card,.ticket-card { box-shadow: var(--shadow); }
+.summary-card { border-top: 3px solid var(--primary); }
+.table-container { border-radius: 10px; }
+th { text-transform: uppercase; letter-spacing: .06em; }
+button:not(.seat):not(.password-toggle), .btn { min-height: 42px; }
+.back-link { font-size: 14px; }
+.ticket-header { overflow-wrap: anywhere; }
+.chart-container { background: #fff; border-radius: 12px; padding: 12px; }
+@media(max-width: 600px) {
+  .header-actions,.form-actions { flex-wrap: wrap; }
+  .filters input { min-width: 0; }
+  .tickets-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+
+:root { --success: #70d9a2; }
+:root[data-theme='light'] { --success: #167446; }
+.discount-label, .net-salary, .profit { color: var(--success) !important; }
+
+.error-banner { margin: 20px; padding: 16px; color: var(--error); background: var(--surface); border: 1px solid var(--error); border-radius: 10px; }
+.student-dialog { width: min(680px, calc(100vw - 32px)); max-height: 85vh; overflow: auto; padding: 28px; border: 1px solid var(--border); border-radius: 16px; background: var(--surface); color: var(--text); }
+.student-dialog::backdrop { background: #0009; }
+.student-dialog article { border-top: 1px solid var(--border); padding: 12px 0; overflow-wrap: anywhere; }
+.student-dialog .close-detail { float: right; }

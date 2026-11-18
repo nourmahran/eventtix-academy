@@ -1,8 +1,8 @@
 
 :host {
   display: block;
-  font-family: Arial, sans-serif;
-  color: #263248;
+  font-family: inherit;
+  color: var(--text);
 }
 
 * {
@@ -11,7 +11,7 @@
 
 .finance-page {
   padding: 32px;
-  background: #f7f8fc;
+  background: var(--page-bg);
   min-height: 100vh;
 }
 
@@ -29,7 +29,7 @@
 
   p {
     font-size: 14px;
-    color: #8490a5;
+    color: var(--muted);
     margin: 0;
   }
 }
@@ -45,17 +45,17 @@
 }
 
 .primary-btn {
-  background: #5268d9;
+  background: var(--primary);
   color: white;
 
   &:hover {
-    background: #4054bd;
+    background: var(--primary-hover);
   }
 }
 
 .secondary-btn {
-  background: #e9edfc;
-  color: #5268d9;
+  background: var(--soft);
+  color: var(--accent);
 }
 
 .summary-cards {
@@ -66,13 +66,13 @@
 }
 
 .summary-card {
-  background: white;
-  border: 1px solid #edf0f5;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 22px;
 
   p {
-    color: #8490a5;
+    color: var(--muted);
     font-size: 13px;
     margin: 0 0 14px;
   }
@@ -83,14 +83,14 @@
   }
 
   span {
-    color: #a0aabb;
+    color: var(--muted);
     font-size: 12px;
   }
 }
 
 .records-section {
-  background: white;
-  border: 1px solid #edf0f5;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 12px;
   padding: 24px;
   margin-bottom: 24px;
@@ -111,7 +111,7 @@
 
   p {
     font-size: 13px;
-    color: #8490a5;
+    color: var(--muted);
     margin: 0;
   }
 }
@@ -137,14 +137,14 @@
   select {
     width: 100%;
     padding: 12px;
-    border: 1px solid #e1e5ed;
+    border: 1px solid var(--border);
     border-radius: 8px;
-    background: white;
+    background: var(--surface);
     font-size: 13px;
 
     &:focus {
       outline: none;
-      border-color: #5268d9;
+      border-color: var(--primary);
     }
   }
 }
@@ -166,21 +166,21 @@ table {
   white-space: nowrap;
 
   th {
-    background: #f8f9fc;
-    color: #8490a5;
+    background: var(--soft);
+    color: var(--muted);
     padding: 15px 12px;
     font-size: 12px;
   }
 
   td {
     padding: 17px 12px;
-    border-bottom: 1px solid #f0f1f5;
+    border-bottom: 1px solid var(--border);
     font-size: 13px;
-    color: #526078;
+    color: var(--muted);
   }
 
   tbody tr:hover {
-    background: #fafbfe;
+    background: var(--soft);
   }
 }
 
@@ -201,15 +201,15 @@ table {
 
 .event-select {
   padding: 10px;
-  border: 1px solid #e1e5ed;
+  border: 1px solid var(--border);
   border-radius: 8px;
-  background: white;
+  background: var(--surface);
 }
 
 .empty-state {
   text-align: center;
   padding: 30px !important;
-  color: #8490a5;
+  color: var(--muted);
 }
 
 @media (max-width: 1100px) {
@@ -241,3 +241,6 @@ table {
     height: 270px;
   }
 }
+
+.event-select { max-width: 100%; min-width: 0; }
+.chart-container canvas { max-width: 100%; }

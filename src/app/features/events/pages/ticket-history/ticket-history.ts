@@ -1,3 +1,4 @@
+import { TicketCode } from '../ticket-code';
 import { BookingStorage, SavedTicket } from '../../services/booking-storage';
 
 import { Component, inject } from '@angular/core';
@@ -6,7 +7,7 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-ticket-history',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, TicketCode],
   templateUrl: './ticket-history.html',
   styleUrl: './ticket-history.scss'
 })

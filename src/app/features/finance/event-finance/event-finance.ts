@@ -1,6 +1,9 @@
+import { LocalRecord, money, text } from '../../../shared/services/local-record';
+import { BookingStorage } from '../../events/services/booking-storage';
+import { EventService } from '../../events/services/event';
 
 import {
-  Component,
+  Component, inject, HostListener,
   AfterViewInit,
   OnDestroy,
   ViewChild,
@@ -77,6 +80,38 @@ export class EventFinance implements AfterViewInit, OnDestroy {
     }
   ];
 
+  private readonly bookings = inject(BookingStorage);
+  private readonly catalog = inject(EventService);
+  private readonly record = new LocalRecord<FinanceEvent[]>('eventtix.event-finance.v1', this.events, value =>
+    Array.isArray(value) && value.every(e => e && text(e.id) && text(e.name) && money(e.ticketRevenue) &&
+      money(e.sponsorship) && money(e.otherIncome) && Array.isArray(e.expenses) && e.expenses.every((x: any) => x && text(x.description) && money(x.amount))));
+  error = this.record.error;
+  private revenue: Record<string, number> = {};
+  constructor() {
+    this.restore();
+    this.refreshRevenue();
+  }
+  private restore(): void {
+    this.events = this.record.value;
+    for (const event of this.catalog.getEvents()) {
+      const id = `event-${event.id}`;
+      const existing = this.events.find(e => e.id === id);
+      if (existing) existing.name = event.title;
+      else this.events.push({ id, name: event.title, ticketRevenue: 0, sponsorship: 0, otherIncome: 0, expenses: [] });
+    }
+  }
+  @HostListener('window:storage')
+  refreshRevenue(): void {
+    try {
+      for (const event of this.events) if (event.id.startsWith('event-')) this.revenue[event.id] = this.bookings.ticketRevenue(Number(event.id.slice(6)));
+      this.updateChart();
+    } catch (error) { this.error = error instanceof Error ? error.message : 'Ticket revenue is unavailable.'; }
+  }
+  ticketIncome(event: FinanceEvent): number { return event.id.startsWith('event-') ? (this.revenue[event.id] ?? 0) : event.ticketRevenue; }
+  private persist(): boolean {
+    try { this.record.save(this.events); this.error = ''; return true; }
+    catch (error) { this.restore(); this.error = error instanceof Error ? error.message : 'Unable to save finance records.'; return false; }
+  }
   selectedEventId = 'EV001';
 
   // Transaction form
@@ -91,7 +126,7 @@ export class EventFinance implements AfterViewInit, OnDestroy {
 
   getIncome(event: FinanceEvent): number {
     return (
-      event.ticketRevenue +
+      this.ticketIncome(event) +
       event.sponsorship +
       event.otherIncome
     );
@@ -154,6 +189,7 @@ export class EventFinance implements AfterViewInit, OnDestroy {
       event.otherIncome += this.transactionAmount;
     }
 
+    if (!this.persist()) return;
     this.transactionDescription = '';
     this.transactionAmount = 0;
     this.showTransactionForm = false;

@@ -6,8 +6,12 @@ The `develop` branch combines Member 1 foundation/authentication, Member 2 event
 
 - Ready: responsive home/navigation, signup/login, roles and guards, profiles/pictures, mock card labels, preferences and basic storage.
 - Integrated: event catalogue/details, seat selection, account-scoped mock checkout/ticket history, admin event editing, student fees/invoice payments, staff payroll/monthly JSON reports, event finance/charts, shared storage, responsive/animation utilities, and `npm run test:ci`. Finance pages are available to admin/accounting users through the Accounting navigation entry.
-- Still incomplete: scannable ticket QR codes, ticket invoices, live seat availability, event/finance persistence, chatbot, and the student-fee View action. See the integration notes for verified limitations.
+- Added locally on 18 November: scannable ticket QR references, downloadable HTML invoices (print to PDF), browser-local seat reservations, persistent event/fees/payroll/finance data, linked ticket revenue, student fee detail dialogs, and a Gemini AI chatbot (requires a server-side API key).
+- Scope: this is a browser-only classroom demo. Data is shared only within the same browser profile and origin. The chatbot uses Google Gemini through a local Node backend. Team report and submission details still require the team’s input.
+- See [completion notes](docs/FEATURE-COMPLETION.md) for data keys, validation and limitations.
 - Authentication is a frontend classroom mock. Refresh signs out; persistent demo accounts remain in browser storage. Do not enter real payment details.
+
+For AI chat, set `GEMINI_API_KEY` in the private `.env` file; see [Gemini setup](docs/GEMINI-CHAT.md). `npm start` runs Angular and the chat backend together.
 
 Run `npm ci`, then `npm start`; build with `npm run build`; test with `npm run test:ci` (Chrome required).
 

@@ -1,3 +1,4 @@
+import { LocalRecord, money, text } from '../../../shared/services/local-record';
 
 import { Component } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
@@ -88,6 +89,27 @@ export class StudentFees {
   invoiceAmount: number = 0;
   invoiceDueDate: string = '';
 
+  private readonly record = new LocalRecord('eventtix.fees.v1',
+    { students: this.students, invoices: this.invoices, payments: this.payments }, value =>
+      value && Array.isArray(value.students) && value.students.every((s: any) => s && text(s.id) && text(s.name) && money(s.totalFees) && money(s.paidAmount) && s.paidAmount <= s.totalFees && ['Paid','Partial','Unpaid'].includes(s.status)) &&
+      Array.isArray(value.invoices) && value.invoices.every((i: any) => i && text(i.id) && text(i.studentId) && text(i.studentName) && text(i.description) && money(i.amount) && text(i.dueDate) && ['Paid','Unpaid'].includes(i.status)) &&
+      Array.isArray(value.payments) && value.payments.every((t: any) => t && text(t.id) && text(t.studentId) && text(t.studentName) && text(t.invoiceId) && money(t.amount) && text(t.paymentDate) && text(t.paymentMethod)));
+  error = this.record.error;
+  selectedStudentId: string | null = null;
+  constructor() { this.restore(); }
+  private restore(): void {
+    const value = this.record.value;
+    this.students = value.students; this.invoices = value.invoices; this.payments = value.payments;
+  }
+  private persist(): boolean {
+    try { this.record.save({ students: this.students, invoices: this.invoices, payments: this.payments }); this.error = ''; return true; }
+    catch (error) { this.restore(); this.error = error instanceof Error ? error.message : 'Unable to save fees.'; return false; }
+  }
+  get selectedStudent(): StudentFee | undefined { return this.students.find(s => s.id === this.selectedStudentId); }
+  get studentInvoices(): Invoice[] { return this.invoices.filter(i => i.studentId === this.selectedStudentId); }
+  get studentPayments(): Payment[] { return this.payments.filter(p => p.studentId === this.selectedStudentId); }
+  viewStudent(id: string): void { this.selectedStudentId = id; }
+
   // Filter students
   get filteredStudents(): StudentFee[] {
     return this.students.filter(student => {
@@ -143,8 +165,13 @@ export class StudentFees {
       return;
     }
 
+    const unbilled = student.totalFees - student.paidAmount - this.invoices.filter(i => i.studentId === student.id && i.status === 'Unpaid').reduce((sum, i) => sum + i.amount, 0);
+    if (this.invoiceAmount > unbilled) {
+      this.error = 'Invoice exceeds the balance not already covered by unpaid invoices.';
+      return;
+    }
     const newInvoice: Invoice = {
-      id: 'INV-' + Date.now(),
+      id: 'INV-' + crypto.randomUUID(),
       studentId: student.id,
       studentName: student.name,
       description: this.invoiceDescription,
@@ -154,6 +181,7 @@ export class StudentFees {
     };
 
     this.invoices.push(newInvoice);
+    if (!this.persist()) return;
 
     alert('Invoice created successfully!');
 
@@ -210,7 +238,7 @@ export class StudentFees {
 
     // Create payment history record
     const newPayment: Payment = {
-      id: 'PAY-' + Date.now(),
+      id: 'PAY-' + crypto.randomUUID(),
       studentId: student.id,
       studentName: student.name,
       invoiceId: invoice.id,
@@ -220,6 +248,7 @@ export class StudentFees {
     };
 
     this.payments.push(newPayment);
+    if (!this.persist()) return;
 
     alert('Payment recorded successfully!');
   }

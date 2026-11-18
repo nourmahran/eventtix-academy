@@ -44,6 +44,7 @@
             @if (ticket.isStudent) {
               <span class="discount-label">Student discount applied</span>
             }
+            <app-ticket-code [ticket]="ticket" />
           </div>
 
         </article>

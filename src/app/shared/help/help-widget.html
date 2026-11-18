@@ -1,0 +1,22 @@
+<button class="help-launcher" type="button" (click)="help.showModal()" aria-haspopup="dialog">✦ AI assistant</button>
+<dialog #help class="help-panel" aria-labelledby="chat-title">
+  <header><div class="assistant-brand"><span aria-hidden="true">✦</span><div><h2 id="chat-title">EventTix assistant</h2><small>Powered by Google Gemini</small></div></div>
+    <button type="button" class="icon-button" (click)="help.close()" aria-label="Close chat">✕</button></header>
+  <p class="privacy-note">Messages and public event details are sent to Google Gemini. Don’t share passwords or payment details.</p>
+  <div #messageLog class="messages" role="log" aria-live="polite" aria-relevant="additions text" [attr.aria-busy]="busy">
+    @if (!messages.length) {
+      <section class="welcome"><span class="welcome-mark" aria-hidden="true">✦</span><h3>What’s your next experience?</h3><p>Ask me to compare events, explain booking, or help you find your way around.</p>
+        <div class="suggestions">@for (suggestion of suggestions; track suggestion) { <button type="button" (click)="send(suggestion)">{{ suggestion }} <span aria-hidden="true">↗</span></button> }</div>
+      </section>
+    }
+    @for (message of messages; track $index) {
+      <article [class.user-message]="message.role === 'user'" [class.assistant-message]="message.role === 'model'"><strong>{{ message.role === 'user' ? 'You' : 'Gemini' }}</strong><p>{{ message.text }}</p></article>
+    }
+    @if (busy) { <p class="thinking" role="status">Gemini is thinking…</p> }
+    @if (shortened && !busy) { <p class="chat-note">Reply shortened. Ask a follow-up for more detail.</p> }
+  </div>
+  @if (error) { <div class="chat-error" role="alert"><p>{{ error }}</p>@if (awaitingReply) { <button type="button" (click)="retry()">Retry</button><button type="button" (click)="editFailedMessage()">Edit message</button> }</div> }
+  <form (ngSubmit)="send()"><label for="chat-question">Your message</label><div class="question-row"><textarea id="chat-question" name="question" [(ngModel)]="question" maxlength="2000" rows="2" [disabled]="busy || awaitingReply" placeholder="Ask anything about EventTix…"></textarea>
+    @if (busy) { <button class="send-button" type="button" (click)="stop()">Stop</button> } @else { <button class="send-button" type="submit" [disabled]="!question.trim() || awaitingReply">Send</button> }</div></form>
+  <footer><span>AI can make mistakes. Check booking details.</span><button type="button" (click)="clear()" [disabled]="!messages.length">New chat</button></footer>
+</dialog>

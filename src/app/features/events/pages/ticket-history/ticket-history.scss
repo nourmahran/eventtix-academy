@@ -2,12 +2,12 @@
 .history-page {
   min-height: 100vh;
   padding: 40px 8%;
-  background: #f7f5fc;
-  color: #25213a;
+  background: var(--page-bg);
+  color: var(--text);
 }
 
 .back-link {
-  color: #7046c8;
+  color: var(--accent);
   text-decoration: none;
   font-weight: 600;
 }
@@ -17,7 +17,7 @@
 }
 
 .eyebrow {
-  color: #8056d6;
+  color: var(--accent);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 2px;
@@ -29,7 +29,7 @@
 }
 
 .page-header p {
-  color: #777;
+  color: var(--muted);
 }
 
 .tickets-grid {
@@ -39,7 +39,7 @@
 }
 
 .ticket-card {
-  background: white;
+  background: var(--surface);
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 8px 25px rgba(40, 20, 80, 0.08);
@@ -47,7 +47,7 @@
 
 .ticket-header {
   padding: 18px;
-  background: #7046c8;
+  background: var(--primary);
   color: white;
   display: flex;
   justify-content: space-between;
@@ -73,7 +73,7 @@
 }
 
 .ticket-body p {
-  color: #777;
+  color: var(--muted);
 }
 
 .ticket-divider {
@@ -97,21 +97,21 @@
 }
 
 .empty-state {
-  background: white;
+  background: var(--surface);
   padding: 50px 20px;
   border-radius: 16px;
   text-align: center;
 }
 
 .empty-state p {
-  color: #777;
+  color: var(--muted);
 }
 
 .empty-state a {
   display: inline-block;
   margin-top: 15px;
   padding: 12px 22px;
-  background: #7046c8;
+  background: var(--primary);
   color: white;
   border-radius: 8px;
   text-decoration: none;

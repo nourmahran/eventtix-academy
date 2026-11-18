@@ -1,8 +1,8 @@
 
 :host {
   display: block;
-  font-family: Arial, sans-serif;
-  color: #263248;
+  font-family: inherit;
+  color: var(--text);
 }
 
 * {
@@ -11,7 +11,7 @@
 
 .payroll-page {
   padding: 32px;
-  background: #f7f8fc;
+  background: var(--page-bg);
   min-height: 100vh;
 }
 
@@ -29,7 +29,7 @@
   }
 
   p {
-    color: #8490a5;
+    color: var(--muted);
     font-size: 14px;
     margin: 0;
   }
@@ -54,26 +54,26 @@
 }
 
 .primary-btn {
-  background: #5268d9;
+  background: var(--primary);
   color: white;
 
   &:hover {
-    background: #4054bd;
+    background: var(--primary-hover);
   }
 }
 
 .secondary-btn {
-  background: #e9edfc;
-  color: #5268d9;
+  background: var(--soft);
+  color: var(--accent);
 
   &:hover {
-    background: #dce3ff;
+    background: var(--soft);
   }
 }
 
 .action-btn {
-  background: #eef1ff;
-  color: #5268d9;
+  background: var(--soft);
+  color: var(--accent);
   padding: 8px 14px;
 }
 
@@ -91,9 +91,9 @@
 
   input {
     padding: 10px;
-    border: 1px solid #e1e5ed;
+    border: 1px solid var(--border);
     border-radius: 8px;
-    background: white;
+    background: var(--surface);
   }
 }
 
@@ -106,13 +106,13 @@
 }
 
 .summary-card {
-  background: white;
+  background: var(--surface);
   padding: 22px;
   border-radius: 12px;
-  border: 1px solid #edf0f5;
+  border: 1px solid var(--border);
 
   p {
-    color: #8490a5;
+    color: var(--muted);
     font-size: 13px;
     margin: 0 0 14px;
   }
@@ -120,22 +120,22 @@
   h2 {
     font-size: 23px;
     margin: 0 0 10px;
-    color: #263248;
+    color: var(--text);
   }
 
   span {
     font-size: 12px;
-    color: #a0aabb;
+    color: var(--muted);
   }
 }
 
 // Sections
 .records-section,
 .form-section {
-  background: white;
+  background: var(--surface);
   padding: 24px;
   border-radius: 12px;
-  border: 1px solid #edf0f5;
+  border: 1px solid var(--border);
   margin-bottom: 24px;
 }
 
@@ -154,7 +154,7 @@
 
   p {
     font-size: 13px;
-    color: #8490a5;
+    color: var(--muted);
     margin: 0;
   }
 }
@@ -175,28 +175,28 @@
   label {
     font-size: 13px;
     font-weight: 600;
-    color: #526078;
+    color: var(--muted);
   }
 
   input,
   select {
     padding: 12px;
-    border: 1px solid #e1e5ed;
+    border: 1px solid var(--border);
     border-radius: 8px;
     font-size: 13px;
-    background: white;
+    background: var(--surface);
     width: 100%;
 
     &:focus {
       outline: none;
-      border-color: #5268d9;
+      border-color: var(--primary);
     }
   }
 }
 
 .event-form {
   padding: 20px;
-  background: #f8f9fc;
+  background: var(--soft);
   border-radius: 10px;
   margin-bottom: 22px;
 }
@@ -214,21 +214,21 @@ table {
   white-space: nowrap;
 
   th {
-    background: #f8f9fc;
-    color: #8490a5;
+    background: var(--soft);
+    color: var(--muted);
     font-size: 12px;
     padding: 15px 12px;
   }
 
   td {
     padding: 17px 12px;
-    border-bottom: 1px solid #f0f1f5;
+    border-bottom: 1px solid var(--border);
     font-size: 13px;
-    color: #526078;
+    color: var(--muted);
   }
 
   tbody tr:hover {
-    background: #fafbfe;
+    background: var(--soft);
   }
 
   tbody tr:last-child td {
@@ -244,7 +244,7 @@ table {
 .empty-state {
   text-align: center;
   padding: 30px !important;
-  color: #8490a5;
+  color: var(--muted);
 }
 
 // Responsive Design

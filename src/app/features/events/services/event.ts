@@ -1,3 +1,4 @@
+import { LocalRecord, money, text } from '../../../shared/services/local-record';
 
 import { Injectable, signal } from '@angular/core';
 
@@ -17,7 +18,7 @@ export interface Event {
 })
 export class EventService {
 
-  private events = signal<Event[]>([
+  private readonly seed: Event[] = [
     {
       id: 1,
       title: 'Cairo Music Festival',
@@ -58,7 +59,14 @@ export class EventService {
       image: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=800',
       description: 'Enjoy an evening of live jazz performances.'
     }
-  ]);
+  ];
+  private readonly record = new LocalRecord<Event[]>('eventtix.events.v1', this.seed, value =>
+    Array.isArray(value) && value.every(e => e && Number.isInteger(e.id) && e.id > 0 &&
+      text(e.title) && text(e.category) && /^\d{4}-\d{2}-\d{2}$/.test(e.date) && text(e.location) &&
+      money(e.price) && typeof e.image === 'string' && typeof e.description === 'string') && new Set(value.map(e => e.id)).size === value.length);
+  readonly error = this.record.error;
+  private events = signal<Event[]>(this.record.value);
+
 
   getEvents(): Event[] {
     return this.events();
@@ -67,15 +75,18 @@ export class EventService {
   getEventById(id: number): Event | undefined {
     return this.events().find(event => event.id === id);
   }
+  assertCurrent(): void { this.record.assertCurrent(); }
   addEvent(event: Event): void {
-  this.events.update(current => [...current, event]);
+  if (this.getEventById(event.id)) throw new Error('An event with this ID already exists.');
+  const next = [...this.events(), event];
+  this.record.save(next);
+  this.events.set(next);
 }
 
 updateEvent(updatedEvent: Event): void {
-  this.events.update(current =>
-    current.map(event =>
-      event.id === updatedEvent.id ? updatedEvent : event
-    )
-  );
+  if (!this.getEventById(updatedEvent.id)) throw new Error('Event no longer exists.');
+  const next = this.events().map(event => event.id === updatedEvent.id ? updatedEvent : event);
+  this.record.save(next);
+  this.events.set(next);
 }
 }

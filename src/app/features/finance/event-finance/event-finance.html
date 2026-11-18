@@ -1,3 +1,4 @@
+@if (error) { <p class="error-banner" role="alert">{{ error }}</p> }
 
 <div class="finance-page">
 
@@ -128,7 +129,7 @@
     <div class="section-header">
       <div>
         <h2>Event Budget Overview</h2>
-        <p>Financial breakdown for each event.</p>
+        <p>Booking revenue updates from saved tickets. Original sample budgets remain separate.</p>
       </div>
     </div>
 
@@ -151,7 +152,7 @@
           @for (event of events; track event.id) {
             <tr>
               <td>{{ event.name }}</td>
-              <td>{{ event.ticketRevenue | number }}</td>
+              <td>{{ ticketIncome(event) | number }}</td>
               <td>{{ event.sponsorship | number }}</td>
               <td>{{ event.otherIncome | number }}</td>
               <td>{{ getIncome(event) | number }}</td>

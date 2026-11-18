@@ -2,9 +2,9 @@
 :host {
   display: block;
   min-height: 100vh;
-  background: #f7f8fc;
-  color: #17172b;
-  font-family: Arial, sans-serif;
+  background: var(--page-bg);
+  color: var(--text);
+  font-family: inherit;
 }
 
 .details-page {
@@ -16,7 +16,7 @@
 .back-link {
   display: inline-block;
   margin-bottom: 25px;
-  color: #6554d9;
+  color: var(--accent);
   text-decoration: none;
   font-weight: 600;
 }
@@ -38,8 +38,8 @@
   position: absolute;
   top: 20px;
   left: 20px;
-  background: white;
-  color: #6554d9;
+  background: var(--surface);
+  color: var(--accent);
   padding: 10px 16px;
   border-radius: 20px;
   font-size: 13px;
@@ -54,7 +54,7 @@
 }
 
 .eyebrow {
-  color: #6554d9;
+  color: var(--accent);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 2px;
@@ -66,7 +66,7 @@
 }
 
 .description {
-  color: #77788c;
+  color: var(--muted);
   line-height: 1.8;
   margin-bottom: 30px;
 }
@@ -88,20 +88,20 @@
 
 .information-row p {
   margin: 5px 0 0;
-  color: #77788c;
+  color: var(--muted);
   font-size: 13px;
 }
 
 .booking-card {
   align-self: start;
-  background: white;
-  border: 1px solid #ededf3;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 16px;
   padding: 25px;
 }
 
 .booking-card > span {
-  color: #77788c;
+  color: var(--muted);
   font-size: 13px;
 }
 
@@ -111,7 +111,7 @@
 }
 
 .booking-card p {
-  color: #77788c;
+  color: var(--muted);
   font-size: 13px;
   line-height: 1.7;
 }
@@ -120,19 +120,19 @@
   width: 100%;
   padding: 14px;
   margin: 15px 0;
-  background: #6554d9;
+  background: var(--primary);
   color: white;
   border: none;
   border-radius: 9px;
   font-weight: 600;
-  opacity: 0.6;
-  cursor: not-allowed;
+
+
 }
 
 .booking-card small {
   display: block;
   text-align: center;
-  color: #999;
+  color: var(--muted);
 }
 
 .not-found {
@@ -141,7 +141,7 @@
 }
 
 .not-found a {
-  color: #6554d9;
+  color: var(--accent);
 }
 
 @media (max-width: 750px) {
@@ -158,3 +158,7 @@
     font-size: 29px;
   }
 }
+
+.booking-card button { cursor: pointer; opacity: 1; }
+.booking-card button:hover:not(:disabled) { background: var(--primary-hover); }
+.booking-card button:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }

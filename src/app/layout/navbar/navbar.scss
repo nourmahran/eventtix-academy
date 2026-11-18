@@ -57,12 +57,12 @@
 .nav-links .signup-btn {
   padding: 11px 22px;
   border-radius: 9px;
-  background: #8651dc;
+  background: var(--primary);
   color: #ffffff;
 }
 
 .nav-links .signup-btn:hover {
-  background: #9e6af2;
+  background: var(--primary-hover);
 }
 
 .menu-toggle {
@@ -103,3 +103,23 @@
 }
 
 button.signup-btn { border: 0; cursor: pointer; font-weight: 600; }
+
+
+:host { position: sticky; top: 0; z-index: 1000; }
+.navbar { background: var(--surface); box-shadow: 0 4px 24px #00000008; }
+.nav-container { max-width: 1280px; padding: 16px 28px; gap: 24px; }
+.logo { letter-spacing: -1px; }
+.logo-icon { display: grid; place-items: center; width: 36px; height: 36px; background: var(--primary); color: white; border-radius: 11px; }
+.nav-links { gap: 8px; }
+.nav-links a { padding: 10px 13px; border-radius: 8px; }
+.nav-links a.active:not(.signup-btn) { background: var(--soft); color: var(--accent); }
+.nav-links .signup-btn { margin-left: 8px; }
+@media(max-width: 900px) {
+ .menu-toggle { display: block; }
+ .nav-container { flex-wrap: wrap; padding: 14px 20px; }
+ .nav-links { display: none; width: 100%; flex-direction: column; align-items: stretch; padding-top: 8px; }
+ .nav-links.open { display: flex; }
+ .nav-links .signup-btn { margin-left: 0; text-align: center; }
+}
+
+.navbar { position: static; }

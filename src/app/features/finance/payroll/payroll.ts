@@ -1,3 +1,4 @@
+import { LocalRecord, money, text } from '../../../shared/services/local-record';
 
 import { Component } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
@@ -60,6 +61,17 @@ export class Payroll {
       eventAllowances: []
     }
   ];
+
+  private readonly record = new LocalRecord<Staff[]>('eventtix.payroll.v1', this.staff, value =>
+    Array.isArray(value) && value.every(s => s && text(s.id) && text(s.name) && text(s.position) &&
+      money(s.basicSalary) && money(s.allowances) && money(s.deductions) && s.deductions <= s.basicSalary + s.allowances &&
+      Array.isArray(s.eventAllowances) && s.eventAllowances.every((a: any) => a && text(a.eventName) && money(a.amount) && /^\d{4}-\d{2}$/.test(a.month))));
+  error = this.record.error;
+  constructor() { this.staff = this.record.value; }
+  private persist(): boolean {
+    try { this.record.save(this.staff); this.error = ''; return true; }
+    catch (error) { this.staff = this.record.value; this.error = error instanceof Error ? error.message : 'Unable to save payroll.'; return false; }
+  }
 
   // Add/Edit staff form
   showStaffForm = false;
@@ -151,9 +163,9 @@ export class Payroll {
     if (
       !this.formName.trim() ||
       !this.formPosition.trim() ||
-      amounts.some(n => !Number.isFinite(n) || n < 0)
+      amounts.some(n => !Number.isFinite(n) || n < 0) || this.formDeductions > this.formSalary + this.formAllowances
     ) {
-      alert('Please enter valid staff information.');
+      alert('Enter valid staff information. Deductions cannot exceed salary plus regular allowances.');
       return;
     }
 
@@ -175,7 +187,7 @@ export class Payroll {
 
     } else {
       this.staff.push({
-        id: 'ST-' + Date.now(),
+        id: 'ST-' + crypto.randomUUID(),
         name: this.formName.trim(),
         position: this.formPosition.trim(),
         basicSalary: this.formSalary,
@@ -185,6 +197,7 @@ export class Payroll {
       });
     }
 
+    if (!this.persist()) return;
     this.showStaffForm = false;
     this.editingStaffId = null;
   }
@@ -212,6 +225,7 @@ export class Payroll {
       month: this.selectedMonth
     });
 
+    if (!this.persist()) return;
     this.selectedStaffId = '';
     this.eventName = '';
     this.eventAmount = 0;

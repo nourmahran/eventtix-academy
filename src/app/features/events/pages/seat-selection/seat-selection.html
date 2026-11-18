@@ -1,4 +1,4 @@
-@if (error) { <p class="notice" role="alert">{{ error }}</p> }
+@if (error) { <p class="notice" role="alert">{{ error }} <button type="button" (click)="refreshSeats()">Refresh availability</button></p> }
 
 <div class="seat-page">
 
@@ -36,7 +36,7 @@
                   class="seat"
                   [class.booked]="isBooked(row + number)"
                   [class.selected]="isSelected(row + number)"
-                  [disabled]="isBooked(row + number)"
+                  [disabled]="!!error || isBooked(row + number)"
                   (click)="toggleSeat(row + number)">
                   {{ number }}
                 </button>
@@ -85,7 +85,7 @@
     [checked]="isStudent()"
     (change)="isStudent.set($any($event.target).checked)"
   />
-  I am a student — get 10% off
+  Apply student discount (student accounts only)
 </label>
 
 <div class="summary-line">
@@ -107,7 +107,7 @@
 
         <button
   class="continue-button"
-  [disabled]="selectedSeats().length === 0"
+  [disabled]="!!error || selectedSeats().length === 0"
   (click)="proceedToCheckout()">
   Continue to Checkout →
 </button>

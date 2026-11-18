@@ -2,12 +2,12 @@
 .checkout-page {
   min-height: 100vh;
   padding: 40px 8%;
-  background: #f7f5fc;
-  color: #25213a;
+  background: var(--page-bg);
+  color: var(--text);
 }
 
 .back-link {
-  color: #7046c8;
+  color: var(--accent);
   text-decoration: none;
   font-weight: 600;
 }
@@ -17,7 +17,7 @@
 }
 
 .eyebrow {
-  color: #8056d6;
+  color: var(--accent);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 2px;
@@ -29,21 +29,21 @@
 }
 
 .page-header p {
-  color: #777;
+  color: var(--muted);
 }
 
 .checkout-card {
   max-width: 650px;
   margin: auto;
   padding: 30px;
-  background: white;
+  background: var(--surface);
   border-radius: 18px;
   box-shadow: 0 8px 30px rgba(40, 20, 80, 0.08);
 }
 
 .event-info {
   padding-bottom: 20px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border);
 }
 
 .event-info h2 {
@@ -52,7 +52,7 @@
 
 .event-info p,
 .mock-notice {
-  color: #777;
+  color: var(--muted);
 }
 
 .booking-info {
@@ -68,8 +68,8 @@
 
 .selected-seats span {
   padding: 8px 14px;
-  background: #eee7ff;
-  color: #7046c8;
+  background: var(--soft);
+  color: var(--accent);
   border-radius: 8px;
   font-weight: 700;
 }
@@ -88,7 +88,7 @@
 
 .final-total {
   padding-top: 18px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--border);
   font-size: 20px;
   font-weight: 700;
 }
@@ -98,12 +98,12 @@
   padding: 15px;
   border: none;
   border-radius: 10px;
-  background: #7046c8;
+  background: var(--primary);
   color: white;
   font-size: 16px;
   font-weight: 700;
-  cursor: not-allowed;
-  opacity: 0.6;
+
+
 }
 
 .mock-notice {
@@ -128,6 +128,7 @@
   .checkout-card {
     padding: 20px;
   }
+}
   .confirmation-message {
   margin-top: 20px;
   padding: 20px;
@@ -148,7 +149,7 @@
   width: fit-content;
   margin: 20px auto;
   padding: 10px;
-  background: white;
+  background: var(--surface);
   border: 1px solid #ddd;
 }
 
@@ -159,7 +160,7 @@
   width: fit-content;
   margin: 25px auto;
   padding: 12px;
-  background: white;
+  background: var(--surface);
   border: 2px solid #ddd;
   border-radius: 8px;
 }
@@ -168,10 +169,31 @@
   display: block;
   width: 16px;
   height: 16px;
-  background: white;
+  background: var(--surface);
 }
 
 .ticket-qr span.dark {
   background: #171717;
 }
-}
+
+.confirm-button { cursor: pointer; opacity: 1; }
+.confirm-button:hover:not(:disabled) { background: var(--primary-hover); }
+.confirm-button:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+
+
+.checkout-page { max-width: 1200px; margin: auto; padding: 48px 24px 80px; }
+.page-header { text-align: center; margin: 36px 0; }
+.checkout-card { border: 1px solid var(--border); padding: clamp(24px, 5vw, 44px); }
+.event-info { border-bottom: 1px solid var(--border); }
+.event-info h2 { font-size: 25px; }
+.final-total { padding: 22px 18px; background: var(--soft); border: 0; border-radius: 12px; }
+.final-total strong { color: var(--accent); }
+.selected-seats span { border: 1px solid var(--border); color: var(--accent); }
+.confirmation-message { overflow-wrap: anywhere; }
+.ticket-qr, .ticket-qr span { background: white; }
+
+
+.discount { color: var(--success); }
+
+.confirmation-message { background: var(--soft); color: var(--text); border-color: var(--border); }
+.confirmation-message h2 { color: var(--success); }

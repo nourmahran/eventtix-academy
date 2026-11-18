@@ -1,5 +1,7 @@
 # Team integration - 16 November 2026
 
+> Historical integration record. The missing features listed below were subsequently implemented locally on 18 November; see [current completion notes](FEATURE-COMPLETION.md).
+
 Existing teammate work was integrated into develop. No missing teammate features were implemented, and all original feature branches were preserved.
 
 ## Included work

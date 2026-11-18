@@ -2,9 +2,9 @@
 :host {
   display: block;
   min-height: 100vh;
-  background: #f7f8fc;
-  color: #17172b;
-  font-family: Arial, sans-serif;
+  background: var(--page-bg);
+  color: var(--text);
+  font-family: inherit;
 }
 
 .seat-page {
@@ -14,7 +14,7 @@
 }
 
 .back-link {
-  color: #6554d9;
+  color: var(--accent);
   text-decoration: none;
   font-weight: 600;
 }
@@ -25,7 +25,7 @@
 }
 
 .eyebrow {
-  color: #6554d9;
+  color: var(--accent);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 2px;
@@ -37,7 +37,7 @@
 }
 
 .page-header p {
-  color: #77788c;
+  color: var(--muted);
 }
 
 .seat-layout {
@@ -49,8 +49,8 @@
 
 .seating-section,
 .booking-summary {
-  background: white;
-  border: 1px solid #ededf3;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 16px;
   padding: 28px;
 }
@@ -60,8 +60,8 @@
   margin: 0 auto 35px;
   padding: 15px;
   text-align: center;
-  background: #e9e6ff;
-  color: #6554d9;
+  background: var(--soft);
+  color: var(--accent);
   border-radius: 50% 50% 10px 10px;
   font-weight: 700;
   letter-spacing: 4px;
@@ -80,7 +80,7 @@
   display: flex;
   align-items: center;
   gap: 7px;
-  color: #77788c;
+  color: var(--muted);
   font-size: 12px;
 }
 
@@ -96,7 +96,7 @@
 }
 
 .selected {
-  background: #6554d9;
+  background: var(--primary);
 }
 
 .booked {
@@ -121,7 +121,7 @@
   text-align: center;
   font-size: 12px;
   font-weight: 700;
-  color: #77788c;
+  color: var(--muted);
 }
 
 .seat {
@@ -130,7 +130,7 @@
   border: none;
   border-radius: 8px 8px 5px 5px;
   background: #e8e6f5;
-  color: #6554d9;
+  color: var(--accent);
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
@@ -142,7 +142,7 @@
 }
 
 .seat.selected {
-  background: #6554d9;
+  background: var(--primary);
   color: white;
 }
 
@@ -154,7 +154,7 @@
 
 .map-note {
   text-align: center;
-  color: #999;
+  color: var(--muted);
   font-size: 12px;
   margin-top: 30px;
 }
@@ -169,12 +169,12 @@
   flex-direction: column;
   gap: 8px;
   padding-bottom: 20px;
-  border-bottom: 1px solid #ededf3;
+  border-bottom: 1px solid var(--border);
 }
 
 .summary-event span,
 .notice {
-  color: #77788c;
+  color: var(--muted);
   font-size: 12px;
 }
 
@@ -194,8 +194,8 @@
 }
 
 .selected-list span {
-  background: #eeebff;
-  color: #6554d9;
+  background: var(--soft);
+  color: var(--accent);
   padding: 7px 10px;
   border-radius: 6px;
   font-size: 12px;
@@ -203,17 +203,17 @@
 }
 
 .selected-list small {
-  color: #999;
+  color: var(--muted);
 }
 
 .total-line {
-  border-top: 1px solid #ededf3;
+  border-top: 1px solid var(--border);
   padding-top: 20px;
   font-size: 16px;
 }
 
 .total-line strong {
-  color: #6554d9;
+  color: var(--accent);
 }
 
 .continue-button {
@@ -221,11 +221,11 @@
   padding: 14px;
   border: none;
   border-radius: 9px;
-  background: #6554d9;
+  background: var(--primary);
   color: white;
   font-weight: 700;
-  opacity: 0.5;
-  cursor: not-allowed;
+
+
 }
 
 .notice {
@@ -240,7 +240,7 @@
 }
 
 .not-found a {
-  color: #6554d9;
+  color: var(--accent);
 }
 
 @media (max-width: 800px) {
@@ -272,3 +272,7 @@
     font-size: 29px;
   }
 }
+
+.continue-button { cursor: pointer; opacity: 1; }
+.continue-button:hover:not(:disabled) { background: var(--primary-hover); }
+.continue-button:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }

@@ -1,7 +1,7 @@
 import { BookingStorage } from '../../services/booking-storage';
 import { AuthService } from '../../../../core/auth/auth.service';
 
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, HostListener } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { EventService } from '../../services/event';
 
@@ -27,11 +27,19 @@ export class SeatSelection {
   seatsPerRow = [1, 2, 3, 4, 5, 6, 7, 8];
 
   bookedSeats = ['A3', 'A4', 'B2', 'C5', 'D6', 'E1'];
+  constructor() { this.refreshSeats(); }
+  @HostListener('window:storage')
+  refreshSeats(): void {
+    try {
+      this.bookedSeats = ['A3', 'A4', 'B2', 'C5', 'D6', 'E1', ...this.storage.reservedSeats(this.eventId)];
+      this.error = '';
+    } catch (error) { this.error = error instanceof Error ? error.message : 'Seat availability is unavailable.'; }
+  }
 
   selectedSeats = signal<string[]>([]);
 
   totalPrice = computed(() =>
-    this.selectedSeats().length * (this.event?.price ?? 0)
+    Math.round(this.selectedSeats().length * (this.event?.price ?? 0) * 100) / 100
   );
 
   isStudent = signal(this.auth.hasRole(['student']));
@@ -39,11 +47,11 @@ export class SeatSelection {
 discountPercent = 10;
 
 discountAmount = computed(() =>
-  this.isStudent() && this.auth.hasRole(['student']) ? this.totalPrice() * this.discountPercent / 100 : 0
+  this.isStudent() && this.auth.hasRole(['student']) ? Math.round(this.totalPrice() * this.discountPercent) / 100 : 0
 );
 
 finalTotal = computed(() =>
-  this.totalPrice() - this.discountAmount()
+  Math.round((this.totalPrice() - this.discountAmount()) * 100) / 100
 );
 
   isSelected(seat: string): boolean {
@@ -55,7 +63,7 @@ finalTotal = computed(() =>
   }
 
   toggleSeat(seat: string): void {
-    if (this.isBooked(seat)) {
+    if (this.error || this.isBooked(seat)) {
       return;
     }
 
@@ -70,6 +78,13 @@ finalTotal = computed(() =>
     return;
   }
 
+  this.refreshSeats();
+  if (this.error) return;
+  if (this.selectedSeats().some(seat => this.isBooked(seat))) {
+    this.selectedSeats.set(this.selectedSeats().filter(seat => !this.isBooked(seat)));
+    this.error = 'Some selected seats were booked in another tab. Choose available seats.';
+    return;
+  }
   const booking = {
     eventId: this.eventId,
     selectedSeats: this.selectedSeats(),

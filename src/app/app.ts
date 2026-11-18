@@ -1,3 +1,4 @@
+import { HelpWidget } from './shared/help/help-widget';
 import { AppearanceService } from './core/preferences/appearance.service';
 import { AuthService } from './core/auth/auth.service';
 
@@ -8,7 +9,7 @@ import { Navbar } from './layout/navbar/navbar';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, Navbar],
+  imports: [RouterOutlet, Navbar, HelpWidget],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

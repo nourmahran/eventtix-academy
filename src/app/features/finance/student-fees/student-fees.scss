@@ -2,13 +2,13 @@
 :host {
   display: block;
   min-height: 100%;
-  font-family: Arial, sans-serif;
-  color: #263248;
+  font-family: inherit;
+  color: var(--text);
 }
 
 .fees-page {
   padding: 32px;
-  background: #f7f8fc;
+  background: var(--page-bg);
   min-height: 100vh;
 }
 
@@ -26,14 +26,14 @@
   }
 
   p {
-    color: #8490a5;
+    color: var(--muted);
     margin: 0;
     font-size: 14px;
   }
 }
 
 .primary-btn {
-  background: #5268d9;
+  background: var(--primary);
   color: white;
   border: none;
   padding: 12px 20px;
@@ -44,7 +44,7 @@
   transition: background 0.2s;
 
   &:hover {
-    background: #4054bd;
+    background: var(--primary-hover);
   }
 }
 
@@ -57,14 +57,14 @@
 }
 
 .summary-card {
-  background: white;
+  background: var(--surface);
   padding: 22px;
   border-radius: 12px;
-  border: 1px solid #edf0f5;
+  border: 1px solid var(--border);
   box-shadow: 0 2px 8px rgba(30, 50, 80, 0.03);
 
   p {
-    color: #8490a5;
+    color: var(--muted);
     font-size: 13px;
     margin: 0 0 14px;
   }
@@ -73,21 +73,21 @@
     font-size: 23px;
     margin: 0 0 10px;
     font-weight: 700;
-    color: #263248;
+    color: var(--text);
   }
 
   span {
     font-size: 12px;
-    color: #a0aabb;
+    color: var(--muted);
   }
 }
 
 // Records Section
 .records-section {
-  background: white;
+  background: var(--surface);
   padding: 24px;
   border-radius: 12px;
-  border: 1px solid #edf0f5;
+  border: 1px solid var(--border);
 }
 
 .section-header {
@@ -100,7 +100,7 @@
 
   p {
     font-size: 13px;
-    color: #8490a5;
+    color: var(--muted);
     margin: 0;
   }
 }
@@ -114,12 +114,12 @@
   input,
   select {
     padding: 11px 14px;
-    border: 1px solid #e1e5ed;
+    border: 1px solid var(--border);
     border-radius: 8px;
     font-size: 13px;
-    color: #526078;
+    color: var(--muted);
     outline: none;
-    background: white;
+    background: var(--surface);
   }
 
   input {
@@ -128,7 +128,7 @@
 
   input:focus,
   select:focus {
-    border-color: #5268d9;
+    border-color: var(--primary);
   }
 
   select {
@@ -149,8 +149,8 @@ table {
   white-space: nowrap;
 
   th {
-    background: #f8f9fc;
-    color: #8490a5;
+    background: var(--soft);
+    color: var(--muted);
     font-size: 12px;
     font-weight: 600;
     padding: 15px 12px;
@@ -158,13 +158,13 @@ table {
 
   td {
     padding: 17px 12px;
-    border-bottom: 1px solid #f0f1f5;
+    border-bottom: 1px solid var(--border);
     font-size: 13px;
-    color: #526078;
+    color: var(--muted);
   }
 
   tbody tr:hover {
-    background: #fafbfe;
+    background: var(--soft);
   }
 
   tbody tr:last-child td {
@@ -198,8 +198,8 @@ table {
 
 // Action Button
 .action-btn {
-  background: #eef1ff;
-  color: #5268d9;
+  background: var(--soft);
+  color: var(--accent);
   border: none;
   border-radius: 6px;
   padding: 7px 13px;
@@ -207,7 +207,7 @@ table {
   cursor: pointer;
 
   &:hover {
-    background: #dfe4ff;
+    background: var(--soft);
   }
 }
 
@@ -215,15 +215,15 @@ table {
 .empty-state {
   text-align: center;
   padding: 35px !important;
-  color: #8490a5 !important;
+  color: var(--muted) !important;
 }
 
 // Invoice Form
 .invoice-form-section {
-  background: white;
+  background: var(--surface);
   padding: 25px;
   border-radius: 12px;
-  border: 1px solid #edf0f5;
+  border: 1px solid var(--border);
   margin-bottom: 25px;
 
   form {
@@ -246,20 +246,20 @@ table {
   label {
     font-size: 13px;
     font-weight: 600;
-    color: #526078;
+    color: var(--muted);
   }
 
   input,
   select {
     padding: 12px;
-    border: 1px solid #e1e5ed;
+    border: 1px solid var(--border);
     border-radius: 8px;
     font-size: 13px;
     outline: none;
-    background: white;
+    background: var(--surface);
 
     &:focus {
-      border-color: #5268d9;
+      border-color: var(--primary);
     }
   }
 }
@@ -302,3 +302,5 @@ table {
     grid-template-columns: 1fr;
   }
 }
+
+.records-section { margin-bottom: 24px; }

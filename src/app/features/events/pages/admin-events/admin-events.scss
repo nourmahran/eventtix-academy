@@ -2,12 +2,12 @@
 .admin-page {
   min-height: 100vh;
   padding: 40px 8%;
-  background: #f7f5fc;
-  color: #25213a;
+  background: var(--page-bg);
+  color: var(--text);
 }
 
 .back-link {
-  color: #7046c8;
+  color: var(--accent);
   text-decoration: none;
   font-weight: 600;
 }
@@ -17,7 +17,7 @@
 }
 
 .eyebrow {
-  color: #8056d6;
+  color: var(--accent);
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 2px;
@@ -29,7 +29,7 @@
 }
 
 .page-header p {
-  color: #777;
+  color: var(--muted);
 }
 
 .admin-layout {
@@ -41,7 +41,7 @@
 
 .event-form,
 .events-list {
-  background: white;
+  background: var(--surface);
   padding: 25px;
   border-radius: 16px;
   box-shadow: 0 8px 25px rgba(40, 20, 80, 0.07);
@@ -71,17 +71,17 @@
   width: 100%;
   box-sizing: border-box;
   padding: 12px;
-  border: 1px solid #ddd6ed;
+  border: 1px solid var(--border);
   border-radius: 8px;
   font: inherit;
-  background: white;
+  background: var(--surface);
 }
 
 .event-form input:focus,
 .event-form select:focus,
 .event-form textarea:focus {
   outline: 2px solid #b69be8;
-  border-color: #7046c8;
+  border-color: var(--primary);
 }
 
 .save-button,
@@ -96,13 +96,13 @@
 
 .save-button {
   margin-top: 15px;
-  background: #7046c8;
+  background: var(--primary);
   color: white;
 }
 
 .cancel-button {
-  background: #eeeaf5;
-  color: #51466a;
+  background: var(--soft);
+  color: var(--muted);
 }
 
 .admin-event-card {
@@ -111,7 +111,7 @@
   align-items: center;
   gap: 15px;
   padding: 18px 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border);
 }
 
 .admin-event-card:last-child {
@@ -123,13 +123,13 @@
 }
 
 .admin-event-card p {
-  color: #777;
+  color: var(--muted);
   font-size: 13px;
 }
 
 .category {
-  color: #7046c8;
-  background: #eee7ff;
+  color: var(--accent);
+  background: var(--soft);
   padding: 5px 9px;
   border-radius: 20px;
   font-size: 11px;
@@ -137,8 +137,8 @@
 }
 
 .edit-button {
-  background: #eee7ff;
-  color: #7046c8;
+  background: var(--soft);
+  color: var(--accent);
 }
 
 @media (max-width: 800px) {

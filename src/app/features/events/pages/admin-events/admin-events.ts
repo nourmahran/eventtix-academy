@@ -14,6 +14,7 @@ import { EventService, Event } from '../../services/event';
 export class AdminEvents {
   private eventService = inject(EventService);
 
+  error = this.eventService.error;
   events = signal<Event[]>(this.eventService.getEvents());
 
   editing = signal(false);
@@ -39,11 +40,13 @@ export class AdminEvents {
       !this.form.title.trim() ||
       !this.form.date ||
       !this.form.location.trim() ||
-      this.form.price <= 0
+      !Number.isFinite(this.form.price) || this.form.price <= 0
     ) {
+      this.error = 'Enter a title, date, location and positive price.';
       return;
     }
 
+    try {
     if (this.editing()) {
       this.eventService.updateEvent(this.form);
     } else {
@@ -57,6 +60,8 @@ export class AdminEvents {
 
     this.events.set(this.eventService.getEvents());
     this.cancelEdit();
+    this.error = '';
+    } catch (error) { this.error = error instanceof Error ? error.message : 'Unable to save event.'; }
   }
 
   editEvent(event: Event): void {

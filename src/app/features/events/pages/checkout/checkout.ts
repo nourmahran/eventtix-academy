@@ -1,4 +1,5 @@
-import { BookingStorage, Booking } from '../../services/booking-storage';
+import { TicketCode } from '../ticket-code';
+import { BookingStorage, Booking, SavedTicket } from '../../services/booking-storage';
 import { AuthService } from '../../../../core/auth/auth.service';
 
 import { Component, inject } from '@angular/core';
@@ -8,7 +9,7 @@ import { EventService } from '../../services/event';
 @Component({
   selector: 'app-checkout',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, TicketCode],
   templateUrl: './checkout.html',
   styleUrl: './checkout.scss'
 })
@@ -22,19 +23,8 @@ export class Checkout {
   eventId = Number(this.route.snapshot.paramMap.get('id'));
   event = this.eventService.getEventById(this.eventId);
 
-  qrPattern = [
-  [1,1,1,1,1,0,1,1,1,1,1],
-  [1,0,0,0,1,0,1,0,0,0,1],
-  [1,0,1,0,1,1,1,0,1,0,1],
-  [1,0,0,0,1,0,1,0,0,0,1],
-  [1,1,1,1,1,0,1,1,1,1,1],
-  [0,0,1,0,0,1,0,1,0,0,0],
-  [1,1,0,1,1,0,1,0,1,1,0],
-  [1,0,1,0,1,1,0,1,0,1,1],
-  [1,1,1,0,0,1,1,0,1,0,1],
-  [1,0,0,1,1,0,0,1,1,0,0],
-  [1,1,1,1,0,1,1,0,1,1,1]
-];
+  savedTicket: SavedTicket | null = null;
+  busy = false;
 
   private readBooking(): Booking | null {
     try { return this.storage.pending(this.eventId); }
@@ -44,7 +34,7 @@ export class Checkout {
 
   selectedSeats = this.booking?.selectedSeats ?? [];
   isStudent = !!this.booking?.isStudent && this.auth.hasRole(['student']);
-  totalPrice = this.selectedSeats.length * (this.event?.price ?? 0);
+  totalPrice = Math.round(this.selectedSeats.length * (this.event?.price ?? 0) * 100) / 100;
   discountAmount = this.isStudent ? Math.round(this.totalPrice * 10) / 100 : 0;
   finalTotal = Math.round((this.totalPrice - this.discountAmount) * 100) / 100;
 
@@ -52,14 +42,16 @@ export class Checkout {
 
 ticketCode = '';
 
-confirmBooking(): void {
-  if (this.confirmed || !this.booking || !this.event || this.selectedSeats.length === 0) return;
+async confirmBooking(): Promise<void> {
+  if (this.busy || this.confirmed || !this.booking || !this.event || this.selectedSeats.length === 0) return;
   this.error = '';
+  this.busy = true;
   const ticketCode = 'ET-' + crypto.randomUUID();
   try {
-    this.storage.confirm({ ...this.booking, totalPrice: this.totalPrice, discountAmount: this.discountAmount, finalTotal: this.finalTotal, isStudent: this.isStudent, ticketCode, eventTitle: this.event.title, eventDate: this.event.date, eventLocation: this.event.location });
+    this.savedTicket = await this.storage.confirm({ ...this.booking, totalPrice: this.totalPrice, discountAmount: this.discountAmount, finalTotal: this.finalTotal, isStudent: this.isStudent, ticketCode, eventTitle: this.event.title, eventDate: this.event.date, eventLocation: this.event.location });
     this.ticketCode = ticketCode;
     this.confirmed = true;
   } catch (error) { this.error = error instanceof Error ? error.message : 'Unable to confirm booking.'; }
+  finally { this.busy = false; }
 }
 }

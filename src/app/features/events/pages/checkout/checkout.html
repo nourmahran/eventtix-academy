@@ -60,9 +60,9 @@
   <button
     class="confirm-button"
     type="button"
-    [disabled]="!booking || selectedSeats.length === 0"
+    [disabled]="busy || !booking || selectedSeats.length === 0"
     (click)="confirmBooking()">
-    Confirm Booking
+    {{ busy ? 'Confirming…' : 'Confirm Booking' }}
   </button>
 } @else {
   <div class="confirmation-message">
@@ -71,15 +71,8 @@
 
   <p>Ticket Reference: <strong>{{ ticketCode }}</strong></p>
 
-  <div class="ticket-qr">
-  @for (row of qrPattern; track $index) {
-    @for (cell of row; track $index) {
-      <span [class.dark]="cell === 1"></span>
-    }
-  }
-</div>
-
-  <p class="qr-label">Demo ticket pattern (not a scannable QR code)</p>
+  @if (savedTicket) { <app-ticket-code [ticket]="savedTicket" /> }
+  <p><a routerLink="/ticket-history">View my tickets</a></p>
 
   <p><strong>{{ event.title }}</strong></p>
   <p>{{ event.date }} · {{ event.location }}</p>
