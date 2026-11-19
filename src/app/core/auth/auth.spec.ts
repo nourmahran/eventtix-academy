@@ -96,7 +96,7 @@ describe('Demo authentication and routing', () => {
     expect(auth.user()).toBeNull();
   });
 
-  it('persists photo, sample card and signup preferences without persisting authentication', async () => {
+  it('persists photo, sample card and signup preferences; sign-in lasts only for the tab session', async () => {
     const picture = 'data:image/png;base64,aGVsbG8=';
     await auth.signup({ ...data, profilePictureUrl: picture, paymentMethodLabel: 'Demo Visa •••• 4242', preferences: { theme: 'light', notificationsEnabled: false, soundEnabled: true } });
     auth.logout();
@@ -110,6 +110,9 @@ describe('Demo authentication and routing', () => {
     await auth.login(data.username, data.password);
     expect(auth.user()?.profilePictureUrl).toBe('');
     expect(auth.user()?.paymentMethodLabel).toBe('');
+    // The tab session survives a reload, but only until logout.
+    expect(new AuthService().user()?.username).toBe(data.username);
+    auth.logout();
     expect(new AuthService().isAuthenticated()).toBeFalse();
   });
 

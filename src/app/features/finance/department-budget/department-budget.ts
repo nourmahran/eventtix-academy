@@ -21,7 +21,7 @@ export class DepartmentBudget implements AfterViewInit, OnDestroy {
   private save(next: Department[]): boolean {
     this.message = '';
     try { this.record.save(next); this.departments = next; this.error = ''; this.message = 'Saved successfully.'; this.updateChart(); void this.sound.success(); return true; }
-    catch(e) { this.error = e instanceof Error ? e.message : 'Unable to save.'; return false; }
+    catch(e) { this.error = e instanceof Error ? e.message : 'Unable to save.'; void this.sound.error(); return false; }
   }
   addDepartment(): void {
     const name = this.name.trim();

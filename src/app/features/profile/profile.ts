@@ -33,6 +33,6 @@ export class Profile {
     if (this.form.invalid) return;
     const value = this.form.getRawValue();
     try { this.auth.updateProfile(value.fullName, value.email, { theme: value.theme, notificationsEnabled: value.notificationsEnabled, soundEnabled: value.soundEnabled }, { profilePictureUrl: value.profilePictureUrl, paymentMethodLabel: value.paymentMethodLabel }); this.form.markAsPristine(); this.message = 'Profile saved.'; void this.sound.success(); }
-    catch (e) { this.error = e instanceof Error ? e.message : 'Unable to save profile.'; }
+    catch (e) { this.error = e instanceof Error ? e.message : 'Unable to save profile.'; void this.sound.error(); }
   }
 }

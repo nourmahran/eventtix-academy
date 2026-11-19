@@ -98,12 +98,12 @@ export class Payroll {
 
   // Calculate net salary
   getNetSalary(staffMember: Staff): number {
-    return (
+    return Math.round((
       staffMember.basicSalary +
       staffMember.allowances +
       this.getEventAllowance(staffMember) -
       staffMember.deductions
-    );
+    ) * 100) / 100;
   }
 
   // Dashboard summary calculations
@@ -254,9 +254,9 @@ export class Payroll {
       })),
 
       totalStaff: this.totalStaff,
-      totalAllowances: this.totalAllowances,
-      totalDeductions: this.totalDeductions,
-      totalPayroll: this.totalPayroll
+      totalAllowances: this.round(this.totalAllowances),
+      totalDeductions: this.round(this.totalDeductions),
+      totalPayroll: this.round(this.totalPayroll)
     };
 
     const file = new Blob(
@@ -271,6 +271,12 @@ export class Payroll {
     link.download = `payroll-${this.selectedMonth}.json`;
     link.click();
 
-    URL.revokeObjectURL(url);
+    // Revoke after the browser has started the download.
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+  }
+
+  // Avoid floating-point noise such as 0.30000000000000004 in reports.
+  private round(value: number): number {
+    return Math.round(value * 100) / 100;
   }
 }

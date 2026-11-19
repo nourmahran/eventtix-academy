@@ -1,3 +1,4 @@
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -17,7 +18,8 @@ export class EventDetails {
   event = signal<EventModel | undefined>(undefined);
 
   constructor() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.event.set(this.eventService.getEventById(id));
+    this.route.paramMap.pipe(takeUntilDestroyed()).subscribe(params => {
+      this.event.set(this.eventService.getEventById(Number(params.get('id'))));
+    });
   }
 }

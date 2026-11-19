@@ -16,7 +16,7 @@
 <p><label><input type="checkbox" formControlName="notificationsEnabled" /> Enable notifications</label></p>
 <p><label><input type="checkbox" formControlName="soundEnabled" /> Enable sound</label></p>
 </fieldset>
-<p class="notice">Classroom demo: account details stay in this browser. Use a unique demo password and no real payment information. Refreshing signs you out.</p>
+<p class="notice">Classroom demo: account details stay in this browser. Use a unique demo password and no real payment information. Closing the tab or signing out ends your session.</p>
 <label><input type="checkbox" formControlName="acceptTerms" /> I understand this is a local demo.</label>
 @if (form.controls.acceptTerms.touched && form.controls.acceptTerms.invalid) { <p class="error">Please acknowledge the demo notice.</p> }
 <p><button class="submit-btn" type="submit" [disabled]="busy || photoBusy">{{ busy ? 'Creating account…' : 'Create account' }}</button></p>

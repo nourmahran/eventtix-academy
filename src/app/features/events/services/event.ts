@@ -11,7 +11,17 @@ export interface Event {
   price: number;
   image: string;
   description: string;
+  time?: string;
+  capacity?: number;
 }
+
+export const seatNumber = (seat: string): number => (seat.charCodeAt(0) - 65) * 8 + Number(seat.slice(1));
+export const eventEnded = (event: Event): boolean => {
+  const end = new Date(`${event.date}T${event.time || '23:59:59'}`);
+  return !Number.isFinite(end.getTime()) || end.getTime() <= Date.now();
+};
+export const validEventDate = (date: string): boolean => /^\d{4}-\d{2}-\d{2}$/.test(date) &&
+  Number.isFinite(Date.parse(date)) && new Date(date).toISOString().slice(0, 10) === date;
 
 @Injectable({
   providedIn: 'root'
@@ -62,8 +72,9 @@ export class EventService {
   ];
   private readonly record = new LocalRecord<Event[]>('eventtix.events.v1', this.seed, value =>
     Array.isArray(value) && value.every(e => e && Number.isInteger(e.id) && e.id > 0 &&
-      text(e.title) && text(e.category) && /^\d{4}-\d{2}-\d{2}$/.test(e.date) && text(e.location) &&
-      money(e.price) && typeof e.image === 'string' && typeof e.description === 'string') && new Set(value.map(e => e.id)).size === value.length);
+      text(e.title) && text(e.category) && validEventDate(e.date) && text(e.location) &&
+      money(e.price) && (e.capacity === undefined || (Number.isInteger(e.capacity) && e.capacity >= 1 && e.capacity <= 40)) &&
+      (e.time === undefined || e.time === '' || /^([01]\d|2[0-3]):[0-5]\d$/.test(e.time)) && typeof e.image === 'string' && typeof e.description === 'string') && new Set(value.map(e => e.id)).size === value.length);
   readonly error = this.record.error;
   private events = signal<Event[]>(this.record.value);
 
@@ -81,6 +92,12 @@ export class EventService {
   const next = [...this.events(), event];
   this.record.save(next);
   this.events.set(next);
+}
+
+removeEvent(id: number): void {
+  if (!this.getEventById(id)) throw new Error('Event no longer exists.');
+  const next = this.events().filter(event => event.id !== id);
+  this.record.save(next); this.events.set(next);
 }
 
 updateEvent(updatedEvent: Event): void {

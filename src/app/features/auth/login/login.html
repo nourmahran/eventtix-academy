@@ -62,7 +62,7 @@
     </form>
 
     @if (error) { <p class="error" role="alert">{{ error }}</p> }
-    <p class="notice">Classroom demo only. Accounts stay in this browser; refreshing signs you out.</p>
+    <p class="notice">Classroom demo only. Accounts stay in this browser. You stay signed in while this tab is open; closing the tab or signing out ends the session.</p>
     <details><summary>Explore demo roles</summary><p>No real records or permissions are provided.</p>
       <div class="demo-actions">
         <button type="button" [disabled]="busy" (click)="demo('student')">Student demo</button>

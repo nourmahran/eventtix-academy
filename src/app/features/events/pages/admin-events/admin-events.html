@@ -43,6 +43,10 @@
           required
         />
 
+        <label for="field-time">Start time (venue local time)</label>
+        <input id="field-time" type="time" name="time" [(ngModel)]="form.time">
+        <label for="field-capacity">Seat capacity (1-40)</label>
+        <input id="field-capacity" type="number" min="1" max="40" step="1" name="capacity" [(ngModel)]="form.capacity">
         <label for="field-location">Location</label>
         <input id="field-location"
           type="text"
@@ -111,7 +115,7 @@
             class="edit-button"
             (click)="editEvent(event)">
             Edit
-          </button></div>
+          </button><button type="button" class="action-btn" (click)="deleteEvent(event)">Delete</button></div>
 
         </article>
       }

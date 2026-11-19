@@ -455,3 +455,44 @@ router-outlet+* {
     padding:20px
   }
 }
+
+/* ---------- Bonus 1: feedback motion ----------
+   Short, compositor-only effects (transform/opacity) that never delay
+   navigation or block input. All are switched off by the
+   prefers-reduced-motion rule above. */
+button:not(.seat) {
+  transition:background .12s,box-shadow .12s,transform .08s
+}
+button:active:not(:disabled):not(.seat) {
+  transform:scale(.97)
+}
+.event-card,.admin-event-card,.summary-cards>* {
+  transition:transform .16s ease,box-shadow .16s ease
+}
+.event-card:hover,.admin-event-card:hover {
+  transform:translateY(-3px);
+  box-shadow:var(--shadow)
+}
+button.seat {
+  transition:background .12s,transform .12s
+}
+button.seat.selected {
+  animation:seat-pop .2s ease-out
+}
+[role=status]:not(:empty),.success-message,.confirmation-message {
+  animation:feedback-in .22s ease-out
+}
+[role=alert],small.error,p.error {
+  animation:feedback-in .22s ease-out,feedback-shake .28s ease-in-out .05s
+}
+@keyframes seat-pop {
+  50% { transform:scale(1.12) }
+}
+@keyframes feedback-in {
+  from { opacity:0; transform:translateY(-4px) }
+  to { opacity:1; transform:none }
+}
+@keyframes feedback-shake {
+  25% { transform:translateX(-4px) }
+  75% { transform:translateX(4px) }
+}

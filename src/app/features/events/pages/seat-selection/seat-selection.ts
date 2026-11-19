@@ -3,7 +3,7 @@ import { AuthService } from '../../../../core/auth/auth.service';
 
 import { Component, computed, inject, signal, HostListener } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { EventService } from '../../services/event';
+import { EventService, eventEnded, seatNumber } from '../../services/event';
 
 @Component({
   selector: 'app-seat-selection',
@@ -58,12 +58,14 @@ finalTotal = computed(() =>
     return this.selectedSeats().includes(seat);
   }
 
+  get closed(): boolean { return !this.event || eventEnded(this.event); }
+  get availableSeats(): number { return (this.event?.capacity ?? 40) - this.bookedSeats.filter(seat => seatNumber(seat) <= (this.event?.capacity ?? 40)).length; }
   isBooked(seat: string): boolean {
-    return this.bookedSeats.includes(seat);
+    return seatNumber(seat) > (this.event?.capacity ?? 40) || this.bookedSeats.includes(seat);
   }
 
   toggleSeat(seat: string): void {
-    if (this.error || this.isBooked(seat)) {
+    if (this.closed || this.error || this.isBooked(seat)) {
       return;
     }
 
@@ -74,7 +76,7 @@ finalTotal = computed(() =>
     );
   }
   proceedToCheckout(): void {
-  if (this.selectedSeats().length === 0 || !this.event) {
+  if (this.closed || this.selectedSeats().length === 0 || !this.event) {
     return;
   }
 

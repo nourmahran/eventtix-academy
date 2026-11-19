@@ -1,9 +1,12 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { SignupData, User, UserPreferences, UserRole } from '../models/user.model';
+import { SignupData, User, UserPreferences, UserRole, USER_ROLES } from '../models/user.model';
 import { validateProfileOptions } from './profile-options';
 
 interface Account { user: User; salt: string; hash: string }
 const KEY = 'eventtix.accounts.v1';
+/** Per-tab sign-in marker. Holds an account id or a demo role name only, never a password or hash. */
+export const SESSION_KEY = 'eventtix.session.v1';
+type SessionMarker = { userId: string } | { demoRole: UserRole };
 export const defaultPreferences: UserPreferences = { theme: 'dark', notificationsEnabled: true, soundEnabled: false };
 
 // Browser-only classroom demo. No browser value is an authorization boundary.
@@ -12,6 +15,35 @@ export class AuthService {
   private readonly current = signal<User | null>(null);
   readonly user = this.current.asReadonly();
   readonly isAuthenticated = computed(() => this.user() !== null);
+
+  constructor() { this.restoreSession(); }
+
+  // Session storage keeps the sign-in for this tab only: it survives a refresh,
+  // and is cleared on logout or when the tab closes. Roles are re-derived here,
+  // never read from storage (registered accounts are always students; demo roles
+  // are already open to anyone through the login page's demo buttons).
+  private restoreSession(): void {
+    let marker: Partial<{ userId: unknown; demoRole: unknown }> | null = null;
+    try { marker = JSON.parse(sessionStorage.getItem(SESSION_KEY) ?? 'null'); } catch { marker = null; }
+    if (!marker || typeof marker !== 'object') return;
+    try {
+      if (typeof marker.demoRole === 'string' && (USER_ROLES as readonly string[]).includes(marker.demoRole)) {
+        this.startDemo(marker.demoRole as UserRole);
+        return;
+      }
+      const account = typeof marker.userId === 'string' ? this.accounts().find(a => a.user.id === marker!.userId) : undefined;
+      if (account) { this.current.set({ ...account.user, role: 'student' }); return; }
+    } catch { /* Damaged storage: stay signed out. */ }
+    this.clearSession();
+  }
+
+  private persistSession(marker: SessionMarker): void {
+    try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(marker)); } catch { /* Sign-in still works for this page load. */ }
+  }
+
+  private clearSession(): void {
+    try { sessionStorage.removeItem(SESSION_KEY); } catch { /* Nothing to clear. */ }
+  }
 
   // Session storage remembers only a convenience field, never a password or role.
   rememberedUsername(): string {
@@ -54,6 +86,7 @@ export class AuthService {
     const user: User = { id: crypto.randomUUID(), username, fullName: data.fullName.trim(), email, role: 'student', preferences: { ...data.preferences }, profilePictureUrl: data.profilePictureUrl || undefined, paymentMethodLabel: data.paymentMethodLabel || undefined, createdAt: new Date().toISOString() };
     this.save([...accounts, { user, salt, hash }]);
     this.current.set(user);
+    this.persistSession({ userId: user.id });
     this.rememberUsername(username);
   }
 
@@ -62,11 +95,13 @@ export class AuthService {
     if (!account || await this.digest(password, account.salt) !== account.hash) throw new Error('Incorrect username or password.');
     // Stored roles are never trusted: public registration only creates students.
     this.current.set({ ...account.user, role: 'student' });
+    this.persistSession({ userId: account.user.id });
     this.rememberUsername(account.user.username);
   }
 
   startDemo(role: UserRole): void {
     this.current.set({ id: `demo-${role}`, username: `demo-${role}`, fullName: `${role[0].toUpperCase()}${role.slice(1)} Demo`, email: `${role}@example.test`, role, preferences: { ...defaultPreferences }, createdAt: new Date().toISOString() });
+    this.persistSession({ demoRole: role });
   }
 
   studentAccountId(username: string): string {
@@ -76,7 +111,7 @@ export class AuthService {
     return account.user.id;
   }
 
-  logout(): void { this.current.set(null); }
+  logout(): void { this.current.set(null); this.clearSession(); }
   hasRole(roles: readonly UserRole[]): boolean { const user = this.user(); return !!user && roles.includes(user.role); }
 
   updateProfile(fullName: string, email: string, preferences: UserPreferences, details?: { profilePictureUrl: string; paymentMethodLabel: string }): void {

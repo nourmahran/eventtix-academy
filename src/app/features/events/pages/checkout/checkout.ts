@@ -54,7 +54,7 @@ async confirmBooking(): Promise<void> {
     this.ticketCode = ticketCode;
     this.confirmed = true;
     void this.sound.success();
-  } catch (error) { this.error = error instanceof Error ? error.message : 'Unable to confirm booking.'; }
+  } catch (error) { this.error = error instanceof Error ? error.message : 'Unable to confirm booking.'; void this.sound.error(); }
   finally { this.busy = false; }
 }
 }
