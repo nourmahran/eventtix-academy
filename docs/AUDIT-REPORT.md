@@ -6,7 +6,7 @@ Audit date: 19 November 2026 · Branch: `audit/full-project-verification` · Req
 
 | Area | Result |
 |---|---|
-| Mandatory requirements | 20 PASS, 1 PARTIAL (report emails), 0 FAIL |
+| Mandatory requirements | 21 PASS, 0 FAIL |
 | Bonus 1 – animation, visual and audio effects | PASS (strengthened during audit) |
 | Bonus 2 – AI chatbot | PASS: live Google Gemini via local key proxy (see risk R1) |
 | Production build | PASS – 378 kB initial (103 kB transfer), all routes lazy-loaded |
@@ -16,7 +16,7 @@ Audit date: 19 November 2026 · Branch: `audit/full-project-verification` · Req
 | Security | No secrets in Git history, no unsafe HTML, passwords PBKDF2-hashed; frontend-only limits apply |
 | `npm audit --omit=dev` | 0 vulnerabilities (16 moderate in dev-only Angular CLI tooling; not force-fixed) |
 
-**Readiness decision: READY WITH DOCUMENTED LIMITATIONS** — the code is complete, but the report still needs the team's email addresses and an updated storage paragraph (see F).
+**Readiness decision: READY WITH DOCUMENTED LIMITATIONS** — code and report are complete; the remaining items in F are confirmations and frontend-only limits.
 
 ## B. Requirement compliance matrix
 
@@ -41,7 +41,7 @@ Audit date: 19 November 2026 · Branch: `audit/full-project-verification` · Req
 | S3 | Local storage (appropriate use) | PASS | Accounts (hashed), events, bookings, fees, payroll, budgets persist after reload | – |
 | A1 | Authentication & authorization | PASS (demo level) | Guards on every protected route; roles never read from storage | – |
 | T1 | Jasmine/Karma unit tests | PASS | 90/90 headless Chrome | +9 tests for the audit fixes |
-| R1 | 3-page report: team, IDs, emails, idea, description, storage explanation, screenshots | PARTIAL | `docs/submission/*.pdf`: emails say "To be provided"; storage paragraph describes old refresh behaviour and 70 tests | Needs team input (see F) |
+| R1 | 3-page report: team, IDs, emails, idea, description, storage explanation, screenshots | PASS | `docs/submission/*.pdf`: 3-page core report + screenshot appendix (48 pages total) | Added team emails; updated storage paragraph, test counts and delivery note |
 | R2 | Source code fully running | PASS | `npm start` serves app + chat proxy; build passes | – |
 | B1 | Bonus: animation, visual & audio effects | PASS | Success chime (660→880 Hz) and error tone (330→220 Hz) captured via Web Audio; message slide-in and error shake confirmed by computed styles | **Added** error tone, feedback animations, button press, card lift, seat pop |
 | B2 | Bonus: AI chat tool | PASS | Live Gemini reply grounded in catalogue (150 → 135 with discount); follow-up used conversation history; offline/429/no-backend errors shown with Retry/Edit | Updated assistant's facts about sign-in |
@@ -79,8 +79,8 @@ Pre-existing uncommitted work found at the start (event time/capacity, delete ev
 
 ## F. Remaining risks and to-dos
 
-1. **Team emails missing in the report** — must be filled in by the team (not invented here).
-2. **Report text is outdated:** it says refresh signs out, sessionStorage holds only the last username, and 70 tests. Suggested replacement: *"sessionStorage keeps the sign-in for the current tab only (an account id or demo role, never a password), so a refresh keeps the user signed in while closing the tab or logging out ends the session. It also remembers the last username."* Update the test count to 90.
+1. **Check email/name pairs in the report.** Emails were matched by first name; three surnames differ from the listed names (Ziad Mohamed Tharwat → ziad.zahra, Karim Walid → karim.abdelazim, Lina Abdelhamid → lina.badr).
+2. **Report text updated (19 Nov):** the storage paragraph now describes the per-tab sessionStorage sign-in, and test counts read 90 Angular / 9 server tests.
 3. **R1 – Chatbot uses a small local Node proxy.** The PDF says Milestone 1 has no server. The proxy only exists to keep the Gemini key out of the browser. If the instructor runs `ng serve` alone, the chat shows "Start the app with npm start". Mention this in the report or confirm with the TA.
 4. **Deadline:** the PDF deadline was 14/11/2026; later changes count as post-deadline improvements.
 5. **Frontend-only security:** anyone can use the demo role buttons, and browser storage can be edited. Guards are UX/demo protections, not real security. Bookings are only consistent within one browser profile (Web Locks across tabs).
