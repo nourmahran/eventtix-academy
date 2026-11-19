@@ -39,9 +39,9 @@
         <div class="invoice-fields">
 
           <div class="form-group">
-            <label>Student</label>
+            <label for="field-student">Student</label>
 
-            <select
+            <select id="field-student"
               name="student"
               [(ngModel)]="invoiceStudentId"
               required>
@@ -58,9 +58,9 @@
           </div>
 
           <div class="form-group">
-            <label>Invoice Description</label>
+            <label for="field-description">Invoice Description</label>
 
-            <input
+            <input id="field-description"
               type="text"
               name="description"
               placeholder="e.g. Semester tuition fees"
@@ -70,9 +70,9 @@
           </div>
 
           <div class="form-group">
-            <label>Amount (EGP)</label>
+            <label for="field-amount">Amount (EGP)</label>
 
-            <input
+            <input id="field-amount"
               type="number"
               name="amount"
               min="1"
@@ -83,9 +83,9 @@
           </div>
 
           <div class="form-group">
-            <label>Due Date</label>
+            <label for="field-dueDate">Due Date</label>
 
-            <input
+            <input id="field-dueDate"
               type="date"
               name="dueDate"
               [(ngModel)]="invoiceDueDate"
@@ -148,12 +148,12 @@
 
       <input
         type="text"
-        placeholder="Search by student name or ID..."
+        aria-label="Search students" placeholder="Search by student name or ID..."
         [value]="searchTerm"
         (input)="searchTerm = $any($event.target).value"
       />
 
-      <select
+      <select aria-label="Payment status"
         [value]="selectedStatus"
         (change)="selectedStatus = $any($event.target).value">
 
@@ -167,7 +167,7 @@
     </div>
 
     <!-- Students Table -->
-    <div class="table-container">
+    <div class="table-container" tabindex="0" role="region" aria-label="Scrollable records">
 
       <table>
 
@@ -175,9 +175,9 @@
           <tr>
             <th>Student</th>
             <th>Student ID</th>
-            <th>Total Fees</th>
-            <th>Paid Amount</th>
-            <th>Remaining</th>
+            <th class="numeric">Total Fees</th>
+            <th class="numeric">Paid Amount</th>
+            <th class="numeric">Remaining</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -189,10 +189,10 @@
             <tr>
               <td>{{ student.name }}</td>
               <td>{{ student.id }}</td>
-              <td>{{ student.totalFees | number }}</td>
-              <td>{{ student.paidAmount | number }}</td>
+              <td class="numeric">{{ student.totalFees | number }}</td>
+              <td class="numeric">{{ student.paidAmount | number }}</td>
 
-              <td>
+              <td class="numeric">
                 {{ (student.totalFees - student.paidAmount) | number }}
               </td>
 
@@ -238,7 +238,7 @@
       </div>
     </div>
 
-    <div class="table-container">
+    <div class="table-container" tabindex="0" role="region" aria-label="Scrollable records">
 
       <table>
 
@@ -247,7 +247,7 @@
             <th>Invoice ID</th>
             <th>Student</th>
             <th>Description</th>
-            <th>Amount</th>
+            <th class="numeric">Amount</th>
             <th>Due Date</th>
             <th>Status</th>
             <th>Action</th>
@@ -262,7 +262,7 @@
               <td>{{ invoice.id }}</td>
               <td>{{ invoice.studentName }}</td>
               <td>{{ invoice.description }}</td>
-              <td>EGP {{ invoice.amount | number }}</td>
+              <td class="numeric">EGP {{ invoice.amount | number }}</td>
               <td>{{ invoice.dueDate }}</td>
 
               <td>
@@ -315,7 +315,7 @@
       </div>
     </div>
 
-    <div class="table-container">
+    <div class="table-container" tabindex="0" role="region" aria-label="Scrollable records">
 
       <table>
 
@@ -325,7 +325,7 @@
             <th>Student</th>
             <th>Student ID</th>
             <th>Invoice ID</th>
-            <th>Amount</th>
+            <th class="numeric">Amount</th>
             <th>Payment Date</th>
             <th>Method</th>
           </tr>
@@ -344,7 +344,7 @@
 
               <td>{{ payment.invoiceId }}</td>
 
-              <td>EGP {{ payment.amount | number }}</td>
+              <td class="numeric">EGP {{ payment.amount | number }}</td>
 
               <td>{{ payment.paymentDate }}</td>
 
@@ -377,6 +377,12 @@
     <h2 id="student-detail-title">{{ student.name }}</h2><p>Student ID: {{ student.id }}</p>
     <p>Fees: EGP {{ student.totalFees | number }} · Paid: EGP {{ student.paidAmount | number }}</p>
     <p><strong>Remaining: EGP {{ student.totalFees - student.paidAmount | number }}</strong> · {{ student.status }}</p>
+    <h3>Student account access</h3>
+    <p>Assign this record to a registered username in this browser. Leave blank to remove the link.</p>
+    <label for="fee-account-username">Registered username</label>
+    <input id="fee-account-username" [(ngModel)]="accountUsername" autocomplete="off">
+    <button class="action-btn" type="button" (click)="linkAccount()">Save account link</button>
+    @if (accountLinkMessage) { <p role="status">{{ accountLinkMessage }}</p> }
     <h3>Invoices</h3>
     @for (invoice of studentInvoices; track invoice.id) {
       <article><strong>{{ invoice.description }}</strong><p>{{ invoice.id }} · Due {{ invoice.dueDate }}</p>

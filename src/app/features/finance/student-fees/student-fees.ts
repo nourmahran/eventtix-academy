@@ -1,6 +1,7 @@
 import { LocalRecord, money, text } from '../../../shared/services/local-record';
 
-import { Component } from '@angular/core';
+import { FeeLinks } from '../fee-links';
+import { Component, inject } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -39,6 +40,20 @@ interface Payment {
   styleUrl: './student-fees.scss',
 })
 export class StudentFees {
+
+  private readonly feeLinks = inject(FeeLinks);
+  accountUsername = '';
+  accountLinkMessage = '';
+  linkAccount(): void {
+    if (!this.selectedStudentId) return;
+    try {
+      // Ensure opening balances exist before creating a separate account link.
+      if (!this.persist()) return;
+      this.feeLinks.link(this.selectedStudentId, this.accountUsername);
+      this.accountLinkMessage = this.accountUsername.trim() ? 'Student account linked.' : 'Account link removed.';
+      this.accountUsername = '';
+    } catch (error) { this.error = error instanceof Error ? error.message : 'Unable to link account.'; }
+  }
 
   // Student records
   students: StudentFee[] = [
@@ -108,7 +123,7 @@ export class StudentFees {
   get selectedStudent(): StudentFee | undefined { return this.students.find(s => s.id === this.selectedStudentId); }
   get studentInvoices(): Invoice[] { return this.invoices.filter(i => i.studentId === this.selectedStudentId); }
   get studentPayments(): Payment[] { return this.payments.filter(p => p.studentId === this.selectedStudentId); }
-  viewStudent(id: string): void { this.selectedStudentId = id; }
+  viewStudent(id: string): void { this.selectedStudentId = id; this.accountUsername = ''; this.accountLinkMessage = '';  }
 
   // Filter students
   get filteredStudents(): StudentFee[] {

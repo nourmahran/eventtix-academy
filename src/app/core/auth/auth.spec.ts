@@ -62,12 +62,12 @@ describe('Demo authentication and routing', () => {
     expect(TestBed.inject(Router).url).toBe('/forbidden');
     auth.startDemo('accounting');
     await harness.navigateByUrl('/accounting');
-    expect(harness.routeNativeElement?.textContent).toContain('Accounting demo');
+    expect(harness.routeNativeElement?.textContent).toContain('Accounting workspace');
     await harness.navigateByUrl('/admin');
     expect(TestBed.inject(Router).url).toBe('/forbidden');
     auth.startDemo('admin');
     await harness.navigateByUrl('/admin');
-    expect(harness.routeNativeElement?.textContent).toContain('Administration demo');
+    expect(harness.routeNativeElement?.textContent).toContain('Administration');
     await harness.navigateByUrl('/login');
     expect(TestBed.inject(Router).url).toBe('/profile');
     auth.logout();

@@ -29,7 +29,7 @@
             <p>{{ ticket.eventDate }}</p>
             <p>{{ ticket.eventLocation }}</p>
 
-            <div class="ticket-divider"></div>
+            <div class="ticket-detail"><span>Ticket holder</span><strong>{{ ticket.buyerName || 'Account holder' }}</strong></div><div class="ticket-divider"></div>
 
             <div class="ticket-detail">
               <span>Selected Seats</span>

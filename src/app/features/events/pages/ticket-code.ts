@@ -7,7 +7,7 @@ import { ticketQr, downloadInvoice } from '../services/ticket-document';
     <p>Scan for the booking reference. Demo tickets are not valid for admission.</p>
     <button type="button" (click)="download()" [disabled]="busy">{{ busy ? 'Preparing invoice…' : 'Download invoice' }}</button>
     @if (error) { <p role="alert">{{ error }}</p> }</div>`,
-  styles: [`.ticket-document{text-align:center;padding:16px 0}.ticket-document img{background:white;border-radius:8px}.ticket-document p{font-size:12px;color:var(--muted)}button{background:var(--primary);color:white;border:0;border-radius:9px;padding:12px 20px;cursor:pointer}button:disabled{opacity:.45}`]
+  styles: [`.ticket-document{text-align:center;padding:24px 0 0;border-top:1px dashed var(--border);margin-top:24px}.ticket-document img{background:white;border-radius:12px;padding:8px;max-width:100%;height:auto}.ticket-document p{font-size:12px;color:var(--muted)}button{background:var(--primary);color:white;border:0;border-radius:9px;padding:12px 20px;cursor:pointer}button:disabled{opacity:.45}`]
 })
 export class TicketCode implements OnChanges {
   @Input({ required: true }) ticket!: SavedTicket;

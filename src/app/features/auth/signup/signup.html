@@ -1,4 +1,4 @@
-<main class="auth-page"><section class="auth-card">
+<main class="auth-page"><aside class="auth-intro"><span class="eyebrow">EVENTTIX / YOUR ACADEMY</span><h2>Make more of your academy life.</h2><p>Create your student account and discover the experiences around you.</p><div class="auth-points"><span>Events for every interest</span><span>Tickets in one place</span><span>Your preferences, remembered</span></div></aside><section class="auth-card">
 <div class="auth-heading"><div class="auth-icon">✦</div><h1>Create your account</h1><p>Join EventTix Academy as a student</p></div>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
 <app-photo-picker [value]="form.controls.profilePictureUrl.value" [disabled]="busy || photoBusy" (valueChange)="form.controls.profilePictureUrl.setValue($event)" (busyChange)="photoBusy = $event" />
@@ -12,7 +12,7 @@
 @if (form.controls.confirmPassword.touched && form.hasError('mismatch')) { <p class="error">Passwords must match.</p> }
 <div class="form-group"><label for="paymentMethod">Credit card (mock)</label><select id="paymentMethod" formControlName="paymentMethodLabel"><option value="">No card selected</option>@for (method of paymentMethods; track method) { <option [value]="method">{{ method }}</option> }</select><small>Choose a sample card. No real card numbers, security codes, or payments.</small></div>
 <fieldset><legend>Your preferences</legend>
-<div class="form-group"><label for="theme">Appearance</label><select id="theme" formControlName="theme"><option value="dark">Dark purple</option><option value="light">Light purple</option></select></div>
+<div class="form-group"><label for="theme">Appearance</label><select id="theme" formControlName="theme"><option value="dark">Midnight navy</option><option value="light">Warm daylight</option></select></div>
 <p><label><input type="checkbox" formControlName="notificationsEnabled" /> Enable notifications</label></p>
 <p><label><input type="checkbox" formControlName="soundEnabled" /> Enable sound</label></p>
 </fieldset>

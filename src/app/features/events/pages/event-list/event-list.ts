@@ -2,7 +2,7 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EventService } from '../../services/event';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-event-list',
@@ -15,7 +15,8 @@ export class EventList {
   private eventService = inject(EventService);
 
   searchTerm = signal('');
-  selectedCategory = signal('All');
+  selectedCategory = signal(inject(ActivatedRoute).snapshot.queryParamMap.get('category') ?? 'All');
+ get eventCount() { return this.eventService.getEvents().length; }
 
   categories = ['All', 'Concert', 'Conference', 'Workshop'];
 

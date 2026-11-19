@@ -7,14 +7,14 @@ describe('Finance persistence', () => {
   const clear = () => { for (const name of ['fees','payroll','event-finance','events']) localStorage.removeItem(`eventtix.${name}.v1`); };
   beforeEach(() => { clear(); spyOn(window, 'alert'); }); afterEach(clear);
   it('persists invoices, payments and student details without double payment', () => {
-    const fees = new StudentFees(); fees.invoiceStudentId = '2024001'; fees.invoiceDescription = 'Tuition'; fees.invoiceAmount = 1000; fees.invoiceDueDate = '2026-12-01'; fees.createInvoice();
-    const next = new StudentFees(); expect(next.invoices.length).toBe(1);
+    const fees = TestBed.runInInjectionContext(() => new StudentFees()); fees.invoiceStudentId = '2024001'; fees.invoiceDescription = 'Tuition'; fees.invoiceAmount = 1000; fees.invoiceDueDate = '2026-12-01'; fees.createInvoice();
+    const next = TestBed.runInInjectionContext(() => new StudentFees()); expect(next.invoices.length).toBe(1);
     next.recordPayment(next.invoices[0].id); next.recordPayment(next.invoices[0].id);
-    const reloaded = new StudentFees(); reloaded.viewStudent('2024001');
+    const reloaded = TestBed.runInInjectionContext(() => new StudentFees()); reloaded.viewStudent('2024001');
     expect(reloaded.selectedStudent?.paidAmount).toBe(11000); expect(reloaded.studentPayments.length).toBe(1); expect(reloaded.studentInvoices[0].status).toBe('Paid');
   });
   it('rolls back fee mutations if persistence fails', () => {
-    const fees = new StudentFees(); fees.invoiceStudentId = '2024001'; fees.invoiceDescription = 'Tuition'; fees.invoiceAmount = 1000; fees.invoiceDueDate = '2026-12-01';
+    const fees = TestBed.runInInjectionContext(() => new StudentFees()); fees.invoiceStudentId = '2024001'; fees.invoiceDescription = 'Tuition'; fees.invoiceAmount = 1000; fees.invoiceDueDate = '2026-12-01';
     spyOn(Storage.prototype, 'setItem').and.throwError('Quota'); fees.createInvoice();
     expect(fees.invoices.length).toBe(0); expect(fees.error).toBeTruthy();
   });

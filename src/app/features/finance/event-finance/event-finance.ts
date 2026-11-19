@@ -208,31 +208,33 @@ export class EventFinance implements AfterViewInit, OnDestroy {
           {
             label: 'Income',
             data: this.events.map(e => this.getIncome(e)),
-            backgroundColor: '#5268d9',
+            backgroundColor: '#087f74',
             borderRadius: 6
           },
           {
             label: 'Expenses',
             data: this.events.map(e => this.getExpenses(e)),
-            backgroundColor: '#f0a46b',
+            backgroundColor: '#b27838',
             borderRadius: 6
           }
         ]
       },
       options: {
+        animation: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? false : {duration:180},
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
           legend: {
-            position: 'bottom'
+            position: 'bottom', labels: { color: getComputedStyle(document.documentElement).getPropertyValue('--muted').trim() || '#526476' }
           }
         },
         scales: {
+          x: { ticks: {color: getComputedStyle(document.documentElement).getPropertyValue('--muted').trim() || '#526476'}, grid: {display:false} },
           y: {
-            beginAtZero: true,
+            beginAtZero: true, ticks: {color: getComputedStyle(document.documentElement).getPropertyValue('--muted').trim() || '#526476'}, grid: {color: getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#cbd5dc'},
             title: {
               display: true,
-              text: 'Amount (EGP)'
+              text: 'Amount (EGP)', color: getComputedStyle(document.documentElement).getPropertyValue('--muted').trim() || '#526476'
             }
           }
         }

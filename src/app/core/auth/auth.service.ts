@@ -69,6 +69,13 @@ export class AuthService {
     this.current.set({ id: `demo-${role}`, username: `demo-${role}`, fullName: `${role[0].toUpperCase()}${role.slice(1)} Demo`, email: `${role}@example.test`, role, preferences: { ...defaultPreferences }, createdAt: new Date().toISOString() });
   }
 
+  studentAccountId(username: string): string {
+    if (!this.hasRole(['admin', 'accounting'])) throw new Error('Staff access required.');
+    const account = this.accounts().find(a => a.user.username === username.trim().toLowerCase());
+    if (!account) throw new Error('Registered student username not found in this browser.');
+    return account.user.id;
+  }
+
   logout(): void { this.current.set(null); }
   hasRole(roles: readonly UserRole[]): boolean { const user = this.user(); return !!user && roles.includes(user.role); }
 

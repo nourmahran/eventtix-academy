@@ -1,6 +1,6 @@
 import { AuthService } from '../../core/auth/auth.service';
 
-import { Component, inject } from '@angular/core';
+import { Component, inject, HostListener } from '@angular/core';
 import {
   Router,
   RouterLink,
@@ -20,6 +20,7 @@ export class Navbar {
   logout(): void { this.auth.logout(); this.closeMenu(); void this.router.navigateByUrl('/login'); }
   menuOpen = false;
 
+  @HostListener('document:keydown.escape') closeOnEscape(): void { this.closeMenu(); }
   toggleMenu(): void {
     this.menuOpen = !this.menuOpen;
   }

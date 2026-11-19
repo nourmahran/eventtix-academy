@@ -1,11 +1,19 @@
+import { BookingStorage, SavedTicket } from '../events/services/booking-storage';
+import { RouterLink } from '@angular/router';
 import { SoundService } from '../../core/preferences/sound.service';
 import { DEMO_PAYMENT_METHODS } from '../../core/auth/profile-options';
 import { PhotoPicker } from '../../shared/photo-picker/photo-picker';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/auth/auth.service';
-@Component({ selector: 'app-profile', imports: [ReactiveFormsModule, PhotoPicker], templateUrl: './profile.html', styleUrl: './profile.scss' })
+@Component({ selector: 'app-profile', imports: [ReactiveFormsModule, PhotoPicker, RouterLink], templateUrl: './profile.html', styleUrl: './profile.scss' })
 export class Profile {
+  tickets: SavedTicket[] = [];
+  ticketsError = '';
+  constructor() {
+    try { this.tickets = inject(BookingStorage).tickets(); }
+    catch(e) { this.ticketsError = e instanceof Error ? e.message : 'Tickets could not be loaded.'; }
+  }
   private readonly sound = inject(SoundService);
   readonly auth = inject(AuthService);
   message = ''; error = ''; photoBusy = false;

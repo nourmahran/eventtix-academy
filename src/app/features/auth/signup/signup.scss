@@ -1,13 +1,1 @@
-@use "../login/login.scss";
-
-.visibility-btn {
-  margin: 0 0 22px;
-  padding: 8px 12px;
-  border: 1px solid var(--border);
-  border-radius: 7px;
-  background: transparent;
-  color: var(--accent);
-  cursor: pointer;
-}
-
-.auth-card { max-width: 620px; }
+/* Shared primitives and page layout are defined in src/styles. */

@@ -13,7 +13,7 @@
       <p>{{ event.title }} · {{ event.date }}</p>
     </header>
 
-    <div class="seat-layout">
+    <nav class="booking-steps" aria-label="Booking progress"><strong aria-current="step">01 Select seats</strong><span>02 Review booking</span><span>03 Your ticket</span></nav><div class="seat-layout">
 
       <section class="seating-section">
 
@@ -33,7 +33,7 @@
               @for (number of seatsPerRow; track number) {
                 <button
                   type="button"
-                  class="seat"
+                  class="seat" [attr.aria-label]="'Seat ' + row + number + (isBooked(row + number) ? ' booked' : '')" [attr.aria-pressed]="isSelected(row + number)"
                   [class.booked]="isBooked(row + number)"
                   [class.selected]="isSelected(row + number)"
                   [disabled]="!!error || isBooked(row + number)"

@@ -1,5 +1,6 @@
+import { EventService } from '../../events/services/event';
 import { RouterLink } from '@angular/router';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 @Component({
   selector: 'app-home',
@@ -8,5 +9,7 @@ import { Component } from '@angular/core';
   styleUrl: './home.scss',
 })
 export class Home {
+ private readonly catalogue = inject(EventService);
+ get featured() { return this.catalogue.getEvents().slice(0,3); }
 
 }

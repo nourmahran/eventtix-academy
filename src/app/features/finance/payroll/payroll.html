@@ -83,8 +83,8 @@
         <div class="form-grid">
 
           <div class="form-group">
-            <label>Staff Name</label>
-            <input
+            <label for="field-staffName">Staff Name</label>
+            <input id="field-staffName"
               type="text"
               name="staffName"
               [(ngModel)]="formName"
@@ -93,8 +93,8 @@
           </div>
 
           <div class="form-group">
-            <label>Position</label>
-            <input
+            <label for="field-position">Position</label>
+            <input id="field-position"
               type="text"
               name="position"
               [(ngModel)]="formPosition"
@@ -103,8 +103,8 @@
           </div>
 
           <div class="form-group">
-            <label>Basic Salary (EGP)</label>
-            <input
+            <label for="field-salary">Basic Salary (EGP)</label>
+            <input id="field-salary"
               type="number"
               name="salary"
               min="0"
@@ -114,8 +114,8 @@
           </div>
 
           <div class="form-group">
-            <label>Allowances (EGP)</label>
-            <input
+            <label for="field-allowances">Allowances (EGP)</label>
+            <input id="field-allowances"
               type="number"
               name="allowances"
               min="0"
@@ -125,8 +125,8 @@
           </div>
 
           <div class="form-group">
-            <label>Deductions (EGP)</label>
-            <input
+            <label for="field-deductions">Deductions (EGP)</label>
+            <input id="field-deductions"
               type="number"
               name="deductions"
               min="0"
@@ -155,18 +155,18 @@
       </div>
     </div>
 
-    <div class="table-container">
+    <div class="table-container" tabindex="0" role="region" aria-label="Scrollable records">
       <table>
 
         <thead>
           <tr>
             <th>Staff Name</th>
             <th>Position</th>
-            <th>Basic Salary</th>
-            <th>Allowances</th>
-            <th>Event Allowances</th>
-            <th>Deductions</th>
-            <th>Net Salary</th>
+            <th class="numeric">Basic Salary</th>
+            <th class="numeric">Allowances</th>
+            <th class="numeric">Event Allowances</th>
+            <th class="numeric">Deductions</th>
+            <th class="numeric">Net Salary</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -177,14 +177,14 @@
             <tr>
               <td>{{ member.name }}</td>
               <td>{{ member.position }}</td>
-              <td>{{ member.basicSalary | number }}</td>
-              <td>{{ member.allowances | number }}</td>
+              <td class="numeric">{{ member.basicSalary | number }}</td>
+              <td class="numeric">{{ member.allowances | number }}</td>
 
-              <td>
+              <td class="numeric">
                 {{ getEventAllowance(member) | number }}
               </td>
 
-              <td>{{ member.deductions | number }}</td>
+              <td class="numeric">{{ member.deductions | number }}</td>
 
               <td class="net-salary">
                 EGP {{ getNetSalary(member) | number }}
@@ -239,9 +239,9 @@
         <div class="form-grid">
 
           <div class="form-group">
-            <label>Select Staff</label>
+            <label for="field-eventStaff">Select Staff</label>
 
-            <select
+            <select id="field-eventStaff"
               name="eventStaff"
               [(ngModel)]="selectedStaffId"
               required>
@@ -257,8 +257,8 @@
           </div>
 
           <div class="form-group">
-            <label>Event Name</label>
-            <input
+            <label for="field-eventName">Event Name</label>
+            <input id="field-eventName"
               type="text"
               name="eventName"
               placeholder="e.g. Music Concert"
@@ -268,8 +268,8 @@
           </div>
 
           <div class="form-group">
-            <label>Allowance Amount (EGP)</label>
-            <input
+            <label for="field-eventAmount">Allowance Amount (EGP)</label>
+            <input id="field-eventAmount"
               type="number"
               name="eventAmount"
               min="1"
@@ -288,7 +288,7 @@
     }
 
     <!-- Recorded Event Allowances -->
-    <div class="table-container">
+    <div class="table-container" tabindex="0" role="region" aria-label="Scrollable records">
       <table>
 
         <thead>
@@ -308,7 +308,7 @@
                 <td>{{ member.name }}</td>
                 <td>{{ allowance.eventName }}</td>
                 <td>{{ allowance.month }}</td>
-                <td>EGP {{ allowance.amount | number }}</td>
+                <td class="numeric">EGP {{ allowance.amount | number }}</td>
               </tr>
             }
           }

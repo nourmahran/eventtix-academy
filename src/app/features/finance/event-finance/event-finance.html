@@ -58,8 +58,8 @@
         <div class="form-grid">
 
           <div class="form-group">
-            <label>Event</label>
-            <select
+            <label for="field-event">Event</label>
+            <select id="field-event"
               name="event"
               [(ngModel)]="selectedEventId">
               @for (event of events; track event.id) {
@@ -71,8 +71,8 @@
           </div>
 
           <div class="form-group">
-            <label>Transaction Type</label>
-            <select
+            <label for="field-transactionType">Transaction Type</label>
+            <select id="field-transactionType"
               name="transactionType"
               [(ngModel)]="transactionType">
               <option value="income">Other Income</option>
@@ -82,8 +82,8 @@
           </div>
 
           <div class="form-group">
-            <label>Description</label>
-            <input
+            <label for="field-description">Description</label>
+            <input id="field-description"
               type="text"
               name="description"
               placeholder="e.g. Marketing, Sponsor ABC"
@@ -93,8 +93,8 @@
           </div>
 
           <div class="form-group">
-            <label>Amount (EGP)</label>
-            <input
+            <label for="field-amount">Amount (EGP)</label>
+            <input id="field-amount"
               type="number"
               name="amount"
               min="1"
@@ -133,18 +133,18 @@
       </div>
     </div>
 
-    <div class="table-container">
+    <div class="table-container" tabindex="0" role="region" aria-label="Scrollable records">
       <table>
 
         <thead>
           <tr>
             <th>Event</th>
-            <th>Ticket Revenue</th>
-            <th>Sponsors</th>
-            <th>Other Income</th>
-            <th>Total Income</th>
-            <th>Expenses</th>
-            <th>Net Profit</th>
+            <th class="numeric">Ticket Revenue</th>
+            <th class="numeric">Sponsors</th>
+            <th class="numeric">Other Income</th>
+            <th class="numeric">Total Income</th>
+            <th class="numeric">Expenses</th>
+            <th class="numeric">Net Profit</th>
           </tr>
         </thead>
 
@@ -152,11 +152,11 @@
           @for (event of events; track event.id) {
             <tr>
               <td>{{ event.name }}</td>
-              <td>{{ ticketIncome(event) | number }}</td>
-              <td>{{ event.sponsorship | number }}</td>
-              <td>{{ event.otherIncome | number }}</td>
-              <td>{{ getIncome(event) | number }}</td>
-              <td>{{ getExpenses(event) | number }}</td>
+              <td class="numeric">{{ ticketIncome(event) | number }}</td>
+              <td class="numeric">{{ event.sponsorship | number }}</td>
+              <td class="numeric">{{ event.otherIncome | number }}</td>
+              <td class="numeric">{{ getIncome(event) | number }}</td>
+              <td class="numeric">{{ getExpenses(event) | number }}</td>
 
               <td
                 class="profit"
@@ -183,7 +183,7 @@
     </div>
 
     <div class="chart-container">
-      <canvas #budgetChart></canvas>
+      <canvas #budgetChart role="img" aria-label="Income versus expenses; exact values appear in the event budget table"></canvas>
     </div>
 
   </section>
@@ -198,7 +198,7 @@
       </div>
 
       <select
-        class="event-select"
+        aria-label="Event expense breakdown" class="event-select"
         [(ngModel)]="selectedEventId">
         @for (event of events; track event.id) {
           <option [value]="event.id">
@@ -208,13 +208,13 @@
       </select>
     </div>
 
-    <div class="table-container">
+    <div class="table-container" tabindex="0" role="region" aria-label="Scrollable records">
       <table>
 
         <thead>
           <tr>
             <th>Description</th>
-            <th>Amount</th>
+            <th class="numeric">Amount</th>
           </tr>
         </thead>
 
@@ -223,7 +223,7 @@
             @for (expense of selectedEvent.expenses; track $index) {
               <tr>
                 <td>{{ expense.description }}</td>
-                <td>EGP {{ expense.amount | number }}</td>
+                <td class="numeric">EGP {{ expense.amount | number }}</td>
               </tr>
             } @empty {
               <tr>

@@ -8,7 +8,7 @@
       <p>Find concerts, conferences and workshops happening around you.</p>
 
       <div class="hero-stats">
-        <div><strong>04</strong><span>Featured events</span></div>
+        <div><strong>{{ eventCount }}</strong><span>Featured events</span></div>
         <div><strong>03</strong><span>Categories</span></div>
       </div>
     </div>
@@ -29,7 +29,7 @@
         <span>⌕</span>
         <input
           type="text"
-          placeholder="Search events or locations..."
+          aria-label="Search events or locations" placeholder="Search events or locations..."
           [ngModel]="searchTerm()"
           (ngModelChange)="searchTerm.set($event)"
         />
@@ -38,7 +38,7 @@
       <div class="category-filters">
         @for (category of categories; track category) {
           <button
-            [class.active]="selectedCategory() === category"
+            [class.active]="selectedCategory() === category" [attr.aria-pressed]="selectedCategory() === category"
             (click)="selectedCategory.set(category)">
             {{ category }}
           </button>
@@ -52,7 +52,7 @@
         <article class="event-card">
 
           <div class="event-image">
-            <img [src]="event.image" [alt]="event.title">
+            <img [src]="event.image" [alt]="event.title" loading="lazy" width="800" height="500">
             <span class="category-tag">{{ event.category }}</span>
           </div>
 

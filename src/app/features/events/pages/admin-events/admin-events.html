@@ -19,8 +19,8 @@
 
       <form (ngSubmit)="saveEvent()">
 
-        <label>Event Title</label>
-        <input
+        <label for="field-title">Event Title</label>
+        <input id="field-title"
           type="text"
           name="title"
           [(ngModel)]="form.title"
@@ -28,23 +28,23 @@
           required
         />
 
-        <label>Category</label>
-        <select name="category" [(ngModel)]="form.category">
+        <label for="field-category">Category</label>
+        <select id="field-category" name="category" [(ngModel)]="form.category">
           <option value="Concert">Concert</option>
           <option value="Conference">Conference</option>
           <option value="Workshop">Workshop</option>
         </select>
 
-        <label>Date</label>
-        <input
+        <label for="field-date">Date</label>
+        <input id="field-date"
           type="date"
           name="date"
           [(ngModel)]="form.date"
           required
         />
 
-        <label>Location</label>
-        <input
+        <label for="field-location">Location</label>
+        <input id="field-location"
           type="text"
           name="location"
           [(ngModel)]="form.location"
@@ -52,8 +52,8 @@
           required
         />
 
-        <label>Ticket Price (EGP)</label>
-        <input
+        <label for="field-price">Ticket Price (EGP)</label>
+        <input id="field-price"
           type="number"
           name="price"
           [(ngModel)]="form.price"
@@ -61,16 +61,16 @@
           required
         />
 
-        <label>Image URL</label>
-        <input
+        <label for="field-image">Image URL</label>
+        <input id="field-image"
           type="url"
           name="image"
           [(ngModel)]="form.image"
           placeholder="https://example.com/image.jpg"
         />
 
-        <label>Description</label>
-        <textarea
+        <label for="field-description">Description</label>
+        <textarea id="field-description"
           name="description"
           [(ngModel)]="form.description"
           placeholder="Describe the event"
@@ -106,12 +106,12 @@
             <strong>EGP {{ event.price }}</strong>
           </div>
 
-          <button
+          <div class="admin-event-actions"><a class="action-btn" [routerLink]="['/events',event.id,'seats']">View seats</a><button
             type="button"
             class="edit-button"
             (click)="editEvent(event)">
             Edit
-          </button>
+          </button></div>
 
         </article>
       }

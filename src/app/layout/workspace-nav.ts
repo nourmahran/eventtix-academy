@@ -1,0 +1,5 @@
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../core/auth/auth.service';
+@Component({selector:'app-workspace-nav',imports:[RouterLink,RouterLinkActive],template:`@if(auth.hasRole(['admin','accounting']) && staffPage){<nav class="workspace-subnav" aria-label="Accounting navigation"><div><a routerLink="/accounting" routerLinkActive="active" ariaCurrentWhenActive="page">Overview</a><a routerLink="/student-fees" routerLinkActive="active" ariaCurrentWhenActive="page">Student fees</a><a routerLink="/payroll" routerLinkActive="active" ariaCurrentWhenActive="page">Payroll</a><a routerLink="/event-finance" routerLinkActive="active" ariaCurrentWhenActive="page">Event finance</a><a routerLink="/department-budget" routerLinkActive="active" ariaCurrentWhenActive="page">Departments</a></div></nav>}`})
+export class WorkspaceNav {readonly auth=inject(AuthService);readonly router=inject(Router);get staffPage(){return ['/accounting','/student-fees','/payroll','/event-finance','/department-budget'].includes(this.router.url.split('?')[0]);}}

@@ -36,7 +36,7 @@ export class DepartmentBudget implements AfterViewInit, OnDestroy {
     if(this.save(next)) { this.description = ''; this.amount = null; }
   }
   ngAfterViewInit(): void {
-    this.chart = new Chart(this.canvas.nativeElement,{ type:'bar', data:{labels:[],datasets:[{label:'Income',data:[],backgroundColor:'#9070e8'},{label:'Expenses',data:[],backgroundColor:'#e8a070'}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true}},plugins:{legend:{labels:{color:'#888888'}}}}}); this.updateChart();
+    this.chart = new Chart(this.canvas.nativeElement,{ type:'bar', data:{labels:[],datasets:[{label:'Income',data:[],backgroundColor:'#087f74'},{label:'Expenses',data:[],backgroundColor:'#b27838'}]},options:{animation: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? false : {duration:180},responsive:true,maintainAspectRatio:false,scales:{x:{ticks:{color:getComputedStyle(document.documentElement).getPropertyValue('--muted').trim() || '#526476'},grid:{display:false}},y:{beginAtZero:true,ticks:{color:getComputedStyle(document.documentElement).getPropertyValue('--muted').trim() || '#526476'},grid:{color:getComputedStyle(document.documentElement).getPropertyValue('--border').trim() || '#cbd5dc'}}},plugins:{legend:{labels:{color:getComputedStyle(document.documentElement).getPropertyValue('--muted').trim() || '#526476'}}}}}); this.updateChart();
   }
   private updateChart(): void { if(this.chart) { this.chart.data.labels=this.departments.map(d=>d.name);this.chart.data.datasets[0].data=this.departments.map(d=>this.total(d,'income'));this.chart.data.datasets[1].data=this.departments.map(d=>this.total(d,'expense'));this.chart.update(); } }
   ngOnDestroy(): void { this.chart?.destroy(); }

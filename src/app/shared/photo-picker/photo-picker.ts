@@ -16,12 +16,12 @@ import { Component, input, output } from '@angular/core';
     </div>`,
   styles: `
     .photo-picker { display: grid; justify-items: start; gap: 10px; margin-bottom: 24px; }
-    img, .avatar { border-radius: 50%; object-fit: cover; border: 2px solid #b887ff; }
-    .avatar { width: 88px; height: 88px; display: grid; place-items: center; font-size: 36px; color: #b887ff; }
+    img, .avatar { border-radius: 50%; object-fit: cover; border: 2px solid var(--accent); }
+    .avatar { width: 88px; height: 88px; display: grid; place-items: center; font-size: 36px; color: var(--accent); }
     label { display: grid; gap: 10px; font-weight: 600; width: 100%; }
     input { max-width: 100%; font-size: 13px; }
     small { line-height: 1.5; }
-    button { border: 1px solid #8651dc; border-radius: 6px; padding: 7px 12px; background: transparent; color: inherit; cursor: pointer; }
+    button { border: 1px solid var(--border); border-radius: 6px; padding: 7px 12px; background: transparent; color: inherit; cursor: pointer; }
     .error { color: var(--error, #ff9aaf); }
   `
 })
