@@ -1,0 +1,46 @@
+:host {
+  display:block
+}
+.budget-page {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);
+  gap:24px
+}
+.budget-page>h1,.budget-page>p {
+  grid-column:1/-1;
+  margin:0
+}
+.budget-page>section {
+  padding:28px;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:var(--surface);
+  min-width:0
+}
+.budget-page>section:nth-last-child(-n+2) {
+  grid-column:1/-1
+}
+.budget-page form {
+  display:grid;
+  gap:10px
+}
+.budget-page form>button {
+  margin-top:10px;
+  background:var(--primary);
+  color:#fff;
+  border-color:var(--primary)
+}
+.budget-page .chart {
+  margin-top:24px
+}
+.budget-page h2 {
+  margin-bottom:20px
+}
+@media(max-width:700px) {
+  .budget-page {
+    grid-template-columns:1fr
+  }
+  .budget-page>section {
+    padding:20px
+  }
+}

@@ -1,0 +1,243 @@
+@if (error) { <p class="error-banner" role="alert">{{ error }}</p> }
+
+<div class="finance-page">
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div>
+      <h1>Event Financial Management</h1>
+      <p>Track event revenue, expenses and profitability.</p>
+    </div>
+
+    <button
+      class="primary-btn"
+      (click)="showTransactionForm = !showTransactionForm">
+      + Add Transaction
+    </button>
+  </header>
+
+  <!-- Summary Cards -->
+  <section class="summary-cards">
+
+    <div class="summary-card">
+      <p>Total Income</p>
+      <h2>EGP {{ totalIncome | number }}</h2>
+      <span>All event revenue</span>
+    </div>
+
+    <div class="summary-card">
+      <p>Total Expenses</p>
+      <h2>EGP {{ totalExpenses | number }}</h2>
+      <span>All event costs</span>
+    </div>
+
+    <div class="summary-card">
+      <p>Sponsorships</p>
+      <h2>EGP {{ totalSponsorship | number }}</h2>
+      <span>Sponsor contributions</span>
+    </div>
+
+    <div class="summary-card">
+      <p>Net Profit</p>
+      <h2>EGP {{ totalProfit | number }}</h2>
+      <span>Income minus expenses</span>
+    </div>
+
+  </section>
+
+  <!-- Add Transaction -->
+  @if (showTransactionForm) {
+    <section class="records-section">
+
+      <div class="section-header">
+        <h2>Add Financial Transaction</h2>
+      </div>
+
+      <form (ngSubmit)="addTransaction()">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label for="field-event">Event</label>
+            <select id="field-event"
+              name="event"
+              [(ngModel)]="selectedEventId">
+              @for (event of events; track event.id) {
+                <option [value]="event.id">
+                  {{ event.name }}
+                </option>
+              }
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="field-transactionType">Transaction Type</label>
+            <select id="field-transactionType"
+              name="transactionType"
+              [(ngModel)]="transactionType">
+              <option value="income">Other Income</option>
+              <option value="expense">Expense</option>
+              <option value="sponsor">Sponsor Contribution</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="field-description">Description</label>
+            <input id="field-description"
+              type="text"
+              name="description"
+              placeholder="e.g. Marketing, Sponsor ABC"
+              [(ngModel)]="transactionDescription"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="field-amount">Amount (EGP)</label>
+            <input id="field-amount"
+              type="number"
+              name="amount"
+              min="1"
+              [(ngModel)]="transactionAmount"
+              required
+            />
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="primary-btn">
+            Save Transaction
+          </button>
+
+          <button
+            type="button"
+            class="secondary-btn"
+            (click)="showTransactionForm = false">
+            Cancel
+          </button>
+        </div>
+
+      </form>
+
+    </section>
+  }
+
+  <!-- Event Financial Table -->
+  <section class="records-section">
+
+    <div class="section-header">
+      <div>
+        <h2>Event Budget Overview</h2>
+        <p>Booking revenue updates from saved tickets. Original sample budgets remain separate.</p>
+      </div>
+    </div>
+
+    <div class="table-container" tabindex="0" role="region" aria-label="Scrollable records">
+      <table>
+
+        <thead>
+          <tr>
+            <th>Event</th>
+            <th class="numeric">Ticket Revenue</th>
+            <th class="numeric">Sponsors</th>
+            <th class="numeric">Other Income</th>
+            <th class="numeric">Total Income</th>
+            <th class="numeric">Expenses</th>
+            <th class="numeric">Net Profit</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (event of events; track event.id) {
+            <tr>
+              <td>{{ event.name }}</td>
+              <td class="numeric">{{ ticketIncome(event) | number }}</td>
+              <td class="numeric">{{ event.sponsorship | number }}</td>
+              <td class="numeric">{{ event.otherIncome | number }}</td>
+              <td class="numeric">{{ getIncome(event) | number }}</td>
+              <td class="numeric">{{ getExpenses(event) | number }}</td>
+
+              <td
+                class="profit"
+                [class.loss]="getProfit(event) < 0">
+                EGP {{ getProfit(event) | number }}
+              </td>
+            </tr>
+          }
+        </tbody>
+
+      </table>
+    </div>
+
+  </section>
+
+  <!-- Budget Chart -->
+  <section class="records-section">
+
+    <div class="section-header">
+      <div>
+        <h2>Income vs Expenses</h2>
+        <p>Compare financial performance across events.</p>
+      </div>
+    </div>
+
+    <div class="chart-container">
+      <canvas #budgetChart role="img" aria-label="Income versus expenses; exact values appear in the event budget table"></canvas>
+    </div>
+
+  </section>
+
+  <!-- Expense Breakdown -->
+  <section class="records-section">
+
+    <div class="section-header">
+      <div>
+        <h2>Expense Breakdown</h2>
+        <p>View expenses recorded for each event.</p>
+      </div>
+
+      <select
+        aria-label="Event expense breakdown" class="event-select"
+        [(ngModel)]="selectedEventId">
+        @for (event of events; track event.id) {
+          <option [value]="event.id">
+            {{ event.name }}
+          </option>
+        }
+      </select>
+    </div>
+
+    <div class="table-container" tabindex="0" role="region" aria-label="Scrollable records">
+      <table>
+
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th class="numeric">Amount</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @if (selectedEvent) {
+            @for (expense of selectedEvent.expenses; track $index) {
+              <tr>
+                <td>{{ expense.description }}</td>
+                <td class="numeric">EGP {{ expense.amount | number }}</td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="2" class="empty-state">
+                  No expenses recorded.
+                </td>
+              </tr>
+            }
+          }
+        </tbody>
+
+      </table>
+    </div>
+
+  </section>
+
+</div>

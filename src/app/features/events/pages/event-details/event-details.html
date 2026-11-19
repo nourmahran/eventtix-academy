@@ -1,0 +1,61 @@
+
+@if (event(); as selectedEvent) {
+  <div class="details-page">
+
+    <a routerLink="/events" class="back-link">← Back to Events</a>
+
+    <div class="details-banner">
+      <img [src]="selectedEvent.image" [alt]="selectedEvent.title">
+      <span class="category-tag">{{ selectedEvent.category }}</span>
+    </div>
+
+    <div class="details-content">
+      <div class="event-information">
+        <span class="eyebrow">EVENT DETAILS</span>
+        <h1>{{ selectedEvent.title }}</h1>
+        <p class="description">{{ selectedEvent.description }}</p>
+
+        <div class="information-row">
+          <span>📅</span>
+          <div>
+            <strong>Date</strong>
+            <p>{{ selectedEvent.date }} {{ selectedEvent.time || '(time not specified)' }}</p>
+          </div>
+        </div>
+
+        <div class="information-row">
+          <span>📍</span>
+          <div>
+            <strong>Location</strong>
+            <p>{{ selectedEvent.location }}</p>
+          </div>
+        </div>
+
+        <div class="information-row">
+          <span>🎟️</span>
+          <div>
+            <strong>Category / Capacity</strong>
+            <p>{{ selectedEvent.category }} · {{ selectedEvent.capacity || 40 }} seats</p>
+          </div>
+        </div>
+      </div>
+
+      <aside class="booking-card">
+        <span>Ticket price from</span>
+        <h2>EGP {{ selectedEvent.price }}</h2>
+        <p>Choose your seats and get ready for an unforgettable experience.</p>
+      <button
+  type="button"
+  [routerLink]="['/events', selectedEvent.id, 'seats']">
+  Select Your Seats →
+</button>
+        <small>Secure mock booking experience</small>
+      </aside>
+    </div>
+  </div>
+} @else {
+  <div class="not-found">
+    <h2>Event not found</h2>
+    <a routerLink="/events">Return to Events</a>
+  </div>
+}

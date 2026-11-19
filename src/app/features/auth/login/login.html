@@ -1,0 +1,79 @@
+
+<main class="auth-page">
+  <aside class="auth-intro"><span class="eyebrow">EVENTTIX / YOUR ACADEMY</span><h2>A familiar place. A new possibility.</h2><p>Your events, tickets and academy tools, together in one account.</p><div class="auth-points"><span>Events for every interest</span><span>Tickets in one place</span><span>Your preferences, remembered</span></div></aside><section class="auth-card">
+    <div class="auth-heading">
+      <div class="auth-icon">✦</div>
+      <h1>Welcome Back</h1>
+      <p>Sign in to your EventTix account</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          placeholder="Enter your username"
+          autocomplete="username"
+          [attr.aria-invalid]="username.invalid && username.touched"
+        />
+
+        @if (username.touched && username.hasError('required')) {
+          <small class="error">Username is required.</small>
+        } @else if (username.touched && username.hasError('minlength')) {
+          <small class="error">Enter at least 3 characters.</small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+
+        <div class="password-field">
+          <input
+            id="password"
+            [type]="showPassword ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+            [attr.aria-invalid]="password.invalid && password.touched"
+          />
+
+          <button
+            type="button"
+            class="password-toggle"
+            (click)="togglePassword()"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+          >
+            {{ showPassword ? 'Hide' : 'Show' }}
+          </button>
+        </div>
+
+        @if (password.touched && password.hasError('required')) {
+          <small class="error">Password is required.</small>
+        } @else if (password.touched && password.hasError('minlength')) {
+          <small class="error">Password must be at least 6 characters.</small>
+        }
+      </div>
+
+      <button class="submit-btn" type="submit" [disabled]="busy">
+        {{ busy ? 'Signing in…' : 'Sign In' }}
+      </button>
+    </form>
+
+    @if (error) { <p class="error" role="alert">{{ error }}</p> }
+    <p class="notice">Classroom demo only. Accounts stay in this browser. You stay signed in while this tab is open; closing the tab or signing out ends the session.</p>
+    <details><summary>Explore demo roles</summary><p>No real records or permissions are provided.</p>
+      <div class="demo-actions">
+        <button type="button" [disabled]="busy" (click)="demo('student')">Student demo</button>
+        <button type="button" [disabled]="busy" (click)="demo('admin')">Admin demo</button>
+        <button type="button" [disabled]="busy" (click)="demo('accounting')">Accounting demo</button>
+      </div>
+    </details>
+
+    <p class="signup-link">
+      Don't have an account?
+      <a routerLink="/signup">Sign Up</a>
+    </p>
+  </section>
+</main>

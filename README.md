@@ -1,5 +1,22 @@
 # EventTix Academy
 
+## Integrated development status
+
+The `develop` branch combines Member 1 foundation/authentication, Member 2 events/ticket booking, Member 3 finance pages, and Member 4 storage, responsive/animation utilities and testing setup.
+
+- Ready: responsive home/navigation, signup/login, roles and guards, profiles/pictures, mock card labels, preferences and basic storage.
+- Integrated: event catalogue/details, seat selection, account-scoped mock checkout/ticket history, admin event editing, student fees/invoice payments, staff payroll/monthly JSON reports, event finance/charts, shared storage, responsive/animation utilities, and `npm run test:ci`. Finance pages are available to admin/accounting users through the Accounting navigation entry.
+- Added locally on 18 November: scannable ticket QR references, downloadable HTML invoices (print to PDF), browser-local seat reservations, persistent event/fees/payroll/finance data, linked ticket revenue, student fee detail dialogs, and a Gemini AI chatbot (requires a server-side API key).
+- Scope: this is a browser-only classroom demo. Data is shared only within the same browser profile and origin. The chatbot uses Google Gemini through a local Node backend. Team report and submission details still require the team’s input.
+- See [completion notes](docs/FEATURE-COMPLETION.md) for data keys, validation and limitations.
+- Authentication is a frontend classroom mock. The sign-in is kept per tab in sessionStorage (account id or demo role only), so refresh keeps you signed in; closing the tab or logging out ends it. Persistent demo accounts remain in localStorage. Do not enter real payment details.
+
+For AI chat, set `GEMINI_API_KEY` in the private `.env` file; see [Gemini setup](docs/GEMINI-CHAT.md). `npm start` runs Angular and the chat backend together.
+
+Run `npm ci`, then `npm start`; build with `npm run build`; test with `npm run test:ci` (Chrome required).
+
+See [Member 1 handoff](docs/MEMBER1-INTEGRATION.md) and [team integration notes](docs/TEAM-INTEGRATION.md).
+
 EasyWeb | GIU Web Programming — ICS 511 | Topic 15
 
 EventTix Academy is a web application designed to help an academy manage events, ticket sales, student course fees, staff payroll, and event finances.
@@ -160,9 +177,9 @@ The project uses Git branches for collaborative development.
 * main — Stable project version
 * develop — Shared development and integration branch
 * feature/member1-foundation-auth
-* feature/member2-payroll-fees
-* feature/member3-budget-ui
-* feature/member4-chatbot-storage-qa
+* feature/member2-events-tickets
+* feature/member3-finance-payroll
+* feature/member4-bonuses-ux
 
 Feature branches are merged into develop through pull requests after review.
 

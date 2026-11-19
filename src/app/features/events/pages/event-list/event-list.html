@@ -1,0 +1,100 @@
+
+<div class="events-page">
+
+  <header class="hero">
+    <div class="hero-content">
+      <span class="eyebrow">EVENTTIX ACADEMY</span>
+      <h1>Discover Events.<br>Experience More.</h1>
+      <p>Find concerts, conferences and workshops happening around you.</p>
+
+      <div class="hero-stats">
+        <div><strong>{{ eventCount }}</strong><span>Featured events</span></div>
+        <div><strong>03</strong><span>Categories</span></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="events-container">
+
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">WHAT'S HAPPENING</span>
+        <h2>Explore Events</h2>
+      </div>
+      <span class="event-count">{{ filteredEvents().length }} events found</span>
+    </div>
+
+    <div class="filters">
+      <div class="search-box">
+        <span>⌕</span>
+        <input
+          type="text"
+          aria-label="Search events or locations" placeholder="Search events or locations..."
+          [ngModel]="searchTerm()"
+          (ngModelChange)="searchTerm.set($event)"
+        />
+      </div>
+
+      <div class="category-filters">
+        @for (category of categories; track category) {
+          <button
+            [class.active]="selectedCategory() === category" [attr.aria-pressed]="selectedCategory() === category"
+            (click)="selectedCategory.set(category)">
+            {{ category }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="events-grid">
+
+      @for (event of filteredEvents(); track event.id) {
+        <article class="event-card">
+
+          <div class="event-image">
+            <img [src]="event.image" [alt]="event.title" loading="lazy" width="800" height="500">
+            <span class="category-tag">{{ event.category }}</span>
+          </div>
+
+          <div class="event-content">
+            <span class="event-date">{{ event.date }}</span>
+
+            <h3>{{ event.title }}</h3>
+
+            <p class="description">{{ event.description }}</p>
+
+            <div class="event-location">
+              <span>📍</span>
+              {{ event.location }}
+            </div>
+
+            <div class="card-footer">
+              <div class="price">
+                <span>Starting from</span>
+                <strong>EGP {{ event.price }}</strong>
+              </div>
+
+              <button
+  class="details-button"
+  type="button"
+  [routerLink]="['/events', event.id]">
+  View Details →
+</button>
+            </div>
+          </div>
+
+        </article>
+      }
+
+      @empty {
+        <div class="empty-state">
+          <h3>No events found</h3>
+          <p>Try another search or category.</p>
+        </div>
+      }
+
+    </div>
+
+  </main>
+
+</div>
