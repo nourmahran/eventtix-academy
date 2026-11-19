@@ -63,6 +63,7 @@ Audit date: 19 November 2026 · Branch: `audit/full-project-verification` · Req
 | 4 | Low | Payroll JSON totals could show float noise; URL revoked synchronously | Unrounded sums; immediate `revokeObjectURL` | `finance/payroll/payroll.ts` | Unit test (0.1 + 0.2 → 0.3) |
 | 5 | Low | Browser tab showed "GiuFinancialManagement" before routing | Leftover title | `src/index.html` | Browser |
 | 6 | Bonus gap | No audio/visual feedback for failures | Only `success()` existed | `sound.service.ts`, checkout, profile, department budget, `_components.scss` | Tones captured in browser; unit test |
+| 7 | Low | Chatbot wrote prices with "$" instead of EGP | System prompt never stated the currency | `server/chat-server.mjs` | Live Gemini reply showed EGP 150 / EGP 135; server tests 9/9 |
 
 Pre-existing uncommitted work found at the start (event time/capacity, delete event, expired-event closing, event-details param fix, payroll rounding, two audit spec files) was reviewed, kept and covered by the tests above.
 
@@ -79,9 +80,10 @@ Pre-existing uncommitted work found at the start (event time/capacity, delete ev
 
 ## F. Remaining risks and to-dos
 
-1. **Check email/name pairs in the report.** Emails were matched by first name; three surnames differ from the listed names (Ziad Mohamed Tharwat → ziad.zahra, Karim Walid → karim.abdelazim, Lina Abdelhamid → lina.badr).
+1. **Team emails confirmed:** each email belongs to the member with the matching first name (surnames in the addresses may differ from the listed names).
 2. **Report text updated (19 Nov):** the storage paragraph now describes the per-tab sessionStorage sign-in, and test counts read 90 Angular / 9 server tests.
-3. **R1 – Chatbot uses a small local Node proxy.** The PDF says Milestone 1 has no server. The proxy only exists to keep the Gemini key out of the browser. If the instructor runs `ng serve` alone, the chat shows "Start the app with npm start". Mention this in the report or confirm with the TA.
+2b. **Screenshot appendix refreshed (19 Nov):** the five audit-affected screens and all ten Member 4 evidence screens were retaken from the current application; storage views show live values in an inspection panel, and build/test views show the real audit-run output.
+3. **Chatbot local proxy confirmed as acceptable** for the milestone (19 Nov 2026). It still requires `npm start`; `ng serve` alone shows "Start the app with npm start". Restart `npm start` to load the updated prompt (EGP prices, sign-in facts).
 4. **Deadline:** the PDF deadline was 14/11/2026; later changes count as post-deadline improvements.
 5. **Frontend-only security:** anyone can use the demo role buttons, and browser storage can be edited. Guards are UX/demo protections, not real security. Bookings are only consistent within one browser profile (Web Locks across tabs).
 6. Running chat server must be restarted to pick up the updated assistant prompt.

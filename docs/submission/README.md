@@ -1,6 +1,6 @@
 # Submission artifacts
 
-The core report is three pages. The updated full report includes current application screenshots and all ten supplied Member 4 images, labeled as historical evidence. Team names, student IDs and university emails match the details supplied by the team.
+The core report is three pages. The updated full report includes current application screenshots, including Member 4's ten evidence screens retaken from the current application on 19 November 2026. Team names, student IDs and university emails match the details supplied by the team.
 
 Final checks (19 November audit): production build passed, 90 Angular tests and 9 backend tests passed. The redesign passed 308 responsive checks, followed by seven width checks for the new linked-fee overview. Staff assignment, student-only fee balance visibility and reload persistence passed browser tests.
 
