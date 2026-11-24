@@ -36,6 +36,7 @@ Sanctum domain and cookie settings.
 
 | Method and route | Access and result |
 | --- | --- |
+| GET `/api/appearance` | Laravel initializes the Milestone 1 theme cookie for a new browser and reads an existing preference |
 | GET `/sanctum/csrf-cookie` | Initialize the CSRF cookie before mutations |
 | POST `/api/register` | Create a student and start a session. Returns `201` with `message` and `user` |
 | POST `/api/login` | Accept username or email and password. Returns `message` and `user` |
@@ -63,8 +64,9 @@ The server retains a soft-deleted account row to preserve future booking and
 finance references. Deleted accounts cannot log in. The account's email and
 username stay reserved. Profile photo data is bounded and checked as a raster
 image. The card selector stores only one of two fictional labels. The browser
-may keep a remembered username and appearance preferences, while Laravel
-controls identity, account preferences, and access.
+may keep a remembered username in session storage. Laravel initializes the
+non-sensitive theme cookie and refreshes it on signup, sign-in, and profile
+updates. Laravel controls identity, account preferences, and access.
 
 ## Confirmation email bonus
 
@@ -93,9 +95,10 @@ path pending those members' server integration.
 | Signup, sign-in, sign-out and session recovery | Register as a student, refresh the profile, sign out, and sign back in. Check that private routes redirect while signed out. |
 | Profile CRUD | Register, view the profile, save a change, refresh to verify persistence, then delete a test account with its current password. |
 | Roles and authorization | Use the server role command on fictional accounts. Verify students cannot open staff pages, accounting can open Accounting but cannot open Admin, and admins can open both. |
+| Server-side theme cookie initialization | Use a fresh browser context, verify that `GET /api/appearance` sets the theme cookie, then save a different theme in the profile and check that Laravel updates it. |
 | Validation and request security | Run AccountTest for invalid passwords and images, duplicate registration, role assignment, separate signup/login limits, session requirements and the configured CORS allowlist. |
 | Subscription confirmation | Subscribe from the profile using a fictional address, run the queue worker with a development SMTP catcher, and verify receipt in the test inbox. |
 
 The role gates provide the shared authorization contract for Events and Finance.
 Those modules enforce policies and ownership in their own Laravel endpoints.
-The official brief still needs to confirm the email bonus trigger.
+The official brief ends the email bonus instruction at “subscribes to” and leaves the destination unspecified. EventTix uses subscriptions to event announcements.
