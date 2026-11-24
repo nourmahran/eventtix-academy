@@ -17,7 +17,23 @@ import {
 export class Navbar {
   readonly auth = inject(AuthService);
   private readonly router = inject(Router);
-  logout(): void { this.auth.logout(); this.closeMenu(); void this.router.navigateByUrl('/login'); }
+  logoutError = '';
+  signingOut = false;
+
+  async logout(): Promise<void> {
+    if (this.signingOut) return;
+    this.signingOut = true;
+    this.logoutError = '';
+    try {
+      await this.auth.logout();
+      this.closeMenu();
+      await this.router.navigateByUrl('/login');
+    } catch (error) {
+      this.logoutError = error instanceof Error ? error.message : 'Unable to sign out.';
+    } finally {
+      this.signingOut = false;
+    }
+  }
   menuOpen = false;
 
   @HostListener('document:keydown.escape') closeOnEscape(): void { this.closeMenu(); }

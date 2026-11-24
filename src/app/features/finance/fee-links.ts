@@ -11,17 +11,32 @@ export class FeeLinks {
       value && typeof value === 'object' && !Array.isArray(value) &&
       Object.values(value).every(text) && new Set(Object.values(value)).size === Object.values(value).length);
   }
-  link(studentId: string, username: string): void {
+  link(studentId: string, username: string): void | Promise<void> {
+    if (!this.auth.hasRole(['admin', 'accounting'])) throw new Error('Staff access required.');
+    if (!username.trim()) {
+      this.saveLink(studentId);
+      return;
+    }
+    const accountId = this.auth.studentAccountId(username);
+    if (typeof accountId === 'string') {
+      this.saveLink(studentId, accountId);
+      return;
+    }
+    return accountId.then(id => this.saveLink(studentId, id));
+  }
+
+  private saveLink(studentId: string, accountId?: string): void {
     if (!this.auth.hasRole(['admin', 'accounting'])) throw new Error('Staff access required.');
     const record = this.records();
     const links = record.value;
-    if (username.trim()) {
-      const accountId = this.auth.studentAccountId(username);
+    if (accountId) {
       if (Object.entries(links).some(([id, account]) => id !== studentId && account === accountId)) {
         throw new Error('This account is already linked to another student record. Unlink it first.');
       }
       links[studentId] = accountId;
-    } else { delete links[studentId]; }
+    } else {
+      delete links[studentId];
+    }
     record.save(links);
   }
   isLinked(studentId: string): boolean {

@@ -1,4 +1,5 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { AccountApi } from './account-api';
+import { Inject, Injectable, InjectionToken, Optional, computed, signal } from '@angular/core';
 import { SignupData, User, UserPreferences, UserRole, USER_ROLES } from '../models/user.model';
 import { validateProfileOptions } from './profile-options';
 
@@ -9,14 +10,24 @@ export const SESSION_KEY = 'eventtix.session.v1';
 type SessionMarker = { userId: string } | { demoRole: UserRole };
 export const defaultPreferences: UserPreferences = { theme: 'dark', notificationsEnabled: true, soundEnabled: false };
 
-// Browser-only classroom demo. No browser value is an authorization boundary.
+export const ACCOUNT_API = new InjectionToken<AccountApi>('EventTix account API');
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly current = signal<User | null>(null);
   readonly user = this.current.asReadonly();
   readonly isAuthenticated = computed(() => this.user() !== null);
 
-  constructor() { this.restoreSession(); }
+  readonly ready?: Promise<void>;
+  readonly serverMode: boolean;
+
+  constructor(@Optional() @Inject(ACCOUNT_API) private readonly api: AccountApi | null = null) {
+    this.serverMode = !!api;
+    if (api) {
+      this.ready = api.current().then(user => this.current.set(user), () => this.current.set(null));
+    } else {
+      this.restoreSession();
+    }
+  }
 
   // Session storage keeps the sign-in for this tab only: it survives a refresh,
   // and is cleared on logout or when the tab closes. Roles are re-derived here,
@@ -79,6 +90,16 @@ export class AuthService {
     const username = data.username.trim().toLowerCase();
     const email = data.email.trim().toLowerCase();
     if (!/^[a-z0-9_]{3,30}$/.test(username) || data.fullName.trim().length < 3 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || data.password.length < 8 || data.password.length > 128) throw new Error('Check your name, username, email and password (8–128 characters).');
+    if (this.api) {
+      const { user } = await this.api.mutate<{ user: User }>('POST', '/api/register', {
+        username, email, name: data.fullName.trim(), password: data.password,
+        password_confirmation: data.password, preferences: data.preferences,
+        profilePictureUrl: data.profilePictureUrl, paymentMethodLabel: data.paymentMethodLabel
+      });
+      this.current.set(user);
+      this.rememberUsername(user.username);
+      return;
+    }
     const salt = crypto.randomUUID();
     const hash = await this.digest(data.password, salt);
     const accounts = this.accounts();
@@ -91,6 +112,14 @@ export class AuthService {
   }
 
   async login(username: string, password: string): Promise<void> {
+    if (this.api) {
+      const { user } = await this.api.mutate<{ user: User }>('POST', '/api/login', {
+        login: username.trim().toLowerCase(), password
+      });
+      this.current.set(user);
+      if (user.username) this.rememberUsername(user.username);
+      return;
+    }
     const account = this.accounts().find(a => a.user.username.toLowerCase() === username.trim().toLowerCase());
     if (!account || await this.digest(password, account.salt) !== account.hash) throw new Error('Incorrect username or password.');
     // Stored roles are never trusted: public registration only creates students.
@@ -100,27 +129,51 @@ export class AuthService {
   }
 
   startDemo(role: UserRole): void {
+    if (this.api) return;
     this.current.set({ id: `demo-${role}`, username: `demo-${role}`, fullName: `${role[0].toUpperCase()}${role.slice(1)} Demo`, email: `${role}@example.test`, role, preferences: { ...defaultPreferences }, createdAt: new Date().toISOString() });
     this.persistSession({ demoRole: role });
   }
 
-  studentAccountId(username: string): string {
+  studentAccountId(username: string): string | Promise<string> {
     if (!this.hasRole(['admin', 'accounting'])) throw new Error('Staff access required.');
+    if (this.api) return this.api.studentAccountId(username);
     const account = this.accounts().find(a => a.user.username === username.trim().toLowerCase());
     if (!account) throw new Error('Registered student username not found in this browser.');
     return account.user.id;
   }
 
-  logout(): void { this.current.set(null); this.clearSession(); }
+  logout(): void | Promise<void> {
+    if (this.api) return this.api.mutate('POST', '/api/logout').then(() => this.current.set(null));
+    this.current.set(null);
+    this.clearSession();
+  }
+
+  async subscribeToEventUpdates(): Promise<void> {
+    if (!this.api) throw new Error('Event updates require the account service.');
+    const user = await this.api.mutate<User>('POST', '/api/user/event-updates-subscription');
+    this.current.set(user);
+  }
+
+  async deleteProfile(password: string): Promise<void> {
+    if (!this.api) throw new Error('Account deletion requires the account service.');
+    await this.api.mutate('DELETE', '/api/user', { password });
+    this.current.set(null);
+  }
   hasRole(roles: readonly UserRole[]): boolean { const user = this.user(); return !!user && roles.includes(user.role); }
 
-  updateProfile(fullName: string, email: string, preferences: UserPreferences, details?: { profilePictureUrl: string; paymentMethodLabel: string }): void {
+  updateProfile(fullName: string, email: string, preferences: UserPreferences, details?: { profilePictureUrl: string; paymentMethodLabel: string }): void | Promise<void> {
     const user = this.user();
     if (!user) throw new Error('Please sign in again.');
     validateProfileOptions(preferences, details?.profilePictureUrl ?? user.profilePictureUrl, details?.paymentMethodLabel ?? user.paymentMethodLabel);
     email = email.trim().toLowerCase();
     if (fullName.trim().length < 3 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Enter a valid name and email.');
     const updated = { ...user, ...details, fullName: fullName.trim(), email, preferences: { ...preferences } };
+    if (this.api) {
+      return this.api.mutate<User>('PATCH', '/api/user', {
+        name: updated.fullName, email, preferences: updated.preferences,
+        profilePictureUrl: updated.profilePictureUrl ?? '', paymentMethodLabel: updated.paymentMethodLabel ?? ''
+      }).then(profile => this.current.set(profile));
+    }
     if (!user.id.startsWith('demo-')) {
       const accounts = this.accounts();
       if (!accounts.some(a => a.user.id === user.id)) throw new Error('Account no longer exists. Please sign in again.');

@@ -8,7 +8,24 @@
 @if (form.controls.email.touched && form.controls.email.invalid) { <p class="error">Enter a valid email.</p> }</div>
 <div class="form-group"><label for="paymentMethod">Credit card (mock)</label><select id="paymentMethod" formControlName="paymentMethodLabel"><option value="">No card selected</option>@for (method of paymentMethods; track method) { <option [value]="method">{{ method }}</option> }</select><small>Sample cards only. No real payments or card details.</small></div>
 <fieldset><legend>Preferences</legend><div class="form-group"><label for="theme">Appearance</label><select id="theme" formControlName="theme"><option value="dark">Midnight navy</option><option value="light">Warm daylight</option></select></div><p><label><input type="checkbox" formControlName="notificationsEnabled" /> Notifications</label></p><p><label><input type="checkbox" formControlName="soundEnabled" /> Sound</label></p></fieldset>
-<p class="notice">Appearance applies when saved. Sound plays confirmation tones when enabled. Notification preference is saved; no notifications are sent. Demo-role profile edits are not saved and reset on refresh or sign out.</p>
-<button type="submit" class="submit-btn" [disabled]="photoBusy">Save profile</button>
+<p class="notice">Appearance applies when saved. Sound plays confirmation tones when enabled.</p>
+<button type="submit" class="submit-btn" [disabled]="photoBusy || busy">Save profile</button>
 @if (message) { <p role="status">{{ message }}</p> } @if (error) { <p class="error" role="alert">{{ error }}</p> }
-</form><section class="profile-tickets"><h2>Purchased tickets</h2>@if(ticketsError){<p role="alert">{{ticketsError}}</p>}@for(ticket of tickets.slice(0,3);track ticket.ticketCode){<article><h3>{{ticket.eventTitle}}</h3><p>{{ticket.eventDate}} · Seats {{ticket.selectedSeats.join(', ')}}</p></article>}@empty{<p>No bookings yet. Your confirmed tickets will appear here.</p>}<a routerLink="/ticket-history">View all tickets & invoices ↗</a></section></section></main>
+</form>
+@if (auth.serverMode) {
+  <section aria-labelledby="event-updates-heading">
+    <h2 id="event-updates-heading">Event updates</h2>
+    @if (auth.user()?.eventUpdatesSubscribed) {
+      <p>You’re subscribed to EventTix event announcements.</p>
+    } @else {
+      <button type="button" [disabled]="busy" (click)="subscribe()">Subscribe to event updates</button>
+    }
+  </section>
+  <details>
+    <summary>Delete account</summary>
+    <label for="delete-password">Confirm your password</label>
+    <input id="delete-password" #deleteField type="password" [value]="deletePassword" (input)="deletePassword = deleteField.value" autocomplete="current-password" />
+    <button type="button" [disabled]="busy || !deletePassword" (click)="deleteAccount()">Delete account</button>
+  </details>
+}
+<section class="profile-tickets"><h2>Purchased tickets</h2>@if(ticketsError){<p role="alert">{{ticketsError}}</p>}@for(ticket of tickets.slice(0,3);track ticket.ticketCode){<article><h3>{{ticket.eventTitle}}</h3><p>{{ticket.eventDate}} · Seats {{ticket.selectedSeats.join(', ')}}</p></article>}@empty{<p>No bookings yet. Your confirmed tickets will appear here.</p>}<a routerLink="/ticket-history">View all tickets & invoices ↗</a></section></section></main>

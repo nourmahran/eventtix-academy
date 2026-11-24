@@ -1,21 +1,18 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-// Public authentication routes
-Route::post('/register', [AuthController::class, 'register'])
-    ->middleware('throttle:5,1');
+Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
 
-Route::post('/login', [AuthController::class, 'login'])
-    ->middleware('throttle:5,1');
-
-// Protected authentication routes
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
-
+    Route::get('/user', [AuthController::class, 'show']);
+    Route::patch('/user', [AuthController::class, 'update']);
+    Route::delete('/user', [AuthController::class, 'destroy'])->middleware('throttle:5,1');
+    Route::post('/user/event-updates-subscription', [AuthController::class, 'subscribe'])->middleware('throttle:5,1');
+    Route::get('/students/by-username/{username}', [AuthController::class, 'lookupStudent'])
+        ->where('username', '[A-Za-z0-9_]{3,30}')
+        ->middleware('throttle:30,1');
     Route::post('/logout', [AuthController::class, 'logout']);
 });
