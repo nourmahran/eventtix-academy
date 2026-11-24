@@ -19,7 +19,7 @@
           <span>📅</span>
           <div>
             <strong>Date</strong>
-            <p>{{ selectedEvent.date }}</p>
+            <p>{{ selectedEvent.date }} {{ selectedEvent.time || '(time not specified)' }}</p>
           </div>
         </div>
 
@@ -34,8 +34,8 @@
         <div class="information-row">
           <span>🎟️</span>
           <div>
-            <strong>Category</strong>
-            <p>{{ selectedEvent.category }}</p>
+            <strong>Category / Capacity</strong>
+            <p>{{ selectedEvent.category }} · {{ selectedEvent.capacity || 40 }} seats</p>
           </div>
         </div>
       </div>

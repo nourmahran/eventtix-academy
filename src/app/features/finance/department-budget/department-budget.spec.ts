@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { DepartmentBudget } from './department-budget';
 import { SoundService } from '../../../core/preferences/sound.service';
 describe('Department budgets',()=>{
- beforeEach(()=>{localStorage.removeItem('eventtix.departments.v1');TestBed.configureTestingModule({providers:[{provide:SoundService,useValue:{success:()=>Promise.resolve()}}]});});
+ beforeEach(()=>{localStorage.removeItem('eventtix.departments.v1');TestBed.configureTestingModule({providers:[{provide:SoundService,useValue:{success:()=>Promise.resolve(),error:()=>Promise.resolve()}}]});});
  afterEach(()=>localStorage.removeItem('eventtix.departments.v1'));
  const create=()=>TestBed.runInInjectionContext(()=>new DepartmentBudget());
  it('persists department income and expenses with correct balances',()=>{const c=create();c.name='Teaching';c.addDepartment();c.description='Tuition';c.amount=1000;c.addTransaction();c.type='expense';c.description='Materials';c.amount=250;c.addTransaction();const restored=create();expect(restored.total(restored.departments[0],'income')-restored.total(restored.departments[0],'expense')).toBe(750);});

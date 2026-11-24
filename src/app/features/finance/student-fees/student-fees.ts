@@ -44,15 +44,18 @@ export class StudentFees {
   private readonly feeLinks = inject(FeeLinks);
   accountUsername = '';
   accountLinkMessage = '';
-  linkAccount(): void {
-    if (!this.selectedStudentId) return;
+  accountLinkBusy = false;
+  async linkAccount(): Promise<void> {
+    if (!this.selectedStudentId || this.accountLinkBusy) return;
+    this.accountLinkBusy = true;
     try {
       // Ensure opening balances exist before creating a separate account link.
       if (!this.persist()) return;
-      this.feeLinks.link(this.selectedStudentId, this.accountUsername);
+      await this.feeLinks.link(this.selectedStudentId, this.accountUsername);
       this.accountLinkMessage = this.accountUsername.trim() ? 'Student account linked.' : 'Account link removed.';
       this.accountUsername = '';
     } catch (error) { this.error = error instanceof Error ? error.message : 'Unable to link account.'; }
+    finally { this.accountLinkBusy = false; }
   }
 
   // Student records

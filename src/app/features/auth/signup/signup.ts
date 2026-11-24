@@ -15,7 +15,7 @@ export class Signup {
     fullName: ['', [Validators.required, Validators.pattern(/.*\S.*\S.*\S.*/)]],
     username: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9_]{3,30}$/)]],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(128)]],
+    password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(72), Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).+$/)]],
     confirmPassword: ['', Validators.required],
     profilePictureUrl: [''], paymentMethodLabel: [''],
     theme: ['dark' as UserPreferences['theme']], notificationsEnabled: [true], soundEnabled: [false],

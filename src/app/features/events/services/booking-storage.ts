@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { EventService } from './event';
+import { EventService, eventEnded, seatNumber } from './event';
 import { AuthService } from '../../../core/auth/auth.service';
 
 export interface Booking {
@@ -108,6 +108,8 @@ export class BookingStorage {
     this.events.assertCurrent();
     const event = this.events.getEventById(ticket.eventId);
     if (!event || this.events.error) throw new Error('Event information is unavailable.');
+    if (eventEnded(event)) throw new Error('This event has ended. Booking is closed.');
+    if (ticket.selectedSeats.some(seat => seatNumber(seat) > (event.capacity ?? 40))) throw new Error('Selected seat exceeds event capacity.');
     const reserved = this.reservedSeats(ticket.eventId);
     const demoBooked = ['A3', 'A4', 'B2', 'C5', 'D6', 'E1'];
     if (ticket.selectedSeats.some(seat => reserved.includes(seat) || demoBooked.includes(seat)))

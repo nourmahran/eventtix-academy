@@ -9,18 +9,18 @@
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label for="username">Username</label>
+        <label for="username">Username or email</label>
         <input
           id="username"
           type="text"
           formControlName="username"
-          placeholder="Enter your username"
+          placeholder="Enter your username or email"
           autocomplete="username"
           [attr.aria-invalid]="username.invalid && username.touched"
         />
 
         @if (username.touched && username.hasError('required')) {
-          <small class="error">Username is required.</small>
+          <small class="error">Username or email is required.</small>
         } @else if (username.touched && username.hasError('minlength')) {
           <small class="error">Enter at least 3 characters.</small>
         }
@@ -62,7 +62,8 @@
     </form>
 
     @if (error) { <p class="error" role="alert">{{ error }}</p> }
-    <p class="notice">Classroom demo only. Accounts stay in this browser; refreshing signs you out.</p>
+    @if (!auth.serverMode) {
+    <p class="notice">Classroom demo only. Accounts stay in this browser. You stay signed in while this tab is open; closing the tab or signing out ends the session.</p>
     <details><summary>Explore demo roles</summary><p>No real records or permissions are provided.</p>
       <div class="demo-actions">
         <button type="button" [disabled]="busy" (click)="demo('student')">Student demo</button>
@@ -70,6 +71,7 @@
         <button type="button" [disabled]="busy" (click)="demo('accounting')">Accounting demo</button>
       </div>
     </details>
+    }
 
     <p class="signup-link">
       Don't have an account?

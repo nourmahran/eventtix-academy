@@ -18,6 +18,7 @@
       <section class="seating-section">
 
         <div class="stage">STAGE</div>
+        <p role="status">{{ closed ? 'This event has ended. Booking is closed.' : (availableSeats === 0 ? 'Sold out' : availableSeats + ' seats available') }}</p>
 
         <div class="seat-legend">
           <span><i class="available"></i> Available</span>
@@ -36,7 +37,7 @@
                   class="seat" [attr.aria-label]="'Seat ' + row + number + (isBooked(row + number) ? ' booked' : '')" [attr.aria-pressed]="isSelected(row + number)"
                   [class.booked]="isBooked(row + number)"
                   [class.selected]="isSelected(row + number)"
-                  [disabled]="!!error || isBooked(row + number)"
+                  [disabled]="closed || !!error || isBooked(row + number)"
                   (click)="toggleSeat(row + number)">
                   {{ number }}
                 </button>

@@ -6,7 +6,7 @@
 <div class="form-group">
 <label [for]="field">{{ field === 'fullName' ? 'Full name' : field === 'confirmPassword' ? 'Confirm password' : field === 'username' ? 'Username' : field === 'email' ? 'Email' : 'Password' }}</label>
 <input [id]="field" [formControlName]="field" [type]="field.toLowerCase().includes('password') ? (showPassword ? 'text' : 'password') : field === 'email' ? 'email' : 'text'" [autocomplete]="field.toLowerCase().includes('password') ? 'new-password' : field === 'fullName' ? 'name' : field" [attr.aria-invalid]="form.get(field)?.touched && form.get(field)?.invalid" />
-@if (form.get(field)?.touched && form.get(field)?.invalid) { <small class="error">{{ field === 'username' ? 'Use 3–30 letters, numbers or underscores.' : field === 'password' ? 'Use 8–128 characters.' : 'Please enter a valid value.' }}</small> }
+@if (form.get(field)?.touched && form.get(field)?.invalid) { <small class="error">{{ field === 'username' ? 'Use 3–30 letters, numbers or underscores.' : field === 'password' ? 'Use at least 8 characters, with upper- and lowercase letters, a number and a symbol.' : 'Please enter a valid value.' }}</small> }
 </div> }
 <button class="visibility-btn" type="button" [attr.aria-pressed]="showPassword" (click)="showPassword = !showPassword">{{ showPassword ? 'Hide passwords' : 'Show passwords' }}</button>
 @if (form.controls.confirmPassword.touched && form.hasError('mismatch')) { <p class="error">Passwords must match.</p> }
@@ -16,8 +16,8 @@
 <p><label><input type="checkbox" formControlName="notificationsEnabled" /> Enable notifications</label></p>
 <p><label><input type="checkbox" formControlName="soundEnabled" /> Enable sound</label></p>
 </fieldset>
-<p class="notice">Classroom demo: account details stay in this browser. Use a unique demo password and no real payment information. Refreshing signs you out.</p>
-<label><input type="checkbox" formControlName="acceptTerms" /> I understand this is a local demo.</label>
+<p class="notice">Use a unique password and choose sample cards only. Never enter real payment information.</p>
+<label><input type="checkbox" formControlName="acceptTerms" /> I understand the sample cards are for demonstration.</label>
 @if (form.controls.acceptTerms.touched && form.controls.acceptTerms.invalid) { <p class="error">Please acknowledge the demo notice.</p> }
 <p><button class="submit-btn" type="submit" [disabled]="busy || photoBusy">{{ busy ? 'Creating account…' : 'Create account' }}</button></p>
 @if (error) { <p class="error" role="alert">{{ error }}</p> }

@@ -18,6 +18,7 @@ export interface User {
   paymentMethodLabel?: string;
   preferences: UserPreferences;
   createdAt: string;
+  eventUpdatesSubscribed?: boolean;
 }
 
 export interface LoginCredentials {

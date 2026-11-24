@@ -1,5 +1,5 @@
 import { BookingStorage, SavedTicket } from '../events/services/booking-storage';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { SoundService } from '../../core/preferences/sound.service';
 import { DEMO_PAYMENT_METHODS } from '../../core/auth/profile-options';
 import { PhotoPicker } from '../../shared/photo-picker/photo-picker';
@@ -16,6 +16,9 @@ export class Profile {
   }
   private readonly sound = inject(SoundService);
   readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
+  busy = false;
+  deletePassword = '';
   message = ''; error = ''; photoBusy = false;
   readonly paymentMethods = DEMO_PAYMENT_METHODS;
   readonly form = new FormBuilder().nonNullable.group({
@@ -27,12 +30,45 @@ export class Profile {
     notificationsEnabled: [this.auth.user()?.preferences?.notificationsEnabled ?? true],
     soundEnabled: [this.auth.user()?.preferences?.soundEnabled ?? false]
   });
-  save(): void {
-    if (this.photoBusy) return;
+  async save(): Promise<void> {
+    if (this.photoBusy || this.busy) return;
     this.message = ''; this.error = ''; this.form.markAllAsTouched();
     if (this.form.invalid) return;
     const value = this.form.getRawValue();
-    try { this.auth.updateProfile(value.fullName, value.email, { theme: value.theme, notificationsEnabled: value.notificationsEnabled, soundEnabled: value.soundEnabled }, { profilePictureUrl: value.profilePictureUrl, paymentMethodLabel: value.paymentMethodLabel }); this.form.markAsPristine(); this.message = 'Profile saved.'; void this.sound.success(); }
-    catch (e) { this.error = e instanceof Error ? e.message : 'Unable to save profile.'; }
+    this.busy = true;
+    try { await this.auth.updateProfile(value.fullName, value.email, { theme: value.theme, notificationsEnabled: value.notificationsEnabled, soundEnabled: value.soundEnabled }, { profilePictureUrl: value.profilePictureUrl, paymentMethodLabel: value.paymentMethodLabel }); this.form.markAsPristine(); this.message = 'Profile saved.'; void this.sound.success(); }
+    catch (e) { this.error = e instanceof Error ? e.message : 'Unable to save profile.'; void this.sound.error(); }
+    finally { this.busy = false; }
+  }
+
+  async subscribe(): Promise<void> {
+    if (this.busy) return;
+    this.busy = true;
+    this.error = '';
+    this.message = '';
+    try {
+      await this.auth.subscribeToEventUpdates();
+      this.message = 'Subscribed to event updates. A confirmation email has been queued.';
+    } catch (error) {
+      this.error = error instanceof Error ? error.message : 'Unable to subscribe.';
+    } finally {
+      this.busy = false;
+    }
+  }
+
+  async deleteAccount(): Promise<void> {
+    if (this.busy || !this.deletePassword || !confirm('Delete your EventTix account?')) return;
+    this.busy = true;
+    this.error = '';
+    this.message = '';
+    try {
+      await this.auth.deleteProfile(this.deletePassword);
+      await this.router.navigateByUrl('/login');
+    } catch (error) {
+      this.error = error instanceof Error ? error.message : 'Unable to delete the account.';
+    } finally {
+      this.deletePassword = '';
+      this.busy = false;
+    }
   }
 }

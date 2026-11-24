@@ -35,7 +35,7 @@
         @if (auth.hasRole(['admin'])) { <a routerLink="/admin" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeMenu()">Admin</a> }
         @if (auth.hasRole(['admin', 'accounting'])) { <a routerLink="/accounting" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeMenu()">Accounting</a> }
         <a routerLink="/profile" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeMenu()">Profile</a>
-        <button type="button" class="signup-btn" (click)="logout()">Sign out</button>
+        <button type="button" class="signup-btn" [disabled]="signingOut" (click)="logout()">Sign out</button>
       } @else {
         <a routerLink="/login" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="closeMenu()">Login</a>
         <a routerLink="/signup" class="signup-btn" (click)="closeMenu()">Sign Up</a>
@@ -43,3 +43,5 @@
     </div>
   </nav>
 </header>
+
+@if (logoutError) { <p role="alert">{{ logoutError }}</p> }
