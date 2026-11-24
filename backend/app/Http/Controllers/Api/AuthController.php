@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\AppearanceCookie;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AccountProfileRequest;
 use App\Http\Requests\RegisterAccountRequest;
@@ -39,7 +40,7 @@ class AuthController extends Controller
         return response()->json([
             'message' => 'Registration successful.',
             'user' => AccountResource::make($user->refresh()),
-        ], 201);
+        ], 201)->withCookie(AppearanceCookie::make($user->preferences['theme'] ?? 'dark'));
     }
 
     public function login(Request $request): JsonResponse
@@ -59,10 +60,12 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
+        $user = Auth::guard('web')->user();
+
         return response()->json([
             'message' => 'Login successful.',
-            'user' => AccountResource::make(Auth::guard('web')->user()),
-        ]);
+            'user' => AccountResource::make($user),
+        ])->withCookie(AppearanceCookie::make($user->preferences['theme'] ?? 'dark'));
     }
 
     public function show(Request $request): JsonResponse
@@ -86,7 +89,8 @@ class AuthController extends Controller
             throw ValidationException::withMessages(['email' => 'That email is already registered.']);
         }
 
-        return response()->json(AccountResource::make($user));
+        return response()->json(AccountResource::make($user))
+            ->withCookie(AppearanceCookie::make($user->preferences['theme'] ?? 'dark'));
     }
 
     public function destroy(Request $request): Response

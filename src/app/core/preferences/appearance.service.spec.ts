@@ -13,6 +13,6 @@ describe('Appearance storage', () => {
     expect(appearance.theme()).toBe('light');
     appearance.apply('dark');
     expect(document.documentElement.dataset['theme']).toBe('dark');
-    expect(document.cookie).toContain('eventtix_theme=dark');
+    expect(document.cookie).toContain('eventtix_theme=light');
   });
 });

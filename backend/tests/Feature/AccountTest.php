@@ -25,7 +25,8 @@ class AccountTest extends TestCase
     {
         $this->postJson('/api/register', $this->registration())
             ->assertCreated()->assertJsonPath('user.username', 'campus_user')
-            ->assertJsonPath('user.role', 'student')->assertJsonMissingPath('user.password');
+            ->assertJsonPath('user.role', 'student')->assertJsonMissingPath('user.password')
+            ->assertPlainCookie('eventtix_theme', 'dark');
 
         $user = User::query()->where('username', 'campus_user')->firstOrFail();
         $this->assertTrue(Hash::check('TestPassword!42', $user->password));
@@ -64,7 +65,8 @@ class AccountTest extends TestCase
             'role' => 'admin',
             'preferences' => ['theme' => 'light', 'notificationsEnabled' => false, 'soundEnabled' => true],
         ])->assertOk()->assertJsonPath('fullName', 'Updated Student')
-            ->assertJsonPath('preferences.theme', 'light')->assertJsonPath('role', 'student');
+            ->assertJsonPath('preferences.theme', 'light')->assertJsonPath('role', 'student')
+            ->assertPlainCookie('eventtix_theme', 'light');
 
         $this->patchJson('/api/user', [
             'name' => 'Updated Student', 'email' => 'updated@example.test',
@@ -152,6 +154,15 @@ class AccountTest extends TestCase
         $this->artisan('eventtix:set-role', ['email' => 'missing@example.test', 'role' => 'admin'])->assertExitCode(1);
         $this->artisan('eventtix:set-role', ['email' => strtoupper($user->email), 'role' => 'accounting'])->assertExitCode(0);
         $this->assertSame('accounting', $user->fresh()->role);
+    }
+
+    public function test_laravel_initializes_the_theme_cookie_and_preserves_an_existing_preference(): void
+    {
+        $this->getJson('/api/appearance')
+            ->assertOk()->assertJsonPath('theme', 'dark')->assertPlainCookie('eventtix_theme', 'dark');
+
+        $this->withCredentials()->withUnencryptedCookie('eventtix_theme', 'light')->getJson('/api/appearance')
+            ->assertOk()->assertJsonPath('theme', 'light')->assertCookieMissing('eventtix_theme');
     }
 
     private function registration(): array
