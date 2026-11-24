@@ -84,3 +84,18 @@ mail environment as the backend. Check the inbox for the
 Run the Laravel account feature tests and Angular suite before integration.
 The existing booking and finance records still use the Milestone 1 storage
 path pending those members' server integration.
+
+## Member 1 verification checklist
+
+| Requirement | Verification |
+| --- | --- |
+| Laravel and MySQL foundation | Apply migrations to a development database and check `php artisan migrate:status`. |
+| Signup, sign-in, sign-out and session recovery | Register as a student, refresh the profile, sign out, and sign back in. Check that private routes redirect while signed out. |
+| Profile CRUD | Register, view the profile, save a change, refresh to verify persistence, then delete a test account with its current password. |
+| Roles and authorization | Use the server role command on fictional accounts. Verify students cannot open staff pages, accounting can open Accounting but cannot open Admin, and admins can open both. |
+| Validation and request security | Run AccountTest for invalid passwords and images, duplicate registration, role assignment, separate signup/login limits, session requirements and the configured CORS allowlist. |
+| Subscription confirmation | Subscribe from the profile using a fictional address, run the queue worker with a development SMTP catcher, and verify receipt in the test inbox. |
+
+The role gates provide the shared authorization contract for Events and Finance.
+Those modules enforce policies and ownership in their own Laravel endpoints.
+The official brief still needs to confirm the email bonus trigger.

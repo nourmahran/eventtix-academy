@@ -106,6 +106,54 @@ class AccountTest extends TestCase
         Notification::assertSentToTimes($user, EventSubscriptionConfirmed::class, 1);
     }
 
+    public function test_registration_and_login_have_separate_rate_limits(): void
+    {
+        for ($attempt = 0; $attempt < 5; $attempt++) {
+            $this->postJson('/api/register', [])->assertUnprocessable();
+        }
+
+        $this->postJson('/api/register', $this->registration())->assertTooManyRequests();
+
+        $user = User::factory()->create();
+        $this->postJson('/api/login', ['email' => $user->email, 'password' => 'password'])->assertOk();
+    }
+
+    public function test_public_registration_requires_a_stateful_session(): void
+    {
+        $this->withHeader('Origin', 'https://untrusted.example.test')
+            ->postJson('/api/register', $this->registration())
+            ->assertStatus(419);
+        $this->assertDatabaseMissing('users', ['email' => 'campus@example.test']);
+    }
+
+    public function test_api_cors_grants_credentials_only_to_explicit_origins(): void
+    {
+        config([
+            'cors.allowed_origins' => ['https://frontend.example.test', 'https://preview.example.test'],
+            'cors.supports_credentials' => true,
+        ]);
+
+        $headers = ['Access-Control-Request-Method' => 'PATCH'];
+        $this->options('/api/user', [], [...$headers, 'Origin' => 'https://frontend.example.test'])
+            ->assertNoContent()
+            ->assertHeader('Access-Control-Allow-Origin', 'https://frontend.example.test')
+            ->assertHeader('Access-Control-Allow-Credentials', 'true');
+
+        $this->options('/api/user', [], [...$headers, 'Origin' => 'https://untrusted.example.test'])
+            ->assertNoContent()
+            ->assertHeaderMissing('Access-Control-Allow-Origin');
+    }
+
+    public function test_role_command_requires_a_supported_role_and_an_active_account(): void
+    {
+        $user = User::factory()->create();
+        $this->artisan('eventtix:set-role', ['email' => $user->email, 'role' => 'owner'])->assertExitCode(1);
+        $this->assertSame('student', $user->fresh()->role);
+        $this->artisan('eventtix:set-role', ['email' => 'missing@example.test', 'role' => 'admin'])->assertExitCode(1);
+        $this->artisan('eventtix:set-role', ['email' => strtoupper($user->email), 'role' => 'accounting'])->assertExitCode(0);
+        $this->assertSame('accounting', $user->fresh()->role);
+    }
+
     private function registration(): array
     {
         return [
