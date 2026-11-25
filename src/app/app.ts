@@ -6,11 +6,12 @@ import { AuthService } from './core/auth/auth.service';
 import { Component, effect, inject } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { Navbar } from './layout/navbar/navbar';
+import { ToastHost } from './shared/toast/toast-host';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, Navbar, HelpWidget, WorkspaceNav],
+  imports: [RouterOutlet, RouterLink, Navbar, HelpWidget, WorkspaceNav, ToastHost],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
