@@ -1,0 +1,63 @@
+.toast-region {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1300;
+  display: grid;
+  gap: 10px;
+  width: min(380px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--border, #33485a);
+  border-left-width: 5px;
+  border-radius: 12px;
+  background: var(--surface, #121f2e);
+  color: var(--text, #f0f4f7);
+  box-shadow: var(--shadow, 0 6px 24px #0004);
+  animation: toast-in 0.2s ease both;
+
+  &[data-kind='success'] { border-left-color: #2e9e6b; }
+  &[data-kind='error'] { border-left-color: var(--error, #e5484d); }
+  &[data-kind='warning'] { border-left-color: #d9a21b; }
+  &[data-kind='info'] { border-left-color: var(--accent, #76ddc7); }
+}
+
+.toast-message {
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.toast-close {
+  flex: none;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 20px;
+  line-height: 1;
+  padding: 0 4px;
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--accent, #76ddc7);
+    outline-offset: 2px;
+  }
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast { animation: none; }
+}
