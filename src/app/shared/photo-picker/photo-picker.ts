@@ -9,7 +9,7 @@ import { Component, input, output } from '@angular/core';
       <label>Profile picture (optional)
         <input type="file" accept="image/png,image/jpeg,image/webp" (change)="select($event)" [disabled]="busy || disabled()" />
       </label>
-      <small>PNG, JPEG or WebP, up to 2 MB. Saved only in this browser.</small>
+      <small>PNG, JPEG or WebP, up to 2 MB. Saved with your account.</small>
       @if (value()) { <button type="button" [disabled]="busy || disabled()" (click)="valueChange.emit('')">Remove picture</button> }
       @if (busy) { <p role="status">Preparing your picture…</p> }
       @if (error) { <p class="error" role="alert">{{ error }}</p> }
