@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\CheckoutDraftController;
 
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:eventtix-register');
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:eventtix-login');
@@ -16,3 +17,13 @@ Route::middleware('auth:sanctum')->group(function () {
         ->middleware('throttle:30,1');
     Route::post('/logout', [AuthController::class, 'logout']);
 });
+
+Route::middleware(['auth:sanctum', 'throttle:60,1'])
+    ->prefix('checkout-draft')
+    ->controller(CheckoutDraftController::class)
+    ->group(function () {
+        Route::get('/', 'show');
+        Route::post('/', 'store');
+        Route::patch('/', 'update');
+        Route::delete('/', 'destroy');
+    });
